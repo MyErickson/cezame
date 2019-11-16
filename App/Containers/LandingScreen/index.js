@@ -9,7 +9,7 @@ export default class LandingScreen extends Component {
             <View>
                 <View style={{justifyContent:'center', alignItems:'center'}}>
                     <Image
-                        style={{width: 153, height: 187,  }}
+                        style={{ width: 153, height: 187 }}
                         source={require('../../Assets/Images/cezame_RVB.png')}
                     />
                 </View>
@@ -21,5 +21,5 @@ export default class LandingScreen extends Component {
                 </View>
             </View>
         )
-    }  
+    }
 }

@@ -25,15 +25,13 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 
 // navigation
-import RootScreen from './Containers/Root';
+import AppNavigator from './Navigators/AppNavigator';
 
 const App: () => React$Node = () => {
   return (
     <>
       <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <RootScreen />
-      </SafeAreaView>
+        <AppNavigator />
     </>
   );
 };

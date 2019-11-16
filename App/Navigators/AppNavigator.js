@@ -1,13 +1,16 @@
-import { createAppContainer, createStackNavigator } from 'react-navigation';
-
+import {createAppContainer} from 'react-navigation';
+import {createStackNavigator} from 'react-navigation-stack';
 import LandingScreen from '../Containers/LandingScreen';
-import Login from '../Containers/Login';
 
-const StackNavigator = createStackNavigator(
-    {
-        LandingScreen : LandingScreen,
-        Login         : Login
+const MainNavigator = createStackNavigator({
+    Home: {
+      screen: LandingScreen,
+      navigationOptions: {
+        header : null
+      }
     }
-)
+});
 
-export default createAppContainer(StackNavigator);
+const AppNavigator = createAppContainer(MainNavigator);
+
+export default AppNavigator;
