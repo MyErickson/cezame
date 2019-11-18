@@ -24,15 +24,14 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-import LandingScreen from './Containers/LandingScreen';
+// navigation
+import AppNavigator from './Navigators/AppNavigator';
 
 const App: () => React$Node = () => {
   return (
     <>
       <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <LandingScreen />
-      </SafeAreaView>
+        <AppNavigator />
     </>
   );
 };

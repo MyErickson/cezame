@@ -1,27 +1,26 @@
 import React, { Component } from 'react';
-import { Text, View, Button, ActivityIndicator, Image} from 'react-native';
+import { Text, View, ScrollView,Button, ActivityIndicator, Image} from 'react-native';
 import Style from './StyleLandingScreen';
 
 
 export default class LandingScreen extends Component {
     render() {
+        const {navigate} = this.props.navigation;
         return (
             <View>
-                <View style>
+                <View style={{justifyContent:'center', alignItems:'center'}}>
                     <Image
-                        style={{width: 153, height: 187}}
-                        //source={{uri: 'https://facebook.github.io/react-native/img/tiny_logo.png'}}
+                        style={{ width: 153, height: 187 }}
                         source={require('../../Assets/Images/cezame_RVB.png')}
                     />
                 </View>
-                <Text>  
-                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. 
-                    Officiis enim voluptates voluptatem, eligendi minima reprehenderit. 
-                    Illo doloribus ipsa voluptates minus dolore magnam earum perspiciatis, 
-                    dignissimos illum blanditiis repellat eveniet a cupiditate nostrum voluptatum mollitia amet in? 
-                    Rem, nobis. Illum, nisi.    
-                </Text>
-                <Button onPress={() => alert('What ?! you wake me up !')} title="Press Me" />
+                <View>
+                    <Button onPress={() => alert('What ?! QUI SOMMES-NOUS ?')} title="QUI SOMMES-NOUS ?" />
+                    <Button onPress={() => navigate('Login', {name: 'Login'})} title="Accès client" />
+                    <Button onPress={() => navigate('News', {name: 'News'})} title="Actualités" />
+                    <Button onPress={() => alert('What ?! Contact')} title="Contact" />
+                    <Button onPress={() => alert('What ?! Mentions légales')} title="Mentions légales" />
+                </View>
             </View>
         )
     }
