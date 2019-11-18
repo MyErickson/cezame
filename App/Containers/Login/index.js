@@ -12,7 +12,6 @@ export default class Login extends Component {
 
         this.UpdateInputToState = this.UpdateInputToState.bind(this);
         this.Login = this.Login.bind(this);
-        console.log("constructor")
     }
 
     UpdateInputToState = (event) => {
@@ -39,7 +38,7 @@ export default class Login extends Component {
           .then(function(response) {
             //handle success
             // console.log('response : ', response.data.token);
-            console.log(response.status)
+            console.log(response.data)
           })
           .catch(function(error) {
             //handle error
