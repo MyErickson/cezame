@@ -5,6 +5,7 @@ import Style from './StyleLandingScreen';
 
 export default class LandingScreen extends Component {
     render() {
+        const {navigate} = this.props.navigation;
         return (
             <View>
                 <View style={{justifyContent:'center', alignItems:'center'}}>
@@ -15,7 +16,8 @@ export default class LandingScreen extends Component {
                 </View>
                 <View>
                     <Button onPress={() => alert('What ?! QUI SOMMES-NOUS ?')} title="QUI SOMMES-NOUS ?" />
-                    <Button onPress={() => alert('What ?! Accès client')} title="Accès client" />
+                    <Button onPress={() => navigate('Login', {name: 'Login'})} title="Accès client" />
+                    <Button onPress={() => navigate('News', {name: 'News'})} title="Actualités" />
                     <Button onPress={() => alert('What ?! Contact')} title="Contact" />
                     <Button onPress={() => alert('What ?! Mentions légales')} title="Mentions légales" />
                 </View>
