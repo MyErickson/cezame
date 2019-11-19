@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Text, View, ScrollView,Button, ActivityIndicator, TextInput } from 'react-native';
+
 import axios from 'axios';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export default class Login extends Component {
     constructor(props){
@@ -10,8 +12,12 @@ export default class Login extends Component {
             password: ''
         }
 
+        this.storeData = this.storeData.bind(this);
+        this.getData = this.getData.bind(this);
+
         this.UpdateInputToState = this.UpdateInputToState.bind(this);
         this.Login = this.Login.bind(this);
+
     }
 
     UpdateInputToState = (event) => {
@@ -20,11 +26,31 @@ export default class Login extends Component {
         this.setState({ [name] :  event.nativeEvent.text})
     }
 
+    storeData = async (key, value) => {
+        try {
+           await AsyncStorage.setItem(key, value);
+        } catch (e) {
+          // saving error
+        }
+    }
+
+    getData = async (key) => {
+        try {
+          const value = await AsyncStorage.getItem(key)
+          if(value !== null) {
+            // value previously stored
+            return value
+          }
+        } catch(e) {
+          // error reading value
+        }
+    }
+
     Login = () => {
         let bodyFormData = new FormData();
         
         bodyFormData.append("login", "bruno.cox");
-        bodyFormData.append("pass", 123456788);
+        bodyFormData.append("pass", 123456);
 
         // bodyFormData.append("login", this.state.email);
         // bodyFormData.append("pass", this.state.password);
@@ -38,7 +64,12 @@ export default class Login extends Component {
           .then(function(response) {
             //handle success
             // console.log('response : ', response.data.token);
-            console.log(response.data)
+            //console.log(response.data.token)
+            const token = response.data.token;
+
+            this.storeData('jwt_auth', token);
+            const tokenFromAsyncStorage = this.getData('jwt_auth');
+            console.log(tokenFromAsyncStorage);
           })
           .catch(function(error) {
             //handle error

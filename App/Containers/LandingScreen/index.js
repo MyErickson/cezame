@@ -18,6 +18,7 @@ export default class LandingScreen extends Component {
                     <Button onPress={() => alert('What ?! QUI SOMMES-NOUS ?')} title="QUI SOMMES-NOUS ?" />
                     <Button onPress={() => navigate('Login', {name: 'Login'})} title="Accès client" />
                     <Button onPress={() => navigate('News', {name: 'News'})} title="Actualités" />
+                    <Button onPress={() => navigate('Agenda', {name: 'Agenda'})} title="Agenda" />
                     <Button onPress={() => alert('What ?! Contact')} title="Contact" />
                     <Button onPress={() => alert('What ?! Mentions légales')} title="Mentions légales" />
                 </View>
