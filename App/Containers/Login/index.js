@@ -1,19 +1,23 @@
 import React, { Component } from 'react';
-import { Text, View, ScrollView,Button, ActivityIndicator, TextInput } from 'react-native';
+import { Text, View, ScrollView, ActivityIndicator } from 'react-native';
 
 import axios from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
+
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { Input, Button } from 'react-native-elements';
+
+import Styles from './style';
 
 export default class Login extends Component {
     constructor(props){
         super(props)
         this.state = {
-            email: '',
-            password: ''
+          email: '',
+          password: '',
+          loaderConnexion : false,
+          passwordVisibility : false,
         }
-
-        this.storeData = this.storeData.bind(this);
-        this.getData = this.getData.bind(this);
 
         this.UpdateInputToState = this.UpdateInputToState.bind(this);
         this.Login = this.Login.bind(this);
@@ -22,31 +26,30 @@ export default class Login extends Component {
 
     UpdateInputToState = (event) => {
         const name = event._targetInst.pendingProps.name;
-        console.log(event.nativeEvent.text)
         this.setState({ [name] :  event.nativeEvent.text})
     }
 
-    storeData = async (key, value) => {
-        try {
-           await AsyncStorage.setItem(key, value);
-        } catch (e) {
-          // saving error
-        }
+    toogleLoader = () => {
+      this.setState({loaderConnexion : !this.state.loaderConnexion});
     }
 
-    getData = async (key) => {
+    tooglePasswordVisibility = () => {
+      this.setState({passwordVisibility : !this.state.passwordVisibility});
+    }
+
+    storeToken = async (key, value) => {
         try {
-          const value = await AsyncStorage.getItem(key)
-          if(value !== null) {
-            // value previously stored
-            return value
-          }
-        } catch(e) {
-          // error reading value
+          await AsyncStorage.setItem(key, value);
+        } catch (e) {
+          // saving error
+          console.log(error)
         }
     }
 
     Login = () => {
+        // activate loader
+        this.toogleLoader();
+
         let bodyFormData = new FormData();
         
         bodyFormData.append("login", "bruno.cox");
@@ -61,30 +64,72 @@ export default class Login extends Component {
           data: bodyFormData,
           headers: { "Content-Type": "multipart/form-data" }
         })
-          .then(function(response) {
-            //handle success
-            // console.log('response : ', response.data.token);
-            //console.log(response.data.token)
-            const token = response.data.token;
-
-            this.storeData('jwt_auth', token);
-            const tokenFromAsyncStorage = this.getData('jwt_auth');
-            console.log(tokenFromAsyncStorage);
-          })
-          .catch(function(error) {
-            //handle error
-            console.log("error :  ", error);
+        .then((response) => {
+          //handle success
+          const token = response.data.token;
+          this.storeToken('jwt_auth', token);
+          AsyncStorage.getItem("jwt_auth").then((value) => {
+            console.log(value)
+            // remove loader
+            this.toogleLoader();
           });
+        })
+        .catch((error) => {
+          //handle error
+          console.log(error);
+          this.toogleLoader();
+        });
     }
 
     render(){
-        const {navigate} = this.props.navigation;
+
+        // loader
+        let loaderConnexion;
+        if (this.state.loaderConnexion){
+          loaderConnexion =  <ActivityIndicator size="large" color="#0000ff" />;
+        }
+
+        let eyeIcon;
+        if (!this.state.passwordVisibility){
+          // Visibility = true 
+          eyeIcon = <Icon name='eye' size={28} color='black' onPress={this.tooglePasswordVisibility}/>;
+        }
+        else{
+          // Visibility = false
+          eyeIcon =  <Icon name='eye-slash' size={28} color='black' onPress={this.tooglePasswordVisibility}/>;
+        }
+        
         return(
-            <View>
-                <Text>LOGIN PAGE</Text>
-                <TextInput name="email" placeholder='email' value={this.state.email} onChange={this.UpdateInputToState}></TextInput>
-                <TextInput name="password" placeholder='password'  value={this.state.password} onChange={this.UpdateInputToState}></TextInput>
-                <Button  title="Connexion" onPress={this.Login}></Button>
+            <View style={Styles.BigContainer} >
+                {loaderConnexion}
+                <View style={Styles.container}>
+                  <Input
+                    name='email' 
+                    label='Identifiant'
+                    placeholder='email@my_email.com'
+                    errorStyle={{ color: 'red' }}
+                    errorMessage='' 
+                    value={this.state.email} 
+                    onChange={this.UpdateInputToState}
+                  />
+                  <Input 
+                    name="password"
+                    label="Mot de passe"
+                    value={this.state.password} 
+                    onChange={this.UpdateInputToState} 
+                    rightIcon={eyeIcon}
+                  />
+                  <Button  
+                    title="Connexion" 
+                    onPress={this.Login} 
+                    type="solid"
+                  />
+                  <Button  
+                    title="Mot de passe oublié ?" 
+                    onPress={this.Login} 
+                    type="clear"
+                  />
+                </View>
             </View>
         );
     }
