@@ -24,6 +24,8 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
+// import('./Configs/ReactotronConfig').then(() => console.log('Reactotron Configured'))
+
 // navigation
 import AppNavigator from './Navigators/AppNavigator';
 

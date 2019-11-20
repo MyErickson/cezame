@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, ScrollView, ActivityIndicator } from 'react-native';
+import { Text, View, Modal, TouchableHighlight, Alert, ActivityIndicator } from 'react-native';
 
 import axios from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -15,13 +15,20 @@ export default class Login extends Component {
         this.state = {
           email: '',
           password: '',
+          loginValidate : false,
+
+          emailForgotten : '',
+          emailForgottenValidate : false,
+
           loaderConnexion : false,
           passwordVisibility : false,
+          modalVisible : false
         }
 
         this.UpdateInputToState = this.UpdateInputToState.bind(this);
         this.Login = this.Login.bind(this);
 
+        this.ToogleModal = this.ToogleModal.bind(this);
     }
 
     UpdateInputToState = (event) => {
@@ -29,15 +36,20 @@ export default class Login extends Component {
         this.setState({ [name] :  event.nativeEvent.text})
     }
 
-    toogleLoader = () => {
+    ToogleLoader = () => {
       this.setState({loaderConnexion : !this.state.loaderConnexion});
     }
 
-    tooglePasswordVisibility = () => {
+    TooglePasswordVisibility = () => {
       this.setState({passwordVisibility : !this.state.passwordVisibility});
     }
 
-    storeToken = async (key, value) => {
+    ToogleModal = () => {
+      this.setState({modalVisible: !this.state.modalVisible});
+      
+    }
+
+    StoreToken = async (key, value) => {
         try {
           await AsyncStorage.setItem(key, value);
         } catch (e) {
@@ -48,7 +60,7 @@ export default class Login extends Component {
 
     Login = () => {
         // activate loader
-        this.toogleLoader();
+        this.ToogleLoader();
 
         let bodyFormData = new FormData();
         
@@ -67,18 +79,35 @@ export default class Login extends Component {
         .then((response) => {
           //handle success
           const token = response.data.token;
-          this.storeToken('jwt_auth', token);
+          this.StoreToken('jwt_auth', token);
           AsyncStorage.getItem("jwt_auth").then((value) => {
-            console.log(value)
             // remove loader
-            this.toogleLoader();
+            this.ToogleLoader();
           });
         })
         .catch((error) => {
           //handle error
           console.log(error);
-          this.toogleLoader();
+          this.ToogleLoader();
         });
+    }
+
+    ResetPassword = () => {
+      const email = this.state.emailForgotten;
+      let bodyFormData = new FormData();
+      bodyFormData.append("login", email);
+
+      axios({
+        url : 'https://cezame-dev.digitalcube.fr/api/forgot-password',
+        method : 'POST',
+        data : bodyFormData,
+        headers : { "Content-Type" : "multipart/form-data"}
+      })
+      .then((res) => {
+        console.log(res);
+        this.ToogleModal();
+      })
+      .catch((err) => console.log(err));
     }
 
     render(){
@@ -89,47 +118,107 @@ export default class Login extends Component {
           loaderConnexion =  <ActivityIndicator size="large" color="#0000ff" />;
         }
 
+        // password eye icon
         let eyeIcon;
-        if (!this.state.passwordVisibility){
+        if (this.state.passwordVisibility == false){
           // Visibility = true 
-          eyeIcon = <Icon name='eye' size={28} color='black' onPress={this.tooglePasswordVisibility}/>;
+          eyeIcon =  <Icon name='eye-slash' size={28} color='black' onPress={this.TooglePasswordVisibility}/>;
         }
         else{
           // Visibility = false
-          eyeIcon =  <Icon name='eye-slash' size={28} color='black' onPress={this.tooglePasswordVisibility}/>;
+          eyeIcon = <Icon name='eye' size={28} color='black' onPress={this.TooglePasswordVisibility}/>;
         }
-        
+
         return(
-            <View style={Styles.BigContainer} >
-                {loaderConnexion}
-                <View style={Styles.container}>
-                  <Input
-                    name='email' 
-                    label='Identifiant'
-                    placeholder='email@my_email.com'
-                    errorStyle={{ color: 'red' }}
-                    errorMessage='' 
-                    value={this.state.email} 
-                    onChange={this.UpdateInputToState}
-                  />
-                  <Input 
-                    name="password"
-                    label="Mot de passe"
-                    value={this.state.password} 
-                    onChange={this.UpdateInputToState} 
-                    rightIcon={eyeIcon}
-                  />
-                  <Button  
-                    title="Connexion" 
-                    onPress={this.Login} 
-                    type="solid"
-                  />
-                  <Button  
-                    title="Mot de passe oublié ?" 
-                    onPress={this.Login} 
-                    type="clear"
-                  />
-                </View>
+            <View>
+              {loaderConnexion}
+              <View>
+                <Input
+                  name='email' 
+                  label='Identifiant'
+                  placeholder='email@my_email.com'
+                  errorStyle={{ color: 'red' }}
+                  errorMessage='' 
+                  value={this.state.email} 
+                  onChange={this.UpdateInputToState}
+                />
+                <Input 
+                  name="password"
+                  secureTextEntry={!this.state.passwordVisibility}
+                  label="Mot de passe"
+                  value={this.state.password} 
+                  onChange={this.UpdateInputToState} 
+                  rightIcon={eyeIcon}
+                />
+                <Button  
+                  title="Connexion" 
+                  onPress={this.Login} 
+                  type="solid"
+                />
+                <Button  
+                  title="Mot de passe oublié ?" 
+                  onPress={this.ToogleModal} 
+                  type="clear"
+                />
+              </View>
+
+              {/* Modal */}
+              <View style={{marginTop: 22}}>
+                <Modal
+                  animationType="slide"
+                  transparent={false}
+                  visible={this.state.modalVisible}
+                  onRequestClose={() => {
+                    Alert.alert('Modal has been closed.');
+                  }}>
+                  <View style={{marginTop: 20}}>
+                    <View style={{padding: 15, }}>
+                      
+                      <Text style={{ marginBottom : 50, fontSize: 22 }}>
+                        Saisissez votre addresse email, nous  vous enverons un email de récupération de mot de passe 
+                      </Text>
+                      <Input
+                        style={{marginBottom : 50}}
+                        name='forgottenPassword' 
+                        label='Votre email'
+                        placeholder='email@my_email.com'
+                        errorStyle={{ color: 'red' }}
+                        errorMessage='' 
+                        value={this.state.email} 
+                        onChange={this.UpdateInputToState}
+                      />
+                      {/* buttons modal */}
+                      <View style={{flex : 1, flexDirection: "row", minHeight: 100, justifyContent: "space-around", marginTop: 50}}>
+                        <Button
+                          style={{flex : 1 }}
+                          type='outline'
+                          iconRight={{
+                            name : '',
+                            size : 14,
+                            color : 'white'
+                          }}
+                          title="Annuler"
+                          onPress={() => {
+                            this.ToogleModal(!this.state.modalVisible);
+                          }}
+                        />
+                        <Button
+                          style={{flex : 1}}
+                          iconRight={{
+                            name: "send",
+                            size: 15,
+                            color: "white"
+                          }}
+                          title="Envoyer"
+                          onPress={() => {
+                            this.ToogleModal(!this.state.modalVisible);
+                          }}
+                        />
+                      </View>
+                    </View>
+                  </View>
+                </Modal>
+              </View>
             </View>
         );
     }

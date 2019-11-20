@@ -31,7 +31,6 @@ const MainNavigator = createStackNavigator({
       navigationOptions:{
         title  : 'Agenda',
       }
-
     }
 });
 
