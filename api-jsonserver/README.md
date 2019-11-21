@@ -15,9 +15,9 @@ npm install -g json-server
 
 the datas are store in cezame.json, db.json can be use as an example to create another "db"
 
-Start JSON Server
+## Start JSON Server
 ```
-json-server --watch db.json --port 3003
+json-server --watch cezame.json --port 3003
 ```
 
 more information on [JSON-Server here](https://github.com/typicode/json-server)
