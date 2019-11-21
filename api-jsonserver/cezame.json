@@ -1,0 +1,152 @@
+{
+  "agenda" : [
+    {
+        "id": 1,
+        "date" : "2019-11-19",
+        "events" : [
+            {   
+                "id" : 1,
+                "address": " Champ de Mars, 5 Avenue Anatole France, 75007 Paris",
+                "title" : "Visite de la tour Eiffel", 
+                "description" :  "Ouverture à 9h",
+                "appointmentTime" : "09h-12h"
+            },
+            {   
+                "id" : 2,
+                "address": "14 rue des papillions 75012 Paris",
+                "title" : "Arc de Triomphe", 
+                "description" :  "Visite de Arc de Triomphe, attention à la circulation.",
+                "appointmentTime" : "13h"
+            }
+
+        ]
+    },
+    {
+        "id": 2,
+        "date" : "2019-11-20",
+        "events" : [
+            {
+                "id" : 1,
+                "address": "35 Rue du Chevalier de la Barre",
+                "title" : "Sacré-Cœur", 
+                "description" :  "Visite de la basilique du Sacré-Coeur de Montmartre",
+                "appointmentTime" : "20h-minuit"
+            },
+            {
+                "id" : 2,
+                "address": "Place du Tertre",
+                "title" : "La place des artistes peintres et autres art graphiques ", 
+                "description" :  "On trouve tous les styles d'art graphique, peinture, aquarelle, fusain, sanguine, découpe de papier.... Mais attention il y a également les faux artistes qui se contentent de revendre des reproductions, c'est le prix qui fait la différence. Une fois sur la butte Montmartre, il n'y a pas que la place du tertre, il y a la basilique, les vignobles, ..." ,
+                "appointmentTime" : "20h-minuit"
+            },
+            {
+                "id" : 2,
+                "address": "Place de l'Opéra, 75009 Paris",
+                "title" : "Palais Garnier", 
+                "description" :  "Ouverture à 19h",
+                "appointmentTime" : "20h-minuit"
+            }
+        ]
+    },
+    {
+        "id": 1,
+        "date" : "2019-11-21",
+        "events" : [
+            {   
+                "id" : 1,
+                "address": "Île de la Cité - 75004 Paris",
+                "title" : "Île de la Cité", 
+                "description" :  "Anciennement Lutèce, l’Île de la Cité est le plus vieux quartier de Paris. A lui seul, il regroupe des sites incontournables lors d'une visite de la capitale : le Pont Neuf, Notre-Dame, le pont de l’Archevêché… Sa position centrale privilégiée, entre le Châtelet au Nord et Saint-Germain-des-Prés au Sud, l’Île de la Cité constitue véritablement le carrefour central de la capitale. ",
+                "appointmentTime" : "10h-12h"
+            },
+            {   
+                "id" : 2,
+                "address": " 6 Parvis Notre-Dame - Pl. Jean-Paul II, 75004 Paris",
+                "title" : "Notre-Dame de Paris", 
+                "description" :  "La cathédrale Notre-Dame de Paris, communément appelée Notre-Dame, est la cathédrale de l'archidiocèse de Paris, située sur l'île de la Cité. Dédiée à la Vierge Marie, elle est pendant de nombreux siècles l'une des cathédrales les plus grandes d'Occident.",
+                "appointmentTime" : "13h"
+            }
+        ]
+    }
+  ],
+  "users" : [
+    {
+        "id"          : 1,
+        "username"    : "bruno.cox",
+        "email"       : "bruno@cezame.com",
+        "tel"         : "0142424242",
+        "password"    : "123456",
+        "hasImageAgree"    : false
+    },
+    {
+        "id"          : 2,
+        "username"    : "JohnDoe",
+        "email"       : "johndoe@cezame.com",
+        "tel"         : "0143434343",
+        "password"    : "123456",
+        "hasImageAgree"    : false
+    },
+    {
+        "id"          : 3,
+        "username"    : "techguy",
+        "email"       : "techguy@cezame.com",
+        "tel"         : "0145454545",
+        "password"    : "123456",
+        "hasImageAgree"    : false
+    }
+  ],
+  "operation" : [
+    {
+        "id"                : 1,
+        "city"              : "Paris",
+        "compagny"          : "Groupe BFCE",
+        "operationStart"    : "15 juillet 2019",
+        "operationEnd"      : "25 juillet 2019",
+        "convocation"       : "",
+        "tripBook"          : "",
+        "hotel"          : {
+            "mapCoordinate" : "",
+            "name"          : "Hôtel Chatillon Montparnasse Paris",
+            "adress"        : "11 Square de Châtillon, 75014 Paris",
+            "tel"           : "01 45 42 31 17",
+            "information"   : "Hôtel élégant proposant des chambres chaleureuses avec Wi-Fi gratuit et une salle de petit-déjeuner raffinée."
+        },
+        "contact"           : [
+            {
+                "id" : 1,
+                "name"  : "Sandrice LOUYER",
+                "job"   : "Accompagnatrice",
+                "tel"   : "0142424242"
+            },
+            {
+                "id" : 2,
+                "name"  : "Alexandre Le Grand",
+                "job"   : "Accompagnateur",
+                "tel"   : "0143434343"
+            },
+            {
+                "id" : 3,
+                "name"  : "Jane D'ARC",
+                "job"   : "Accompagnatrice",
+                "tel"   : "0145454545"
+            }
+        ]
+    }
+  ],
+  "notification" : [
+      {
+          "id"          : 1,
+          "title"       : "Déjeuné repousser à 13h",
+          "date"        : "17/09/2019",
+          "hours"       : "11h05",
+          "hasBeenSeen" : false
+      },
+      {
+        "id"      : 2,
+        "title"   : "Alcool et Soft à 5€ au lieu de 10€ au bar de La P'tite Soeur",
+        "date"    : "17/09/2019",
+        "hours"   : "19h05",
+        "hasBeenSeen" : false
+    }
+  ]
+}
