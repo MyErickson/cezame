@@ -1,6 +1,6 @@
 # Cézame  React Native project
 
-{: style="text-align:center"}![Cezame Banner](App/Assets/Images/LOGO_CEZAME.jpg "Cezame")
+[Cezame Banner](App/Assets/Images/LOGO_CEZAME.jpg "Cezame")
 
 ## Requirements
 
