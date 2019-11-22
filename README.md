@@ -1,6 +1,6 @@
 # Cézame  React Native project
 
-![Cezame Banner](App/Assets/Images/LOGO_CEZAME.jpg "Cezame")
+{: style="text-align:center"}![Cezame Banner](App/Assets/Images/LOGO_CEZAME.jpg "Cezame")
 
 ## Requirements
 
@@ -22,9 +22,6 @@ After cloning the repository, in your terminal, enter this in order to install t
     npm install 
 ```
 
-
-
-
 ### Run Metro before running Android or IOS App
 ```
     react-native start
@@ -34,8 +31,8 @@ After cloning the repository, in your terminal, enter this in order to install t
 You should be ready to run the app when you see this.
 
 ```
-Looking for JS files in $HOME/YourWorkingDirectory/Cezame
-Loading dependency graph, done.
+    Looking for JS files in $HOME/YourWorkingDirectory/Cezame
+    Loading dependency graph, done.
 ```
 
 ### Run on Android
@@ -59,7 +56,7 @@ If you want to run the fake api, jsonserver's readme.md is in the api-jsonserver
     cd  api-jsonserver
 ```
 
-### Install JSONServer
+#### Install JSONServer
 
 ```
     npm install -g json-server
@@ -67,17 +64,17 @@ If you want to run the fake api, jsonserver's readme.md is in the api-jsonserver
 
 the datas are store in cezame.json, db.json can be use as an example to create another "db"
 
-### Start JSON Server
+#### Start JSON Server
 
 ```
-json-server --watch cezame.json --port 3003
+    json-server --watch cezame.json --port 3003
 ```
 
 open your web browser and go to this url : [http://localhost:3003](http://localhost:3003) and you are ready to rock n roll.
 
 Otherwise you can see more information on [JSON-Server here](https://github.com/typicode/json-server).
 
-#### Big Thanks to Typicode :)
+##### Big Thanks to Typicode :)
 
 
 ## About us
