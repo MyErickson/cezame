@@ -1,4 +1,4 @@
-![Cezame Banner](App/Assets/Images/LOGO_CEZAME.jpg "Cezame")
+![Cezame Banner](App/Assets/Images/cezame-cover.png "Cezame")
 
 # Cézame  React Native project
 
