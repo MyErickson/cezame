@@ -1,7 +1,10 @@
 import { StyleSheet } from 'react-native';
 
-export default StyleSheet.create({
+const Styles = StyleSheet.create({
     imageContainer : {
         flex : 1,
     }
 });
+
+
+export default Styles;

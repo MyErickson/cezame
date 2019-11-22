@@ -5,6 +5,7 @@ import {createStackNavigator} from 'react-navigation-stack';
 import LandingScreen from '../Containers/LandingScreen';
 import Login from '../Containers/Login';
 import News from '../Containers/News';
+import AgendaScreen from '../Containers/Agenda';
 
 const MainNavigator = createStackNavigator({
     Home: {
@@ -20,7 +21,16 @@ const MainNavigator = createStackNavigator({
       }
     },
     News : {
-      screen: News
+      screen: News,
+      navigationOptions: {
+        title  : 'Actualité',
+      }
+    },
+    Agenda : {
+      screen : AgendaScreen,
+      navigationOptions:{
+        title  : 'Agenda',
+      }
     }
 });
 
