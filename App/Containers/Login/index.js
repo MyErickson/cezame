@@ -7,7 +7,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { Input, Button } from 'react-native-elements';
 
 import Styles from './style';
-import { patternEmail, errorsMsg } from '../../Configs/General'
+import { config, patternEmail, errorsMsg } from '../../Configs/General'
 import { validate } from '@babel/types';
 
 
@@ -20,7 +20,8 @@ export default class Login extends Component {
           password          : "",
 
           emailErrorMsg     : "",
-          passwordErrorMsg  : "", 
+          passwordErrorMsg  : "",
+          passwordForgottenErrorMsg  : "",
 
           passwordForgotten : "",
           passwordForgottenValidate : false,
@@ -40,11 +41,17 @@ export default class Login extends Component {
         this.ToogleModal = this.ToogleModal.bind(this);
     }
 
+    //-----------------------------------//
+    //------- Input Listener -----------//
+    //---------------------------------//
     UpdateInputToState = (event) => {
         const name = event._targetInst.pendingProps.name;
         this.setState({ [name] :  event.nativeEvent.text})
     }
 
+    //--------------------------------------//
+    //---------- Display Control  ---------//
+    //------------------------------------//
     ToogleLoader = () => {
       this.setState({loaderConnexion : !this.state.loaderConnexion});
     }
@@ -58,56 +65,76 @@ export default class Login extends Component {
       
     }
 
-    StoreToken = async (key, value) => {
-        try {
-          await AsyncStorage.setItem(key, value);
-        } catch (e) {
-          // saving error
-          console.log(error)
+    //-----------------------------------//
+    //------- INPUT VALIDATOR ----------//
+    //---------------------------------//
+
+    EmailValidator = (emailToCheck, emailInputName) => {
+      let email;
+
+      // Email
+      if (emailToCheck){
+        if(patternEmail.test(emailToCheck.trim())){
+          email = emailToCheck.toLowerCase();
+          this.setState({[emailInputName] : ""});
+          
         }
+        else{
+          this.setState({[emailInputName] : errorsMsg.emailInvalide});
+        }
+      }
+      else{
+        this.setState({[emailInputName] : errorsMsg.emptyFiled });
+      }
+
+      return (email);
     }
 
-
-    FormLoginValidator = (emailToCheck, passwordToCheck) => {
-      let email;
+    PasswordValidator = (passwordToCheck) => {
       let password;
 
-      // Password 
+      // Password length check
       if(passwordToCheck.length > 6 && passwordToCheck.length < 22){
-        password = passwordToCheck;
+        password = passwordToCheck.toLowerCase();
         this.setState({passwordErrorMsg : ""});
       }
       else{
         this.setState({passwordErrorMsg : errorsMsg.passwordLen});
       }
 
-      // Email
-      if (emailToCheck){
-        if(patternEmail.test(emailToCheck.trim())){
-          email = emailToCheck;
-          this.setState({emailErrorMsg : ""});
-        }
-        else{
-          this.setState({emailErrorMsg : errorsMsg.emailInvalide});
-        }
+      return password;
+    }
+
+    FormLoginValidator = async (emailToCheck, passwordToCheck) => {
+      let email;
+      let password;
+
+      try{
+        email     = await this.EmailValidator(emailToCheck, "emailErrorMsg");
+        password  = await this.PasswordValidator(passwordToCheck);
+
       }
-      else{
-        this.setState({emailErrorMsg : errorsMsg.emptyFiled });
+      catch(error){
+        console.log(error);
       }
-      
+
       return { email, password };
     }
 
+    //--------------------------------//
+    //------- MAIN ACTION -----------//
+    //------------------------------//
     Login = async () => {
       try{
         // activate loader
         this.ToogleLoader();
-        let validate = await this.FormLoginValidator(this.state.email, this.state.password);
+        let validateInputs = await this.FormLoginValidator(this.state.email, this.state.password);
 
-        if(validate.email && validate.password){
+        if(validateInputs.email && validateInputs.password){
           let bodyFormData = new FormData();
-          bodyFormData.append("login", validate.email);
-          bodyFormData.append("pass", validate.password);
+          bodyFormData.append("login", validateInputs.email);
+          bodyFormData.append("pass", validateInputs.password);
+
           // a décommenter si on ne veux pas taper le login/password
           //bodyFormData.append("login", "bruno.cox");
           //bodyFormData.append("pass", 123456);
@@ -130,11 +157,11 @@ export default class Login extends Component {
           .catch((error) => {
             //handle error
             console.log(error);
+            this.setState({ emailErrorMsg : errorsMsg.invalidLogin, passwordErrorMsg : errorsMsg.invalidLogin });
             this.ToogleLoader();
           });
         }
         else{
-          console.log("ca passe pas")
           // deactivate loader
           this.ToogleLoader();
         }
@@ -144,26 +171,47 @@ export default class Login extends Component {
       }
     }
 
-    ResetPassword = () => {
-      const email = this.state.passwordForgotten;
-      let bodyFormData = new FormData();
-      bodyFormData.append("login", email);
+    ResetPassword = async () => {
+      try{
+        const email = await this.EmailValidator(this.state.passwordForgotten, "passwordForgottenErrorMsg");
+        console.log(this.state)
 
-      axios({
-        url : 'https://cezame-dev.digitalcube.fr/api/forgot-password',
-        method : 'POST',
-        data : bodyFormData,
-        headers : { "Content-Type" : "multipart/form-data"}
-      })
-      .then((res) => {
-        console.log(res);
-        this.ToogleModal();
-      })
-      .catch((err) => console.log(err));
+
+        if(email){
+          let bodyFormData = new FormData();
+          bodyFormData.append("login", email);
+  
+          axios({
+            url : 'https://cezame-dev.digitalcube.fr/api/forgot-password',
+            method : 'POST',
+            data : bodyFormData,
+            headers : { "Content-Type" : "multipart/form-data"}
+          })
+          .then((res) => {
+            console.log(res);
+            this.ToogleModal();
+          })
+          .catch((err) => console.log(err));
+        }
+      }
+      catch(error){
+        console.log(error);
+      }
+    }
+  
+    //--------------------------------------------//
+    //------- TO STORE INTO THE REDUX -----------//
+    //------------------------------------------//
+    StoreToken = async (key, value) => {
+      try {
+        await AsyncStorage.setItem(key, value);
+      } catch (e) {
+        // saving error
+        console.log(error)
+      }
     }
 
     render(){
-
         // loader
         let loaderConnexion;
         if (this.state.loaderConnexion){
@@ -174,7 +222,7 @@ export default class Login extends Component {
         let eyeIcon;
         if (this.state.isPasswordVisibility == false){
           // Visibility = true 
-          eyeIcon =  <Icon name='eye-slash' size={28} color='black' onPress={this.TooglePasswordVisibility}/>;
+          eyeIcon =  <Icon name='eye-slash' size={18} color='black' onPress={this.TooglePasswordVisibility}/>;
         }
         else{
           // Visibility = false
@@ -216,9 +264,6 @@ export default class Login extends Component {
                 />
               </View>
 
-
-
-
               {/* Modal */}
               <View style={{marginTop: 22}}>
                 <Modal
@@ -239,7 +284,7 @@ export default class Login extends Component {
                         label='Votre email'
                         placeholder='email@my_email.com'
                         errorStyle={{ color: 'red' }}
-                        errorMessage='' 
+                        errorMessage={ this.state.passwordForgottenErrorMsg } 
                         value={this.state.passwordForgotten} 
                         onChange={this.UpdateInputToState}
                       />
