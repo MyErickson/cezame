@@ -1,17 +1,21 @@
 import { StyleSheet } from 'react-native';
 const Styles = StyleSheet.create({
-    BigContainer :{
-        flexDirection: "row",
-        backgroundColor: "blue",
-        justifyContent:"center",
-        alignItems: "center",
-        margin: "auto"
+    modalContainer : {
+        marginTop: 22,
+        padding: 15
     },
-    container : {
-        maxWidth : 500,
-        textAlign: "center",
-        justifyContent:"center",
-        backgroundColor:"red"
+    modalTitle : {
+        marginTop : 40,
+        marginBottom : 50,
+        padding : 15,
+        fontSize: 22
+    },
+    modalButtonContainer : {
+        flexDirection: "row", 
+        height: "auto", 
+        justifyContent: "space-around",
+        alignItems: "stretch",
+        marginTop: 50
     }
 });
 

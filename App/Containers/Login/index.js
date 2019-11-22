@@ -8,7 +8,7 @@ import { Input, Button } from 'react-native-elements';
 
 import Styles from './style';
 import { config, patternEmail, errorsMsg } from '../../Configs/General'
-import { validate } from '@babel/types';
+
 
 
 export default class Login extends Component {
@@ -94,7 +94,7 @@ export default class Login extends Component {
       let password;
 
       // Password length check
-      if(passwordToCheck.length > 6 && passwordToCheck.length < 22){
+      if(passwordToCheck.length > config.minLenPassword && passwordToCheck.length < config.maxLenPassword){
         password = passwordToCheck.toLowerCase();
         this.setState({passwordErrorMsg : ""});
       }
@@ -174,8 +174,6 @@ export default class Login extends Component {
     ResetPassword = async () => {
       try{
         const email = await this.EmailValidator(this.state.passwordForgotten, "passwordForgottenErrorMsg");
-        console.log(this.state)
-
 
         if(email){
           let bodyFormData = new FormData();
@@ -226,7 +224,7 @@ export default class Login extends Component {
         }
         else{
           // Visibility = false
-          eyeIcon = <Icon name='eye' size={28} color='black' onPress={this.TooglePasswordVisibility}/>;
+          eyeIcon = <Icon name='eye' size={18} color='black' onPress={this.TooglePasswordVisibility}/>;
         }
 
         return(
@@ -265,7 +263,7 @@ export default class Login extends Component {
               </View>
 
               {/* Modal */}
-              <View style={{marginTop: 22}}>
+              <View style={Styles.modalContainer}>
                 <Modal
                   animationType="slide"
                   transparent={false}
@@ -273,13 +271,12 @@ export default class Login extends Component {
                   onRequestClose={() => {
                     Alert.alert('Modal has been closed.');
                   }}>
-                  <View style={{marginTop: 20}}>
-                    <View style={{padding: 15}}>
-                      <Text style={{ marginBottom : 50, fontSize: 22 }}>
+                  <View>
+                    <View>
+                      <Text style={Styles.modalTitle}>
                         Saisissez votre addresse email, nous  vous enverons un email de récupération de mot de passe 
                       </Text>
                       <Input
-                        style={{marginBottom : 50}}
                         name='passwordForgotten' 
                         label='Votre email'
                         placeholder='email@my_email.com'
@@ -289,9 +286,8 @@ export default class Login extends Component {
                         onChange={this.UpdateInputToState}
                       />
                       {/* buttons modal */}
-                      <View style={{flex : 1, flexDirection: "row", minHeight: 100, justifyContent: "space-around", marginTop: 50}}>
+                      <View style={Styles.modalButtonContainer}>
                         <Button
-                          style={{flex : 1 }}
                           type='outline'
                           iconRight={{
                             name : '',
@@ -304,7 +300,6 @@ export default class Login extends Component {
                           }}
                         />
                         <Button
-                          style={{flex : 1}}
                           iconRight={{
                             name: "send",
                             size: 15,

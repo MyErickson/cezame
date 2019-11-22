@@ -12,4 +12,4 @@ const errorsMsg = {
     passwordLen         : `Votre mot de passe doit faire entre ${config.minLenPassword} et ${config.maxLenPassword} charactère.`
 }
 
-export {patternEmail, errorsMsg, config};
+export { patternEmail, errorsMsg, config };
