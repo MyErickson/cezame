@@ -2,10 +2,12 @@ import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
     container : {
-        height : 100,
-        padding :  20,
+
+        paddingLeft :  50,
+        paddingRight: 50,
         textAlign : "center",
-        backgroundColor : "red"
+        flexDirection : "row",
+        justifyContent : "center"
     },
     text : {
         fontSize : 22
