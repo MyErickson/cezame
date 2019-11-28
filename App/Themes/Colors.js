@@ -1,10 +1,13 @@
 const Colors = {
     // App Colors
     black           : "#000",
+    dark            : "#232323",
     white           : "#FFF",
     primary         : "#017EDC",
     lightPrimary    : "#13B0CB", 
-    secondary       : "#7BCB61",
+    darkPrimary     : "#003883", 
+    secondary       : "#47A229",
+    lightSecondary  : "#7BCB61",
 
     // 
     generalBackground : "#EAF5F7",

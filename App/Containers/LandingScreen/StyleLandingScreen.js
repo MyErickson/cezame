@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import Colors from '../../Themes/Colors';
 
 const Styles = StyleSheet.create({
     imageContainer : {
@@ -7,11 +8,11 @@ const Styles = StyleSheet.create({
     backgroundLanding : {
         width: "100%",
         height: 260,
-        backgroundColor:'#000',
+        backgroundColor: Colors.generalBackground,
         
         paddingVertical: 40,
         position: 'absolute',
-        bottom: -10
+        bottom: -10,
     }
 });
 

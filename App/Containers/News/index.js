@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Text, View, Button } from 'react-native';
 import axios from 'axios';
 import { ScrollView } from 'react-native-gesture-handler';
+import LayoutContent from '../../Components/LayoutContent/LayoutContent';
 
 export default class News extends Component {
 
@@ -34,10 +35,9 @@ export default class News extends Component {
                         )
                 });
         return (
-            <ScrollView>
-                <Text> NEWS </Text>
+            <LayoutContent>
                 {news}
-            </ScrollView>
+            </LayoutContent>
         )
     }
 }

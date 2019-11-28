@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
-import { Text, View, Modal, TouchableHighlight, Alert, ActivityIndicator } from 'react-native';
+import { Text, View, Modal, Alert, ActivityIndicator, ImageBackground, Dimensions, KeyboardAvoidingView } from 'react-native';
 
 import axios from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import { Input, Button } from 'react-native-elements';
+import { Input, Button, Icon } from 'react-native-elements';
 
 import Styles from './style';
 import { config, patternEmail, errorsMsg } from '../../Configs/General'
+import Images from '../../Themes/Images';
+import Colors from '../../Themes/Colors';
 
+const screen = Dimensions.get("window");
 
 
 export default class Login extends Component {
@@ -220,47 +222,74 @@ export default class Login extends Component {
         let eyeIcon;
         if (this.state.isPasswordVisibility == false){
           // Visibility = true 
-          eyeIcon =  <Icon name='eye-slash' size={18} color='black' onPress={this.TooglePasswordVisibility}/>;
+          eyeIcon =  <Icon name='eye-slash' size={18} color='#969696' onPress={this.TooglePasswordVisibility}/>;
         }
         else{
           // Visibility = false
-          eyeIcon = <Icon name='eye' size={18} color='black' onPress={this.TooglePasswordVisibility}/>;
+          eyeIcon = <Icon name='eye' size={18} color='#969696' onPress={this.TooglePasswordVisibility}/>;
         }
 
         return(
             <View>
-              {loaderConnexion}
-              <View>
-                <Input
-                  name='email' 
-                  label='Identifiant'
-                  placeholder='email@my_email.com'
-                  errorStyle={{ color: 'red' }}
-                  errorMessage={this.state.emailErrorMsg} 
-                  value={this.state.email} 
-                  onChange={this.UpdateInputToState}
-                />
-                <Input 
-                  name="password"
-                  secureTextEntry={!this.state.isPasswordVisibility}
-                  label="Mot de passe"
-                  errorStyle={{ color: 'red' }}
-                  errorMessage={this.state.passwordErrorMsg} 
-                  value={this.state.password} 
-                  onChange={this.UpdateInputToState} 
-                  rightIcon={eyeIcon}
-                />
-                <Button  
-                  title="Connexion" 
-                  onPress={this.Login} 
-                  type="solid"
-                />
-                <Button  
-                  title="Mot de passe oublié ?" 
-                  onPress={this.ToogleModal} 
-                  type="clear"
-                />
-              </View>
+              <KeyboardAvoidingView  behavior="position" enabled>
+                <ImageBackground 
+                  source={Images.bgLogin}
+                  style={{width: screen.width, height: screen.height-231}}
+                >
+                  <Icon 
+                    name="ios-arrow-round-back" 
+                    type='ionicon' 
+                    onPress={ () => this.props.navigation.goBack() }
+                    color={'white'}
+                    containerStyle={{ position: "absolute", left: 25, top: 25 }}
+                    size={55}
+                  />
+                  <Text style={{color: "white", fontSize: 32, textTransform: "uppercase", position: "absolute", top: 350, left: 60 }}>Bienvenue</Text>
+                </ImageBackground>
+                {loaderConnexion}
+              
+                <View style={{ marginHorizontal: 50, marginTop: -30 }}>
+                  <Input
+                    name='email' 
+                    label='Identifiant'
+                    placeholder='email@adress.com'
+                    errorStyle={{ color: 'red' }}
+                    errorMessage={this.state.emailErrorMsg} 
+                    value={this.state.email} 
+                    onChange={this.UpdateInputToState}
+                    labelStyle={{ fontSize: 15, margin: 0, color: Colors.dark, fontWeight: "normal" }}
+                    inputStyle={{ padding: 0, marginTop: 15, fontSize: 15 }}
+                    containerStyle={{ borderBottomWidth: 1, borderBottomColor: "#C6C6C6" }}
+                    inputContainerStyle={{ borderBottomWidth: 0,height: 25, marginBottom: 10 }}
+                  />
+                  <Input 
+                    name="password"
+                    secureTextEntry={!this.state.isPasswordVisibility}
+                    label="Mot de passe"
+                    placeholder='•••••••••'
+                    errorStyle={{ color: 'red' }}
+                    errorMessage={this.state.passwordErrorMsg} 
+                    value={this.state.password} 
+                    onChange={this.UpdateInputToState} 
+                    rightIcon={eyeIcon}
+                    labelStyle={{ fontSize: 15, marginTop: 15, color: Colors.dark, fontWeight: "normal" }}
+                    inputStyle={{ padding: 0, marginTop: 15, fontSize: 15,  }}
+                    containerStyle={{ borderBottomWidth: 1, borderBottomColor: "#C6C6C6" }}
+                    inputContainerStyle={{ borderBottomWidth: 0,height: 25, marginBottom: 10 }}
+                  />
+                  <Button 
+                    buttonStyle={{ borderRadius: 30, height: 50, backgroundColor: Colors.lightPrimary, }} 
+                    containerStyle= {{ marginTop: 25, marginBottom: 0 }} 
+                    onPress={this.Login} 
+                    title="Connexion" 
+                  />
+                  <Button  
+                    title="Mot de passe oublié ?" 
+                    onPress={this.ToogleModal} 
+                    type="clear"
+                  />
+                </View>
+              </KeyboardAvoidingView>
 
               {/* Modal */}
               <View style={Styles.modalContainer}>

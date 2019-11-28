@@ -17,13 +17,13 @@ const MainNavigator = createStackNavigator({
     Login: {
       screen: Login,
       navigationOptions: {
-        
+        header : null
       }
     },
     News : {
       screen: News,
       navigationOptions: {
-        title  : 'Actualité',
+        header : null
       }
     },
     Agenda : {
