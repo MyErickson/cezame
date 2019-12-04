@@ -11,51 +11,61 @@ export default class SocialNetwork extends Component {
             <View style={Styles.container}>
                 <TouchableNativeFeedback>
                     <Icon
-                        raised
+                        raised={this.props.white ? false : true }
                         name='facebook'
                         type='font-awesome'
-                        color={Colors.facebook}
+                        color={this.props.white ? "white" : Colors.facebook}
                         onPress={() => console.log('facebook')} 
+                        containerStyle={{ marginHorizontal: this.props.white ? 15 : 0, marginVertical: this.props.white ? 15 : 0 }}
+                        size={18}
                     />
                 </TouchableNativeFeedback>
 
                 <TouchableNativeFeedback>
                     <Icon
-                        raised
+                        raised={this.props.white ? false : true }
                         name='twitter'
                         type='font-awesome'
-                        color={Colors.twitter}
+                        color={this.props.white ? "white" : Colors.twitter}
                         onPress={() => console.log('twitter')} 
+                        containerStyle={{ marginHorizontal: this.props.white ? 15 : 0, marginVertical: this.props.white ? 15 : 0 }}
+                        size={18}
                     />
                 </TouchableNativeFeedback>
 
                 <TouchableNativeFeedback>
                     <Icon
-                        raised
+                        raised={this.props.white ? false : true }
                         name='linkedin'
                         type='font-awesome'
-                        color={Colors.linkedin}
+                        color={this.props.white ? "white" : Colors.linkedin}
                         onPress={() => console.log('linkedin')} 
+                        containerStyle={{ marginHorizontal: this.props.white ? 15 : 0, marginVertical: this.props.white ? 15 : 0 }}
+                        size={18}
                     />
                 </TouchableNativeFeedback>
 
                 <TouchableNativeFeedback>
                     <Icon
-                        raised
+                        raised={this.props.white ? false : true }
                         name='instagram'
                         type='font-awesome'
-                        color={Colors.instagram}
+                        color={this.props.white ? "white" : Colors.instagram}
                         onPress={() => console.log('instagram')} 
+                        containerStyle={{ marginHorizontal: this.props.white ? 15 : 0, marginVertical: this.props.white ? 15 : 0 }}
+                        size={18}
                     />
                 </TouchableNativeFeedback>
 
                 <TouchableNativeFeedback>
                     <Icon
-                        raised
+                        raised={this.props.white ? false : true }
                         name='youtube-play'
                         type='font-awesome'
-                        color={Colors.youtube}
+                        color={this.props.white ? "white" : Colors.youtube}
                         onPress={() => console.log('youtube-play')} 
+                        containerStyle={{ marginHorizontal: this.props.white ? 15 : 0, marginVertical: this.props.white ? 15 : 0 }}
+                        size={18}
                     />
                 </TouchableNativeFeedback>
             </View>

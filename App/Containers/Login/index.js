@@ -9,6 +9,7 @@ import Styles from './style';
 import { config, patternEmail, errorsMsg } from '../../Configs/General'
 import Images from '../../Themes/Images';
 import Colors from '../../Themes/Colors';
+import NavigationService from '../../Services/NavigationService';
 
 const screen = Dimensions.get("window");
 
@@ -131,15 +132,15 @@ export default class Login extends Component {
         // activate loader
         this.ToogleLoader();
         let validateInputs = await this.FormLoginValidator(this.state.email, this.state.password);
-
+        NavigationService.navigate('Program')
         if(validateInputs.email && validateInputs.password){
           let bodyFormData = new FormData();
           bodyFormData.append("login", validateInputs.email);
           bodyFormData.append("pass", validateInputs.password);
 
           // a décommenter si on ne veux pas taper le login/password
-          //bodyFormData.append("login", "bruno.cox");
-          //bodyFormData.append("pass", 123456);
+          // bodyFormData.append("login", "bruno.cox");
+          // bodyFormData.append("pass", 123456);
   
           axios({
             url: "https://cezame-dev.digitalcube.fr/api/login",
@@ -155,6 +156,7 @@ export default class Login extends Component {
               // remove loader
               this.ToogleLoader();
             });
+            NavigationService.navigate('Program')
           })
           .catch((error) => {
             //handle error
@@ -222,11 +224,11 @@ export default class Login extends Component {
         let eyeIcon;
         if (this.state.isPasswordVisibility == false){
           // Visibility = true 
-          eyeIcon =  <Icon name='eye-slash' size={18} color='#969696' onPress={this.TooglePasswordVisibility}/>;
+          eyeIcon =  <Icon name='eye-slash' type="font-awesome" size={18} color='#969696' onPress={this.TooglePasswordVisibility}/>;
         }
         else{
           // Visibility = false
-          eyeIcon = <Icon name='eye' size={18} color='#969696' onPress={this.TooglePasswordVisibility}/>;
+          eyeIcon = <Icon name='eye' type="font-awesome" size={18} color='#969696' onPress={this.TooglePasswordVisibility}/>;
         }
 
         return(

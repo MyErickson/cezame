@@ -24,7 +24,7 @@ export default class LandingScreen extends Component {
                     <Button 
                         buttonStyle={{ borderRadius: 30, height: 50, backgroundColor: Colors.darkPrimary }} 
                         containerStyle= {{ paddingVertical: 5 }} 
-                        onPress={() => alert('What ?! QUI SOMMES-NOUS ?')} 
+                        onPress={() => navigate('AboutUs')} 
                         title="Qui sommes nous ?" 
                     />
                     <Button 
@@ -51,12 +51,12 @@ export default class LandingScreen extends Component {
                         onPress={() => alert('What ?! Mentions légales')}
                         title="Mentions légales" 
                     />
-                    <Button 
+                    {/* <Button 
                         buttonStyle={{ borderRadius: 30, height: 50, backgroundColor: "blue" }} 
                         containerStyle= {{ paddingVertical: 5 }} 
                         onPress={() => navigate('Agenda', {name: 'Agenda'})} 
                         title="Agenda" 
-                    />
+                    /> */}
                 </View>
                 
                 <ImageBackground source={Images.bgImage} style={Styles.backgroundLanding}>

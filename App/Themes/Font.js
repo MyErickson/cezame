@@ -1,25 +1,31 @@
+import Colors from "./Colors"
+
 const size = {
-    h1: 38,
-    h2: 34,
-    h3: 30,
-    input: 18,
-    regular: 17,
-    medium: 14,
-    small: 12,
+    h1: 20,
+    h2: 17,
+    h3: 15,
+    input: 14,
+    regular: 14,
+    medium: 12,
+    small: 10,
 }
   
 const style = {
     h1: {
         fontSize: size.h1,
+        color: Colors.black
     },
     h2: {
         fontSize: size.h2,
+        color: Colors.black
     },
     h3: {
         fontSize: size.h3,
+        color: Colors.black
     },
     normal: {
         fontSize: size.regular,
+        color: Colors.black
     },
 }
   

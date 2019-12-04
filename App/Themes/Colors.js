@@ -12,6 +12,8 @@ const Colors = {
     // 
     generalBackground : "#EAF5F7",
 
+    inputBg: "#D5EBEF",
+
     // Social Colors 
     facebook        : "#2A62BF",
     twitter         : "#42A0ED",

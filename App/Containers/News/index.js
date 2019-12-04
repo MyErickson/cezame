@@ -35,7 +35,7 @@ export default class News extends Component {
                         )
                 });
         return (
-            <LayoutContent>
+            <LayoutContent navigation={this.props.navigation}>
                 {news}
             </LayoutContent>
         )
