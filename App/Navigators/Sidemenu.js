@@ -15,11 +15,11 @@ class SideMenu extends Component {
         this.state = {
           menu: [
               ["Mon programme", "Program"], 
-              ["Points d'intérêts", ''], 
-              ["Agenda", ''], 
+              ["Points d'intérêts", 'Places'], 
+              ["Agenda", 'Agenda'], 
               ["Galerie photos", ''], 
-              ["Messagerie instantannée", ''], 
-              ["Paramètres", ''],
+              ["Messagerie instantannée", 'Chat'], 
+              ["Paramètres", 'Parameters'],
               ["Contact", '']
             ],
           left: new Animated.Value(0),
@@ -120,6 +120,7 @@ class SideMenu extends Component {
                                     color="white"
                                 />
                             }
+                            onPress={() => {  this.goBack(), this.props.navigation.toggleDrawer(), NavigationService.navigate("News") } }
                         />
                         <Button 
                             title={"Qui sommes-nous ?"} 

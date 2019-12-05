@@ -21,14 +21,14 @@ export default class Layout extends Component {
         return (
             <View>
                 <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 0}} colors={['#0062EC','#07318D']} 
-                    style={{ height: 60 }}
+                    style={{ height: 120, paddingTop: 50 }}
                 >
                     {this.props.return && 
                         (
                             <Icon 
                                 name="arrow-back" 
                                 color="white" 
-                                containerStyle={{ position:"absolute", top: 20, left: 35, zIndex: 100 }} 
+                                containerStyle={{ position:"absolute", top: 70, left: 35, zIndex: 100 }} 
                                 onPress={ () => this.props.navigation.goBack() }
                             />
                         )
@@ -37,7 +37,7 @@ export default class Layout extends Component {
                         {this.props.title}
                     </Text>
                     {this.props.chat == true ? (
-                        <View style={[AppStyles.style.flex, { position:"absolute", top: 18, right: 25, alignItems: "center"}]}>
+                        <View style={[AppStyles.style.flex, { position:"absolute", top: 68, right: 25, alignItems: "center"}]}>
                             <Icon 
                                 name="home"
                                 color="white"
@@ -53,7 +53,7 @@ export default class Layout extends Component {
                     )
                     : 
                     (
-                        <View style={[AppStyles.style.flex, { position:"absolute", top: 15, right: 25, alignItems: "center"}]}>
+                        <View style={[AppStyles.style.flex, { position:"absolute", top: 60, right: 25, alignItems: "center"}]}>
                             <Icon 
                                 name="notifications" 
                                 color='white'
@@ -66,7 +66,7 @@ export default class Layout extends Component {
                 </LinearGradient>
                 <View 
                     style={{
-                        width: '100%', height: this.props.chat == true ? screen.height-70 : screen.height-120, 
+                        width: '100%', height: this.props.chat == true ? screen.height-70 : screen.height-135, 
                         backgroundColor: Colors.white, 
                         paddingTop: this.props.noPaddingTop == true ? 0 : 15, 
                     }} 

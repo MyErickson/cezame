@@ -13,6 +13,8 @@ import { Dimensions } from 'react-native';
 import SideMenu from './Sidemenu';
 import Notifications from '../Containers/Notifications';
 import Chat from '../Containers/Chat/';
+import Places from '../Containers/Places';
+import Parameters from '../Containers/Parameters/';
 
 const screen = Dimensions.get("window");
 
@@ -61,6 +63,18 @@ const MainNavigator = createStackNavigator({
     },
     Chat : {
       screen : Chat,
+      navigationOptions:{
+        header : null
+      }
+    },
+    Places : {
+      screen : Places,
+      navigationOptions:{
+        header : null
+      }
+    },
+    Parameters : {
+      screen : Parameters,
       navigationOptions:{
         header : null
       }

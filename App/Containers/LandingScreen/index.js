@@ -14,7 +14,7 @@ export default class LandingScreen extends Component {
         return (
             
             <View style={{ flex: 1 , backgroundColor: Colors.generalBackground }}>
-                <View style={{justifyContent:'center', alignItems:'center', marginTop: 30, marginBottom : 30}}>
+                <View style={{justifyContent:'center', alignItems:'center', marginTop: 70, marginBottom : 30}}>
                     <Image
                         style={{ width: 153, height: 187 }}
                         source={Images.logo}

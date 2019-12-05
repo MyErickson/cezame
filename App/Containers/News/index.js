@@ -27,7 +27,6 @@ export default class News extends Component {
                 this.state.newsArticles.map((news) => {
                         return(
                             <View key={news.id}>
-                                {console.log(news.id)}
                                 <Text>{news.title}</Text>
                                 <Text>{news.description}</Text>
                                 <Text>De : {news.author} publier le  :{news.datePublished}</Text>

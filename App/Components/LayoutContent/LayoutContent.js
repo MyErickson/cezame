@@ -11,14 +11,15 @@ export default class LayoutContent extends Component {
         return (
             <View>
                 <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 0}} colors={['#0062EC','#07318D']} 
-                    style={{ height: 120 }}
+                    style={{ height: 150, paddingTop: 35 }}
                 >
                     <Icon 
                         name="ios-arrow-round-back" 
                         type='ionicon' 
                         onPress={ () => this.props.navigation.goBack() }
                         color={'white'}
-                        containerStyle={{ position: "absolute", left: 25, top: 15, zIndex: 10 }}
+                        containerStyle={{ position: "absolute", left: 35, top: 45, zIndex: 10 }}
+                        hitSlop={{top: 10, bottom: 10, left: 0, right: 0}} 
                         size={40}
                     />
                     <Text style={{ marginTop: 15, textAlign: "center", color: "white", textTransform: "uppercase", fontSize: 25, fontWeight: "bold" }}>Cézame</Text>
@@ -31,7 +32,7 @@ export default class LayoutContent extends Component {
                         size={20}
                     />
                 </LinearGradient>
-                <View style={{width: '100%', height: screen.height-120, backgroundColor: "white", borderRadius: 50, marginTop: -50, paddingHorizontal: 35, paddingTop: 30 }} contentContainerStyle={{ paddingBottom: 50 }}>
+                <View style={{width: '100%', height: screen.height-100, backgroundColor: "white", borderRadius: 50, marginTop: -50, paddingHorizontal: 35, paddingTop: 30 }} contentContainerStyle={{ paddingBottom: 50 }}>
                     {this.props.children}
                 </View>
                 <View style={{ width: "100%", backgroundColor: Colors.lightSecondary }}>

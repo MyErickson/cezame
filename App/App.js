@@ -6,7 +6,7 @@ import NavigationService from './Services/NavigationService';
 export default function App() {
   return (
     <>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar translucent backgroundColor={'transparent'} />
       <AppNavigator ref={(navigatorRef) => {
         NavigationService.setTopLevelNavigator(navigatorRef)
       }}/>
