@@ -2,7 +2,7 @@ import React, { Component, useRef } from 'react';
 import { Text, View, Dimensions, TouchableOpacity, Image, Animated } from 'react-native';
 import Layout from '../../Components/Layout';
 import Colors from '../../Themes/Colors';
-import { Icon, Input } from 'react-native-elements';
+import { Icon, Input, Button } from 'react-native-elements';
 import Font from '../../Themes/Font';
 import MapView, { Marker, Callout } from 'react-native-maps';
 import AppStyles from '../../Themes/AppStyles';
@@ -28,6 +28,7 @@ export default class Parameters extends Component {
                 <Input label='Mon adresse e-mail' />
                 <Input label='Tel.' />
                 <Input label='Changer mon mot de passe' />
+                <Button title="Enregistrer" style={{ backgroundColor: Colors.lightPrimary, borderRadius: 25 }} />
             </Layout>
         )
     }
