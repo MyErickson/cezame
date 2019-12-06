@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Text, View, Button } from 'react-native';
 import axios from 'axios';
 import { ScrollView } from 'react-native-gesture-handler';
+import LayoutContent from '../../Components/LayoutContent/LayoutContent';
 
 export default class News extends Component {
 
@@ -26,7 +27,6 @@ export default class News extends Component {
                 this.state.newsArticles.map((news) => {
                         return(
                             <View key={news.id}>
-                                {console.log(news.id)}
                                 <Text>{news.title}</Text>
                                 <Text>{news.description}</Text>
                                 <Text>De : {news.author} publier le  :{news.datePublished}</Text>
@@ -34,10 +34,9 @@ export default class News extends Component {
                         )
                 });
         return (
-            <ScrollView>
-                <Text> NEWS </Text>
+            <LayoutContent navigation={this.props.navigation}>
                 {news}
-            </ScrollView>
+            </LayoutContent>
         )
     }
 }
