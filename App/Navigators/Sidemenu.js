@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, View, Dimensions, Image, ImageBackground, Animated, BackHandler} from 'react-native';
+import {Text, View, Dimensions, Image, ImageBackground, Animated, BackHandler, FlatList} from 'react-native';
 import { Icon, Button } from 'react-native-elements';
 import Images from '../Themes/Images';
 import LinearGradient from 'react-native-linear-gradient';
@@ -17,10 +17,10 @@ class SideMenu extends Component {
               ["Mon programme", "Program"], 
               ["Points d'intérêts", 'Places'], 
               ["Agenda", 'Agenda'], 
-              ["Galerie photos", ''], 
+              ["Galerie photos", 'Gallery'], 
               ["Messagerie instantannée", 'Chat'], 
               ["Paramètres", 'Parameters'],
-              ["Contact", '']
+              ["Contact", 'Contact']
             ],
           left: new Animated.Value(0),
           iconBack: "clear",
@@ -56,7 +56,7 @@ class SideMenu extends Component {
     return (
     <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 0}} colors={['#fff','#E9ECF5']}>
         <ImageBackground source={Images.bgSidemenu} style={{width: '100%', height: '100%'}} resizeMode={"cover"}>
-            <View style={{ flexDirection: "row", justifyContent: "space-between", marginHorizontal: 25, marginVertical: 15 }}>
+            <View style={{ flexDirection: "row", justifyContent: "space-between", marginHorizontal: 25, marginVertical: 15, marginTop: 55 }}>
                 <Icon 
                     name={this.state.iconBack} 
                     color="#000" 
@@ -65,7 +65,9 @@ class SideMenu extends Component {
                     hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                 />
                 <Text style={[Font.style.h2, { color: Colors.darkPrimary, marginTop: 5, fontWeight: "bold" }]}>{this.state.titleMenu}</Text>
-                <View style={{ width: 35, height: 35, borderRadius: 35, backgroundColor: Colors.dark }}></View>
+                <View style={{ width: 35, height: 35, borderRadius: 35, backgroundColor: Colors.dark }}>
+                    <Image source={Images.devProfil} style={{ width: 35, height: 35, borderRadius: 35, }} />
+                </View>
             </View>
             
             <View style={{ justifyContent: "center" }}>
@@ -77,19 +79,24 @@ class SideMenu extends Component {
                 </View>
                 <Animated.View style={{ flexDirection: "row", left: this.state.left }}>
                     <View style={{ width: screen.width }}>
-                        {this.state.menu.map(function (item, index) {
-                            return(
-                            <Button 
-                                title={item[0]} 
-                                buttonStyle={{ justifyContent: "flex-start", paddingHorizontal: 15, paddingVertical: 12, marginHorizontal: 25, marginVertical: 5, backgroundColor: Colors.white }}
-                                titleStyle={{ marginLeft: 8, color: Colors.darkPrimary }}
-                                onPress={() => { NavigationService.navigate(item[1]) } }
-                                icon={
-                                    <Image source={Images["menu"+index]} />
-                                }
-                            />
-                            )
-                        })}
+
+                        {/* Boucle pour le menu principal */}
+                        <FlatList 
+                            data={this.state.menu}
+                            renderItem={({ item, index }) => 
+                                <Button 
+                                    title={item[0]} 
+                                    buttonStyle={{ justifyContent: "flex-start", paddingHorizontal: 15, paddingVertical: 12, marginHorizontal: 25, marginVertical: 5, backgroundColor: Colors.white }}
+                                    titleStyle={{ marginLeft: 8, color: Colors.darkPrimary }}
+                                    onPress={() => { NavigationService.navigate(item[1]), this.props.navigation.closeDrawer() } }
+                                    icon={
+                                        <Image source={Images["menu"+index]} />
+                                    }
+                                />
+                            }
+                            keyExtractor={item => item.id}
+                        />
+
                         <View style={{ position: "relative" }}>
                             <Button 
                                 title={"A propos de Cézame"} 

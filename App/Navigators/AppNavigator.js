@@ -15,6 +15,8 @@ import Notifications from '../Containers/Notifications';
 import Chat from '../Containers/Chat/';
 import Places from '../Containers/Places';
 import Parameters from '../Containers/Parameters/';
+import Contact from '../Containers/Contact/';
+import Gallery from '../Containers/Gallery';
 
 const screen = Dimensions.get("window");
 
@@ -75,6 +77,18 @@ const MainNavigator = createStackNavigator({
     },
     Parameters : {
       screen : Parameters,
+      navigationOptions:{
+        header : null
+      }
+    },
+    Contact : {
+      screen : Contact,
+      navigationOptions:{
+        header : null
+      }
+    },
+    Gallery : {
+      screen : Gallery,
       navigationOptions:{
         header : null
       }

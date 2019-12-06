@@ -13,7 +13,7 @@ const Images = {
     menu7: require('../Assets/Images/iconMenu/7.png'),
     marker: require('../Assets/Images/marker.png'),
 
-    
+    devProfil: require('../Assets/Images/profil.png'),
     devImageProgram: require('../Assets/Images/madrid-bg.jpg'), 
     devGroup: require('../Assets/Images/group.png'),
 }

@@ -19,7 +19,11 @@ const Colors = {
     twitter         : "#42A0ED",
     linkedin        : "#02307B",
     instagram       : "#E45C5C",
-    youtube         : "#F22929"
+    youtube         : "#F22929",
+
+    // Gradient Colors 
+    leftColor: "#0062EC", 
+    rightColor: "#07318D"
 }
 
 export default Colors;
