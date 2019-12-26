@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, Modal, Alert, ActivityIndicator, ImageBackground, Dimensions, KeyboardAvoidingView } from 'react-native';
+import { Text, View, Modal, Alert, ActivityIndicator, ImageBackground, Dimensions, KeyboardAvoidingView, StatusBar, ScrollView } from 'react-native';
 
 import axios from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -11,7 +11,7 @@ import Images from '../../Themes/Images';
 import Colors from '../../Themes/Colors';
 import NavigationService from '../../Services/NavigationService';
 
-const screen = Dimensions.get("window");
+const screen = Dimensions.get("screen");
 
 
 export default class Login extends Component {
@@ -233,6 +233,7 @@ export default class Login extends Component {
 
         return(
             <View>
+              <StatusBar translucent backgroundColor={'transparent'} />
               <KeyboardAvoidingView  behavior="position" enabled>
                 <ImageBackground 
                   source={Images.bgLogin}
@@ -246,11 +247,11 @@ export default class Login extends Component {
                     containerStyle={{ position: "absolute", left: 25, top: 25 }}
                     size={55}
                   />
-                  <Text style={{color: "white", fontSize: 32, textTransform: "uppercase", position: "absolute", top: 350, left: 60 }}>Bienvenue</Text>
+                  <Text style={{color: "white", fontSize: 32, textTransform: "uppercase", position: "absolute", top: (screen.height/2)-50, left: 60 }}>Bienvenue</Text>
                 </ImageBackground>
                 {loaderConnexion}
               
-                <View style={{ marginHorizontal: 50, marginTop: -30 }}>
+                <ScrollView style={{ marginHorizontal: 50, marginTop: -40, height: 300 }}>
                   <Input
                     name='email' 
                     label='Identifiant'
@@ -290,7 +291,7 @@ export default class Login extends Component {
                     onPress={this.ToogleModal} 
                     type="clear"
                   />
-                </View>
+                </ScrollView>
               </KeyboardAvoidingView>
 
               {/* Modal */}
@@ -305,7 +306,7 @@ export default class Login extends Component {
                   <View>
                     <View>
                       <Text style={Styles.modalTitle}>
-                        Saisissez votre addresse email, nous  vous enverons un email de récupération de mot de passe 
+                        Saisissez votre adresse email, nous vous enverrons un email de récupération de mot de passe
                       </Text>
                       <Input
                         name='passwordForgotten' 

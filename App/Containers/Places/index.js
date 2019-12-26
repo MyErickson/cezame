@@ -29,8 +29,8 @@ export default class Places extends Component {
             adress: [
                 {
                     id: 1, 
-                    title: "Restaurant Casa de Vélazquez",
-                    coord: [40.441431, -3.730483],
+                    title: "Plaza Mayor",
+                    coord: [40.415584, -3.707412],
                     description: 'Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna.',
                 },
                 {
@@ -41,8 +41,8 @@ export default class Places extends Component {
                 },
                 {
                     id: 3, 
-                    title: "Plaza Mayor",
-                    coord: [40.415584, -3.707412],
+                    title: "Restaurant Casa de Vélazquez",
+                    coord: [40.441431, -3.730483],
                     description: 'Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna.',
                 },
             ],
@@ -85,18 +85,32 @@ export default class Places extends Component {
         }, 1000)
     }
 
+    _mapDidUpdate() {
+        if (this.props.navigation.state.params != undefined) {
+            this.map.animateToRegion({
+                latitude: this.props.navigation.state.params.coord.latitude,
+                longitude: this.props.navigation.state.params.coord.longitude,
+                latitudeDelta: 0.0052,
+                longitudeDelta: 0.0121,
+            }, 1000) 
+            this.setState({ 
+                index: 0,
+                rightModal : new Animated.Value(screen.width-(screen.width-(85/2))), // position initial des modals des lieux
+                leftModal: new Animated.Value(-screen.width), // position initial de la modal initiale 
+            });
+        }
+        else {
+        }
+    }
+
     render() {
         return (
             <Layout noPaddingTop title="Points d'intérêts" navigation={this.props.navigation}>
                 <MapView
                     style={{ position: "absolute", top: 0, bottom: 0, left: 0, right: 0 }}
-                    initialRegion={{
-                        latitude: this.state.initialRegion.latitude,
-                        longitude:  this.state.initialRegion.longitude,
-                        latitudeDelta: this.state.initialRegion.latitudeDelta,
-                        longitudeDelta: this.state.initialRegion.longitudeDelta,
-                    }}
+                    initialRegion={this.state.initialRegion}
                     ref={ref => { this.map = ref; }}
+                    onMapReady={ (e) => {this._mapDidUpdate(e)} }
                 >
 
                     {/* Boucle pour les marqueurs */}
@@ -109,8 +123,8 @@ export default class Places extends Component {
                                 title={marker.title}
                                 onPress = {() => {
                                     this.map.animateToRegion({
-                                    latitude: marker.coord[0],
-                                    longitude: marker.coord[1],
+                                    latitude: marker_lat,
+                                    longitude: marker_long,
                                     latitudeDelta: 0.0052,
                                     longitudeDelta: 0.0121,
                                 }, 1000), this._modalPlace(index) }}

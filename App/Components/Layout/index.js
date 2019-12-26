@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import LinearGradient from 'react-native-linear-gradient';
-import { View, Text, Dimensions, BackHandler, Image } from 'react-native';
+import { View, Text, Dimensions, BackHandler, Image, StatusBar, TouchableOpacity } from 'react-native';
 import { Icon } from 'react-native-elements';
 import Colors from '../../Themes/Colors';
 import NavigationService from '../../Services/NavigationService';
 import AppStyles from '../../Themes/AppStyles';
 import Images from '../../Themes/Images';
+import UploadImage from '../../Containers/Gallery/UploadImage';
 const screen = Dimensions.get("window");
 
 export default class Layout extends Component {
@@ -20,11 +21,12 @@ export default class Layout extends Component {
     render() {
         return (
             <View style={{ flex: 1 }}>
+                <StatusBar translucent backgroundColor={'transparent'} />
                 {this.props.allScreenHeader == true ? (
                     <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 0}} colors={[Colors.leftColor, Colors.rightColor]} 
                         style={{ 
                             width: screen.width,
-                            height: screen.height, 
+                            height: screen.height-8, 
                             paddingTop: 50, 
                         }}
                     />
@@ -76,9 +78,12 @@ export default class Layout extends Component {
                                 color='white'
                                 onPress={() =>  NavigationService.navigate('Notifications')}
                             />
-                            <View style={{ width: 35, height: 35, borderRadius: 35, backgroundColor: Colors.dark, marginLeft: 15 }}>
-                                <Image source={Images.devProfil} style={{ width: 35, height: 35, borderRadius: 35, }} />
-                            </View>
+                            <TouchableOpacity 
+                                style={{ width: 35, height: 35, borderRadius: 35, backgroundColor: Colors.dark, marginLeft: 15 }} 
+                                onPress={() => NavigationService.navigate("Parameters")} 
+                            >
+                                <Image source={Images.devProfil} style={{ width: 35, height: 35, borderRadius: 35 }} />
+                            </TouchableOpacity>
                         </View>
                     )}
                 </View>
@@ -104,6 +109,9 @@ export default class Layout extends Component {
                         position: this.props.roundHeader == true ? "absolute" : "relative",
                         bottom: 0
                     }}>
+                        {this.props.gallery && (
+                            <UploadImage />
+                        )}
                         <View style={AppStyles.style.flex}>
                             <Icon 
                                 name="home"
@@ -119,7 +127,6 @@ export default class Layout extends Component {
                                 onPress={() => NavigationService.navigate("Chat")}
                             />  
                         </View>
-                        
                         <Icon
                             name="menu"
                             color="white"

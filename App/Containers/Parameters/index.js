@@ -47,7 +47,7 @@ export default class Parameters extends Component {
             eyeIcon = <Icon name='eye' type="font-awesome" size={18} color='#969696' onPress={this.TooglePasswordVisibility}/>;
         }
         return (
-            <Layout roundHeader return title="Parameters" navigation={this.props.navigation}>
+            <Layout roundHeader return title="Paramètres" navigation={this.props.navigation}>
                 <View style={{ width: 225, height: 225, borderRadius: 45, alignSelf: "center" }}>
                     <Image source={Images.devProfil} style={{ width: 225, height: 225,  borderRadius: 45 }} />
                 </View>

@@ -5,11 +5,8 @@ import NavigationService from './Services/NavigationService';
 
 export default function App() {
   return (
-    <>
-      <StatusBar translucent backgroundColor={'transparent'} />
-      <AppNavigator ref={(navigatorRef) => {
-        NavigationService.setTopLevelNavigator(navigatorRef)
-      }}/>
-    </>
+    <AppNavigator ref={(navigatorRef) => {
+      NavigationService.setTopLevelNavigator(navigatorRef)
+    }}/>
   );
 };
