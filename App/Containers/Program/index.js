@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
-import { View, Text, Image, ScrollView } from 'react-native';
+import { View, Text, Image, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
 import Layout from '../../Components/Layout';
 import { Button, Icon } from 'react-native-elements';
 import Images from '../../Themes/Images';
 import Colors from '../../Themes/Colors';
 import Font from '../../Themes/Font';
 import AppStyles from '../../Themes/AppStyles';
+import NavigationService from '../../Services/NavigationService';
+const screen = Dimensions.get('window');
 
 export default class Program extends Component {
 
@@ -65,16 +67,18 @@ export default class Program extends Component {
                             titleStyle={{ marginLeft: 5, fontSize: 16, fontWeight: "normal" }}
                         />
                     </View>
-                    <View style={[AppStyles.style.pV15, {paddingLeft: 23}]}>
+                    <View style={[AppStyles.style.pV15, {paddingLeft: 20}]}>
                         <Text  style={Font.style.h2}>Votre hôtel</Text>
                     </View>
-                    <View  style={[AppStyles.style.pH15Flex, {justifyContent: "space-evenly"}]}>
-                        <View style={{ backgroundColor: "grey", width: '50%', maxWidth: 165, height: 165, borderRadius: 5 }}>
+                    <View  style={[AppStyles.style.flex, {justifyContent: "space-evenly"}]}>
+                        <View style={{ backgroundColor: "grey", width: (screen.width/3)+15, height: (screen.width/3)+15, borderRadius: 5 }}>
                             <Text>Map</Text>
                         </View>
-                        <View style={{ width: '50%' }}>
-                            <Text style={[Font.style.h3, { flexShrink: 1}]}>Plaza de Las Cortes*****</Text>
-                            <View style={{ marginTop: 15, marginBottom: 7, flexDirection: "row" }}>
+                        <View style={{ width: (screen.width/2)+15 }}>
+                            <TouchableOpacity onPress={()=>{ NavigationService.navigate('Places', { coord: {latitude: 40.415584, longitude: -3.707412, latitudeDelta: 0.0052, longitudeDelta: 0.0121, } }) }}>
+                                <Text style={[Font.style.h3, { flexShrink: 1}]}>Plaza de Las Cortes*****</Text>
+                            </TouchableOpacity>
+                            <View style={{ marginTop: 10, marginBottom: 5, flexDirection: "row" }}>
                                 <Icon
                                     name='map-marker'
                                     type='material-community'
@@ -84,7 +88,7 @@ export default class Program extends Component {
                                 />
                                 <Text style={[Font.style.normal, { flexShrink: 1, color: Colors.primary }]}>Plaza de las Cortes, 7 28014, Madrid, Espagne</Text>
                             </View>
-                            <View style={{ marginTop: 7, marginBottom: 15, flexDirection: "row" }}>
+                            <View style={{ marginTop: 5, marginBottom: 15, flexDirection: "row" }}>
                                 <Icon
                                     name='phone'
                                     type='material-community'
@@ -96,6 +100,7 @@ export default class Program extends Component {
                             </View>
                             <Button 
                                 buttonStyle={{ backgroundColor: Colors.lightSecondary, borderRadius: 5 }} 
+                                onPress={()=>{ NavigationService.navigate('Places', { coord: {latitude: 40.415584, longitude: -3.707412, latitudeDelta: 0.0052, longitudeDelta: 0.0121, } }) }}
                                 title="Voir plus de détail sur l'hôtel" 
                                 titleStyle={{ marginLeft: 5, fontSize: 13, fontWeight: "normal" }}
                             />

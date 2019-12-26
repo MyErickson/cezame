@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Image, ImageBackground } from 'react-native';
+import { View, Image, ImageBackground, StatusBar } from 'react-native';
 import Styles from './StyleLandingScreen';
 import SocialNetworkButtons from '../../Components/SocialNetworkButtons';
 import Colors from '../../Themes/Colors';

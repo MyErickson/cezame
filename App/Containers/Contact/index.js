@@ -92,7 +92,7 @@ export default class Contact extends Component {
                         <View style={{ width: screen.width-50, alignSelf: "center" }}>
                             <Text style={{ fontSize: 22, textAlign: "center" }}>Une question ? Besoin d'information ?</Text>
                             <Text style={{ fontSize: 18, textAlign: "center" }}>Nous vous accompagnons durant votre seminaire</Text>
-                            <Text style={{ fontSize: 15, textAlign: "center" }}>Contact utiles</Text>
+                            <Text style={{ fontSize: 15, textAlign: "center" }}>Contacts utiles</Text>
                         </View>
                         <FlatList data={data} renderItem={({ item }) => 
                             <Item item={item} />

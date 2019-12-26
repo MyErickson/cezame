@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import LinearGradient from 'react-native-linear-gradient';
-import { ScrollView, View, Text, Dimensions } from 'react-native';
+import { ScrollView, View, Text, Dimensions, StatusBar } from 'react-native';
 import { Icon } from 'react-native-elements';
 import SocialNetwork from '../SocialNetworkButtons';
 import Colors from '../../Themes/Colors';
@@ -10,6 +10,7 @@ export default class LayoutContent extends Component {
     render() {
         return (
             <View>
+                <StatusBar translucent backgroundColor={'transparent'} />
                 <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 0}} colors={['#0062EC','#07318D']} 
                     style={{ height: 150, paddingTop: 35 }}
                 >

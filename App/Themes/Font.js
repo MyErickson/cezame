@@ -13,15 +13,18 @@ const size = {
 const style = {
     h1: {
         fontSize: size.h1,
-        color: Colors.black
+        color: Colors.black, 
+        fontWeight: 'bold',
     },
     h2: {
         fontSize: size.h2,
-        color: Colors.black
+        color: Colors.black,
+        fontWeight: 'bold',
     },
     h3: {
         fontSize: size.h3,
-        color: Colors.black
+        color: Colors.black,
+        fontWeight: 'bold',
     },
     normal: {
         fontSize: size.regular,
