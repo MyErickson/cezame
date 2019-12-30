@@ -48,7 +48,7 @@ export default class LandingScreen extends Component {
                     <Button 
                         buttonStyle={{ borderRadius: 30, height: 50, backgroundColor: Colors.lightSecondary }} 
                         containerStyle= {{ paddingVertical: 5 }} 
-                        onPress={() => alert('What ?! Mentions légales')}
+                        onPress={() => navigate('LegalNotice', {name: 'Mentions légales'})}
                         title="Mentions légales" 
                     />
                     {/* <Button 

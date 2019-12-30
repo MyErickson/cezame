@@ -8,6 +8,7 @@ import Login from '../Containers/Login';
 import News from '../Containers/News';
 import AgendaScreen from '../Containers/Agenda';
 import AboutUs from '../Containers/AboutUs';
+import LegalNotice from '../Containers/LegalNotice';
 import Program from '../Containers/Program';
 import { Dimensions } from 'react-native';
 import SideMenu from './Sidemenu';
@@ -47,6 +48,12 @@ const MainNavigator = createStackNavigator({
     },
     AboutUs : {
       screen : AboutUs,
+      navigationOptions:{
+        header : null
+      }
+    },
+    LegalNotice : {
+      screen : LegalNotice,
       navigationOptions:{
         header : null
       }

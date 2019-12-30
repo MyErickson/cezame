@@ -5,8 +5,19 @@ import Colors from '../../Themes/Colors';
 import { Icon, Input } from 'react-native-elements';
 import AppStyles from '../../Themes/AppStyles';
 import Font from '../../Themes/Font';
+import ImagePicker from 'react-native-image-picker';
 import Moment from 'moment';
+import NavigationService from '../../Services/NavigationService';
 const screen = Dimensions.get("window");
+
+const optionsImagePicker = {
+    title: 'Select Avatar',
+    customButtons: [{ name: 'fb', title: 'Choose Photo from Facebook' }],
+    storageOptions: {
+      skipBackup: true,
+      path: 'images',
+    },
+  };
 
 
 const data = [
@@ -45,7 +56,7 @@ const data = [
     },
     {
         id: 4, 
-        message: 'Lorem ipsum dolor sit amet conse ctetur adipiscing elit sed do eiusmod tempor incididunt',
+        message: 'Lorem ipsum dolor sit amet conse ctetur adipiscing elit sed do eiusmod tempor incididunt elit sed do eiusmod tempor incididunt Lorem ipsum dolor sit amet conse ctetur adipiscing ',
         date: new Date(),
         author: {
             id: 2, 
@@ -65,22 +76,51 @@ const data = [
             avatar: ""
         }
     },
+    {
+        id: 6, 
+        message: 'Lorem ipsum dolor sit',
+        date: new Date(),
+        author: {
+            id: 1, 
+            lastName: "Nom 1",
+            name: "Prénom 1",
+            avatar: ""
+        }
+    },
+    {
+        id: 7, 
+        message: 'Lorem ipsum dolor si t elit sed do eiusmod tempor incididunt elit sed do eiusmod tempor incididunt Lorem ipsum dolor sit amet conse ctetur adipiscin ',
+        date: new Date(),
+        author: {
+            id: 2, 
+            lastName: "Nom 1",
+            name: "Prénom 1",
+            avatar: ""
+        }
+    },
 ]
 
 function Item({item}) {
     return(
         <View style={[AppStyles.style.flex, { marginHorizontal: 0, alignItems: "flex-end", marginVertical: 15 }]}>
+            {item.author.id !== 1 && 
+                <View style={{ backgroundColor: Colors.primary, width: 35, height: 35, borderRadius: 35, marginLeft: 10 }}></View>
+            }
             <View style={{ 
-                backgroundColor: "#DCEDD6", 
+                backgroundColor: item.author.id == 1 ? "#DCEDD6" : "#FFEECB", 
                 borderRadius: 15,
-                borderBottomRightRadius: 0, 
+                borderBottomRightRadius: item.author.id == 1 ? 0 : 15, 
+                borderBottomLeftRadius: item.author.id == 1 ? 15 : 0, 
                 paddingVertical: 10, paddingHorizontal: 25,
-                marginLeft: 25, width: '80%'
+                marginLeft:  item.author.id == 1 ? 25 : 10, 
+                width: '80%'
             }}>
-                <Text style={[Font.style.normal, {flexShrink: 1}]}>{item.message}</Text>
+                <Text style={[Font.style.normal, {flexShrink: 1, color: item.author.id == 1 ? "#181D37" : "#4D3A15"}]}>{item.message}</Text>
                 <Text style={{ marginTop: 5, fontSize: 12, color: "#A0A0A0" }}>{Moment(item.date).format("DD/MM -  H[h]mm")}</Text>
             </View>
-            <View style={{ backgroundColor: Colors.primary, width: 35, height: 35, borderRadius: 35, marginLeft: 10 }}></View>
+            {item.author.id == 1 && 
+                <View style={{ backgroundColor: Colors.primary, width: 35, height: 35, borderRadius: 35, marginLeft: 10 }}></View>
+            }
         </View>
     )
 }
@@ -91,6 +131,29 @@ export default class Chat extends Component {
         super(props);
         this.state = {
         }
+    }
+
+    _uploadImage = () => {
+        ImagePicker.launchImageLibrary(optionsImagePicker, (response) => {
+            console.log('Response = ', response);
+
+            if (response.didCancel) {
+                console.log('User cancelled image picker');
+            } else if (response.error) {
+                console.log('ImagePicker Error: ', response.error);
+            } else if (response.customButton) {
+                console.log('User tapped custom button: ', response.customButton);
+            } else {
+                const source = { uri: response.uri };
+            
+                // You can also display the image using data:
+                // const source = { uri: 'data:image/jpeg;base64,' + response.data };
+            
+                this.setState({
+                avatarSource: source,
+                });
+            }
+        });
     }
 
     render() {
@@ -111,6 +174,7 @@ export default class Chat extends Component {
                         name="mail"
                         color={Colors.white}
                         size={25}
+                        onPress={() => NavigationService.navigate("Contact")}
                     />
                 </View>
             </View>
@@ -134,7 +198,13 @@ export default class Chat extends Component {
                     />
                     <View style={AppStyles.style.flex}>
                         <Icon name="smile-o"  type='font-awesome' color="#B6B6B6" size={34} containerStyle={{ marginRight: 8 }} />
-                        <Icon name="file-picture-o" type='font-awesome' color="#B6B6B6" size={30} />
+                        <Icon 
+                            name="file-picture-o" 
+                            type='font-awesome' 
+                            color="#B6B6B6" 
+                            size={30} 
+                            onPress={() => this._uploadImage()}
+                        />  
                     </View>
                 </View>
                     

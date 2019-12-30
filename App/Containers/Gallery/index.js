@@ -119,7 +119,7 @@ export default class Gallery extends Component {
     _renderPageFooter = (image, index, onClose) => {
         return(
             <View>
-                <View style={{width: screen.width, height: 80 }}>
+                <View style={{width: screen.width, height: 45 }}>
                     <View style={{ zIndex: 5, backgroundColor: "rgba(0,0,0,.5)", borderRadius: 25, width: 45, height: 45, alignSelf: "center", justifyContent: "center", alignContent: "center" }}>
                         <Icon
                             name="download"

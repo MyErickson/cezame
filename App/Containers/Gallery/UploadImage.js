@@ -47,7 +47,7 @@ export default class UploadImage extends Component {
 
     render() {
         return (
-            <View style={{ position: "absolute", justifyContent: "center", width: screen.width, top: -18 }}>
+            <View style={{ position: "absolute", justifyContent: "center", left: (screen.width/2)-30, top: -18 }}>
                 <Icon 
                     name="add-circle"
                     color="white"
