@@ -40,6 +40,8 @@ LocaleConfig.locales['fr'] = {
         return (
             <View style={style.dateContainer}>
                 <TouchableWithoutFeedback onPress={() => { this.toggle()}}>
+
+                    
                     <View style={[style.dateTitle, 
                         {
                             borderBottomLeftRadius:  this.state.expanded == true ? 0 : 15,

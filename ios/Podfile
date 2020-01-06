@@ -38,6 +38,8 @@ target 'Cezame' do
 
   pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'
 
+  pod 'react-native-netinfo', :path => '../node_modules/@react-native-community/netinfo'
+
   target 'CezameTests' do
     inherit! :search_paths
     # Pods for testing
