@@ -7,6 +7,7 @@ import NavigationService from '../../Services/NavigationService';
 import AppStyles from '../../Themes/AppStyles';
 import Images from '../../Themes/Images';
 import UploadImage from '../../Containers/Gallery/UploadImage';
+import { Styles } from './styleLayout'
 const screen = Dimensions.get("window");
 
 export default class Layout extends Component {
@@ -21,7 +22,7 @@ export default class Layout extends Component {
     render() {
         return (
             <View style={{ flex: 1 }}>
-                <StatusBar translucent backgroundColor={'transparent'} />
+                <StatusBar translucent backgroundColor={Colors.rightColor} />
                 {this.props.allScreenHeader == true ? (
                     <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 0}} colors={[Colors.leftColor, Colors.rightColor]} 
                         style={{ 
@@ -34,19 +35,22 @@ export default class Layout extends Component {
                     <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 0}} colors={[Colors.leftColor, Colors.rightColor]} 
                         style={{ 
                             width: this.props.roundHeader == true ? screen.width+150 : screen.width,
-                            height: this.props.roundHeader == true ? screen.width+120 : 120, 
-                            paddingTop: 50, 
+                            height: this.props.roundHeader == true ? screen.width+120 : 80, 
                             borderRadius: this.props.roundHeader == true ? screen.width+120 : 0, 
                             marginTop: this.props.roundHeader == true ? -(screen.width-(screen.width/2)+50 ) : 0,
                             marginLeft: this.props.roundHeader == true ? -50 : 0, 
+                            flex:1
+
+                        
                         }}
                     />
                 ) }
                 
-                <View style={{ position: 'absolute', top: 20, width: screen.width, paddingHorizontal: 25, marginTop: 45, flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+                <View style={[Styles.header,{ width: screen.width}]}>
                     <View>
                         {this.props.return && (
                             <Icon 
+                                underlayColor="none"
                                 name="arrow-back" 
                                 color="white" 
                                 containerStyle={{  zIndex: 100 }} 
@@ -54,7 +58,7 @@ export default class Layout extends Component {
                             />
                         )}
                     </View>
-                    <Text style={{ textAlign: "center", color: "white", fontSize: 18, marginLeft: 45 }}>
+                    <Text style={Styles.title}>
                         {this.props.title}
                     </Text>
                     {this.props.chat == true ? (
@@ -79,7 +83,7 @@ export default class Layout extends Component {
                                 onPress={() =>  NavigationService.navigate('Notifications')}
                             />
                             <TouchableOpacity 
-                                style={{ width: 35, height: 35, borderRadius: 35, backgroundColor: Colors.dark, marginLeft: 15 }} 
+                                style={Styles.iconParam} 
                                 onPress={() => NavigationService.navigate("Parameters")} 
                             >
                                 <Image source={Images.devProfil} style={{ width: 35, height: 35, borderRadius: 35 }} />
@@ -92,7 +96,7 @@ export default class Layout extends Component {
                         width: screen.width, 
                         height: this.props.chat == true ? screen.height-70 : screen.height-135, 
                         backgroundColor: (this.props.roundHeader == true || this.props.allScreenHeader == true ) ? "transparent" : Colors.white, 
-                        paddingTop: this.props.noPaddingTop == true ? 0 : 15, 
+                        paddingTop:  0, 
                         position: (this.props.roundHeader == true || this.props.allScreenHeader == true ) ? "absolute" : "relative",
                         top: (this.props.roundHeader == true || this.props.allScreenHeader == true ) ? ( this.props.allScreenHeader == true ? 120 : -(screen.width-530 )) : 0,
                     }} 
@@ -101,14 +105,7 @@ export default class Layout extends Component {
                     {this.props.children}
                 </View>
                 {!this.props.chat && (
-                    <View style={{ 
-                        width: screen.width, 
-                        backgroundColor: Colors.lightSecondary, 
-                        flexDirection: "row", justifyContent: "space-between", 
-                        paddingVertical: 15, paddingHorizontal: 15, 
-                        position: this.props.roundHeader == true ? "absolute" : "relative",
-                        bottom: 0
-                    }}>
+                    <View style={[Styles.containerMenu,{position: this.props.roundHeader == true ? "absolute" : "relative",}]}>
                         {this.props.gallery && (
                             <UploadImage />
                         )}

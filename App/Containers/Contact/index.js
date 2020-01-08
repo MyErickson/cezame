@@ -1,5 +1,5 @@
 import React, { Component, useRef } from 'react';
-import { Text, View, Dimensions, KeyboardAvoidingView } from 'react-native';
+import { Text, View, Dimensions, KeyboardAvoidingView,ScrollView,StatusBar   } from 'react-native';
 import Layout from '../../Components/Layout';
 import Colors from '../../Themes/Colors';
 import { Icon, Input, Button, CheckBox } from 'react-native-elements';
@@ -7,7 +7,7 @@ import AppStyles from '../../Themes/AppStyles';
 import { FlatList } from 'react-native-gesture-handler';
 import Modal from "react-native-modal";
 const screen = Dimensions.get("window");
-
+import { Styles } from './styleContact'
 
 const data = [
     {
@@ -29,25 +29,7 @@ const data = [
 
 function Item({item}) {
     return(
-        <View style={{ 
-            backgroundColor: "white",
-            width: screen.width-50,
-            borderRadius: 15,
-            shadowColor: "#000",
-            alignSelf: "center",
-            paddingVertical: 13,
-            paddingHorizontal: 15,
-            marginVertical: 5,
-            shadowColor: "#000",
-            shadowOffset: {
-                width: 0,
-                height: 2,
-            },
-            shadowOpacity: 0.25,
-            shadowRadius: 3.84,
-            elevation: 5,
-            flexDirection: "row", justifyContent: "space-between", alignItems: "center"
-         }}>
+        <View style={Styles.containerItem}>
             <View>
                 <Text style={{ fontSize: 15, fontWeight: "bold" }}>{item.name}</Text>
                 <View style={[AppStyles.style.flex, {alignItems: "center", marginTop: 2}]}>
@@ -87,47 +69,63 @@ export default class Contact extends Component {
     render() {
         return (
             <Layout return title="Contact" navigation={this.props.navigation}>
-                <KeyboardAvoidingView  behavior={'position'} keyboardVerticalOffset={70} style={{flex: 1}}>  
-                    <View>
-                        <View style={{ width: screen.width-50, alignSelf: "center" }}>
-                            <Text style={{ fontSize: 22, textAlign: "center" }}>Une question ? Besoin d'information ?</Text>
-                            <Text style={{ fontSize: 18, textAlign: "center" }}>Nous vous accompagnons durant votre seminaire</Text>
-                            <Text style={{ fontSize: 15, textAlign: "center" }}>Contacts utiles</Text>
+          
+                 <StatusBar translucent backgroundColor={Colors.rightColor} />
+
+                <KeyboardAvoidingView  behavior="padding" enabled  keyboardVerticalOffset={10} style={{flex: 1,flexDirection: 'column',justifyContent: 'center'}}>  
+                <ScrollView    
+                    style={{ marginHorizontal: 0 }}
+                    showsVerticalScrollIndicator = {false}
+                    keyboardShouldPersistTaps="always"
+                    keyboardDismissMode='on-drag'
+                    keyboardShouldPersistTaps="handled"
+                    contentInsetAdjustmentBehavior="automatic"
+                >
+                
+                    <View >
+                        <View style={{ width: screen.width-50, alignSelf: "center" ,marginTop:15}}>
+                            <Text style={{ fontSize: 20,fontWeight:"bold", textAlign: "center",marginBottom:15 }}>Une question ? Besoin d'information ?</Text>
+                            <Text style={{ fontSize: 16, textAlign: "center" ,marginBottom:10}}>Nous vous accompagnons durant votre seminaire</Text>
+                            <Text style={{ fontSize: 12, textAlign: "center",marginBottom:10 }}>Contacts utiles</Text>
                         </View>
                         <FlatList data={data} renderItem={({ item }) => 
                             <Item item={item} />
                         } />
                     
-                        <View style={{ width: screen.width-75, alignSelf: "center" }}>
+                        <View style={{ width: screen.width-75, alignSelf: "center" ,marginBottom:15}}>
                             <Input 
                                 label="Commentaire" 
                                 multiline
                                 numberOfLines={6}
                                 label="Commentaire"
                                 textAlignVertical="top"
-                                labelStyle={{ fontWeight: "normal", color: Colors.text, fontSize: 18, marginBottom: 8  }}
-                                inputStyle={{ backgroundColor: "#F1F1F1", borderWidth: 1, borderRadius: 5, borderColor: "#DCDCDC" }}
+                                labelStyle={Styles.labelStyle}
+                                inputStyle={Styles.inputStyle}
                                 inputContainerStyle={{ borderBottomWidth: 0 }}
                                 containerStyle={{ marginTop: 15 }}
                             />
                             <Button 
                                 title="Envoyer" 
                                 onPress={() => { this.sendMessage() }}
-                                buttonStyle={{ backgroundColor: Colors.lightPrimary, borderRadius: 35, paddingVertical: 10, marginTop: 25, width: screen.width-125, alignSelf: "center" }} 
+                                buttonStyle={Styles.buttonStyle} 
                             />
                         </View>
                     </View>
+            
+             
+                </ScrollView>
                 </KeyboardAvoidingView>
                 <Modal isVisible={this.state.visibleModal}>
-                    <View style={{ backgroundColor: "white", width: screen.width-50, paddingVertical: 50, borderRadius: 15 }}>
+                    <View style={Styles.viewModal}>
                         <Text style={{ textAlign: "center", fontSize: 18 }}>Votre message a bien été transmis.</Text>
                         <Button 
                             title="OK"
-                            buttonStyle={{ backgroundColor: Colors.lightPrimary, borderRadius: 35, paddingVertical: 10, marginTop: 25, width: screen.width-125, alignSelf: "center" }} 
+                            buttonStyle={Styles.buttonStyle}
                             onPress={() => { this.setState({ visibleModal: false }) }}
                         />
                     </View>
                 </Modal>
+          
             </Layout>
         )
     }

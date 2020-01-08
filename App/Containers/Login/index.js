@@ -33,8 +33,8 @@ export default class Login extends Component {
           loaderConnexion   : false,
           isPasswordVisibility : false,
           modalVisible      : false
-        }
-
+        };
+        this.input = { };
         // axios requests 
         this.Login = this.Login.bind(this);
         this.ResetPassword = this.ResetPassword.bind(this);
@@ -128,30 +128,31 @@ export default class Login extends Component {
     //------- MAIN ACTION -----------//
     //------------------------------//
     Login = async () => {
+      const { email, password} = this.state
       try{
         // activate loader
         this.ToogleLoader();
-        let validateInputs = await this.FormLoginValidator(this.state.email, this.state.password);
-        NavigationService.navigate('Program')
+        let validateInputs = await this.FormLoginValidator(email,password);
+        // NavigationService.navigate('Program')
         if(validateInputs.email && validateInputs.password){
-          let bodyFormData = new FormData();
-          bodyFormData.append("login", validateInputs.email);
-          bodyFormData.append("pass", validateInputs.password);
+     
 
           // a décommenter si on ne veux pas taper le login/password
           // bodyFormData.append("login", "bruno.cox");
           // bodyFormData.append("pass", 123456);
   
-          axios({
-            url: "https://cezame-dev.digitalcube.fr/api/login",
-            method : 'POST',
-            data: bodyFormData,
-            headers: { "Content-Type": "multipart/form-data" }
-          })
-          .then((response) => {
+          axios.post("https://cezame-dev.digitalcube.fr/api/login_check",
+              {
+                
+                  username: validateInputs.email,
+                  password: validateInputs.password
+
+                
+              })
+            .then((response) => {
             //handle success
             const token = response.data.token;
-            this.StoreToken('jwt_auth', token);
+            // this.props.StoreToken('jwt_auth', token);
             AsyncStorage.getItem("jwt_auth").then((value) => {
               // remove loader
               this.ToogleLoader();
@@ -213,6 +214,12 @@ export default class Login extends Component {
       }
     }
 
+
+    inputFocus=(id)=>{  
+       this.input[id].focus()
+  }
+
+
     render(){
         // loader
         let loaderConnexion;
@@ -233,13 +240,22 @@ export default class Login extends Component {
 
         return(
             <View>
-              <StatusBar translucent backgroundColor={'transparent'} />
-              <KeyboardAvoidingView  behavior="position" enabled>
+              <StatusBar translucent backgroundColor={Colors.rightColor} />
+                <ScrollView 
+                style={{ marginHorizontal: 0 }}
+                showsVerticalScrollIndicator = {false}
+                keyboardShouldPersistTaps="always"
+                keyboardDismissMode='on-drag'
+                keyboardShouldPersistTaps="handled"
+                contentInsetAdjustmentBehavior="automatic"
+                >
                 <ImageBackground 
                   source={Images.bgLogin}
-                  style={{width: screen.width, height: screen.height-231}}
+                 imageStyle={{ resizeMode: 'stretch'}}
+                 style={{width: screen.width, height: screen.height-281}}
                 >
                   <Icon 
+                    underlayColor="none"
                     name="ios-arrow-round-back" 
                     type='ionicon' 
                     onPress={ () => this.props.navigation.goBack() }
@@ -247,11 +263,11 @@ export default class Login extends Component {
                     containerStyle={{ position: "absolute", left: 25, top: 25 }}
                     size={55}
                   />
-                  <Text style={{color: "white", fontSize: 32, textTransform: "uppercase", position: "absolute", top: (screen.height/2)-50, left: 60 }}>Bienvenue</Text>
+                  <Text style={{color: "white", fontSize: 32, textTransform: "uppercase", position: "absolute", top: (screen.height/2)-90, left: 60 }}>Bienvenue</Text>
                 </ImageBackground>
                 {loaderConnexion}
               
-                <ScrollView style={{ marginHorizontal: 50, marginTop: -40, height: 300 }}>
+                <ScrollView style={{ marginHorizontal: 50,marginTop:-20 }}>
                   <Input
                     name='email' 
                     label='Identifiant'
@@ -264,8 +280,12 @@ export default class Login extends Component {
                     inputStyle={{ padding: 0, marginTop: 15, fontSize: 15 }}
                     containerStyle={{ borderBottomWidth: 1, borderBottomColor: "#C6C6C6" }}
                     inputContainerStyle={{ borderBottomWidth: 0,height: 25, marginBottom: 10 }}
+                    onSubmitEditing={() => { this.inputFocus("password") }}
+                    blurOnSubmit={false}
+                    returnKeyType="next"
                   />
                   <Input 
+                    ref={ text => this.input["password"] = text}
                     name="password"
                     secureTextEntry={!this.state.isPasswordVisibility}
                     label="Mot de passe"
@@ -279,6 +299,8 @@ export default class Login extends Component {
                     inputStyle={{ padding: 0, marginTop: 15, fontSize: 15,  }}
                     containerStyle={{ borderBottomWidth: 1, borderBottomColor: "#C6C6C6" }}
                     inputContainerStyle={{ borderBottomWidth: 0,height: 25, marginBottom: 10 }}
+                    onSubmitEditing={this.Login}
+                    returnKeyType="send"
                   />
                   <Button 
                     buttonStyle={{ borderRadius: 30, height: 50, backgroundColor: Colors.lightPrimary, }} 
@@ -292,7 +314,8 @@ export default class Login extends Component {
                     type="clear"
                   />
                 </ScrollView>
-              </KeyboardAvoidingView>
+                </ScrollView>
+         
 
               {/* Modal */}
               <View style={Styles.modalContainer}>

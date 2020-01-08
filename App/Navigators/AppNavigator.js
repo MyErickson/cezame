@@ -1,4 +1,5 @@
 import React from 'react';
+import 'react-native-gesture-handler';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createDrawerNavigator } from 'react-navigation-drawer';
@@ -21,86 +22,28 @@ import Gallery from '../Containers/Gallery';
 
 const screen = Dimensions.get("window");
 
-const MainNavigator = createStackNavigator({
-    Home: {
-      screen: LandingScreen,
-      navigationOptions: {
-        header : null
-      }
-    },
-    Login: {
-      screen: Login,
-      navigationOptions: {
-        header : null
-      }
-    },
-    News : {
-      screen: News,
-      navigationOptions: {
-        header : null
-      }
-    },
-    Agenda : {
-      screen : AgendaScreen,
-      navigationOptions:{
-        header : null
-      }
-    },
-    AboutUs : {
-      screen : AboutUs,
-      navigationOptions:{
-        header : null
-      }
-    },
-    LegalNotice : {
-      screen : LegalNotice,
-      navigationOptions:{
-        header : null
-      }
-    },
-    Program : {
-      screen : Program,
-      navigationOptions:{
-        header : null
-      }
-    },
-    Notifications : {
-      screen : Notifications,
-      navigationOptions:{
-        header : null
-      }
-    },
-    Chat : {
-      screen : Chat,
-      navigationOptions:{
-        header : null
-      }
-    },
-    Places : {
-      screen : Places,
-      navigationOptions:{
-        header : null
-      }
-    },
-    Parameters : {
-      screen : Parameters,
-      navigationOptions:{
-        header : null
-      }
-    },
-    Contact : {
-      screen : Contact,
-      navigationOptions:{
-        header : null
-      }
-    },
-    Gallery : {
-      screen : Gallery,
-      navigationOptions:{
-        header : null
-      }
-    }
-});
+const MainNavigator = createStackNavigator(
+  {
+    Home:  LandingScreen,
+    Login:  Login,
+    News : News,
+    Agenda : AgendaScreen,
+    AboutUs :  AboutUs,
+    LegalNotice :  LegalNotice,
+    Program :  Program,
+    Notifications :  Notifications,
+    Chat :  Chat,
+    Places :  Places, 
+    Parameters :  Parameters, 
+    Contact :  Contact,
+    Gallery :  Gallery,
+  },
+  {
+    initialRouteName: 'Home',
+    headerMode: 'none',
+    cardStyle:{ backgroundColor: 'transparent' },
+  }
+);
 
 export const DrawerNavigator = createDrawerNavigator({
   MainNavigator,
@@ -109,6 +52,7 @@ export const DrawerNavigator = createDrawerNavigator({
   drawerWidth: screen.width,
   drawerPosition: 'right',
   drawerBackgroundColor: 'transparent',
+  keyboardDismissMode:'none',
   unmountInactiveRoutes: true,
   contentComponent: props => {
     return <SideMenu {...props} />
