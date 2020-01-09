@@ -43,7 +43,7 @@ export default class Login extends Component {
         this.UpdateInputToState = this.UpdateInputToState.bind(this);
         this.ToogleModal = this.ToogleModal.bind(this);
     }
-
+ 
     //-----------------------------------//
     //------- Input Listener -----------//
     //---------------------------------//
@@ -152,7 +152,8 @@ export default class Login extends Component {
             .then((response) => {
             //handle success
             const token = response.data.token;
-            // this.props.StoreToken('jwt_auth', token);
+            this.props.responseConnection(token)
+            this.props.StoreToken('jwt_auth', token);
             AsyncStorage.getItem("jwt_auth").then((value) => {
               // remove loader
               this.ToogleLoader();
@@ -239,15 +240,15 @@ export default class Login extends Component {
         }
 
         return(
-            <View>
+            <View style={{flex:1}}>
               <StatusBar translucent backgroundColor={Colors.rightColor} />
                 <ScrollView 
-                style={{ marginHorizontal: 0 }}
+                style={{ marginHorizontal: 0  }}
                 showsVerticalScrollIndicator = {false}
                 keyboardShouldPersistTaps="always"
                 keyboardDismissMode='on-drag'
                 keyboardShouldPersistTaps="handled"
-                contentInsetAdjustmentBehavior="automatic"
+                contentInsetAdjustmentBehavior="never"
                 >
                 <ImageBackground 
                   source={Images.bgLogin}
@@ -267,7 +268,7 @@ export default class Login extends Component {
                 </ImageBackground>
                 {loaderConnexion}
               
-                <ScrollView style={{ marginHorizontal: 50,marginTop:-20 }}>
+                <ScrollView style={{ marginHorizontal: 50,marginTop:-20}}>
                   <Input
                     name='email' 
                     label='Identifiant'
@@ -318,8 +319,9 @@ export default class Login extends Component {
          
 
               {/* Modal */}
-              <View style={Styles.modalContainer}>
+        
                 <Modal
+                style={Styles.modalContainer}
                   animationType="slide"
                   transparent={false}
                   visible={this.state.modalVisible}
@@ -369,7 +371,6 @@ export default class Login extends Component {
                     </View>
                   </View>
                 </Modal>
-              </View>
             </View>
         );
     }

@@ -26,8 +26,9 @@ export default class Layout extends Component {
                 {this.props.allScreenHeader == true ? (
                     <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 0}} colors={[Colors.leftColor, Colors.rightColor]} 
                         style={{ 
+                            flex:1,
                             width: screen.width,
-                            height: screen.height-8, 
+                            height: screen.height, 
                             paddingTop: 50, 
                         }}
                     />

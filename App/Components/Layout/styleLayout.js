@@ -32,7 +32,7 @@ export const Styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between", 
         paddingVertical: 15, 
-        paddingHorizontal: 15,
+        paddingHorizontal: 60,
         bottom: 0 
 }
     

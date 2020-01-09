@@ -5,7 +5,7 @@ import { createStackNavigator } from 'react-navigation-stack';
 import { createDrawerNavigator } from 'react-navigation-drawer';
 // Pages/Screen 
 import LandingScreen from '../Containers/LandingScreen';
-import Login from '../Containers/Login';
+import Login from '../Containers/Login/ContainerLogin';
 import News from '../Containers/News';
 import AgendaScreen from '../Containers/Agenda';
 import AboutUs from '../Containers/AboutUs';

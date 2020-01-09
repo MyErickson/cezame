@@ -53,3 +53,27 @@ export const dataLanding = [
     },
 
 ]
+
+
+export const socialNetwork= [
+    {
+        name:"facebook",
+        color:Colors.facebook
+    },
+    {
+        name:"twitter",
+        color:Colors.twitter
+    },
+    {
+        name:"linkedin",
+        color:Colors.linkedin
+    },
+    {
+        name:"instagram",
+        color:Colors.instagram
+    },
+    {
+        name:"youtube-play",
+        color:Colors.youtube
+    },
+]
