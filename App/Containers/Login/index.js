@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, Modal, Alert, ActivityIndicator, ImageBackground, Dimensions, KeyboardAvoidingView, StatusBar, ScrollView } from 'react-native';
+import { Text, View, Modal, Alert, ActivityIndicator, ImageBackground, Dimensions, KeyboardAvoidingView, StatusBar, ScrollView, Platform } from 'react-native';
 
 import axios from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -11,6 +11,10 @@ import Images from '../../Themes/Images';
 import Colors from '../../Themes/Colors';
 import NavigationService from '../../Services/NavigationService';
 
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp
+} from "react-native-responsive-screen";
 const screen = Dimensions.get("screen");
 
 
@@ -142,18 +146,16 @@ export default class Login extends Component {
           // bodyFormData.append("pass", 123456);
   
           axios.post("https://cezame-dev.digitalcube.fr/api/login_check",
-              {
-                
+              {    
                   username: validateInputs.email,
                   password: validateInputs.password
 
-                
               })
             .then((response) => {
             //handle success
             const token = response.data.token;
             this.props.responseConnection(token)
-            this.props.StoreToken('jwt_auth', token);
+            this.StoreToken('jwt_auth', token);
             AsyncStorage.getItem("jwt_auth").then((value) => {
               // remove loader
               this.ToogleLoader();
@@ -182,14 +184,10 @@ export default class Login extends Component {
         const email = await this.EmailValidator(this.state.passwordForgotten, "passwordForgottenErrorMsg");
 
         if(email){
-          let bodyFormData = new FormData();
-          bodyFormData.append("login", email);
   
-          axios({
-            url : 'https://cezame-dev.digitalcube.fr/api/forgot-password',
-            method : 'POST',
-            data : bodyFormData,
-            headers : { "Content-Type" : "multipart/form-data"}
+          axios.post( 'https://cezame-dev.digitalcube.fr/api/forgot-password',
+          {
+            email:email
           })
           .then((res) => {
             console.log(res);
@@ -238,9 +236,11 @@ export default class Login extends Component {
           // Visibility = false
           eyeIcon = <Icon name='eye' type="font-awesome" size={18} color='#969696' onPress={this.TooglePasswordVisibility}/>;
         }
-
+        const keybord = Platform.OS === "ios" ? hp("-5%") : hp("-55%")
         return(
+       
             <View style={{flex:1}}>
+                 <KeyboardAvoidingView  behavior="position" enabled  keyboardVerticalOffset={keybord} style={{flex:1}} >  
               <StatusBar translucent backgroundColor={Colors.rightColor} />
                 <ScrollView 
                 style={{ marginHorizontal: 0  }}
@@ -267,7 +267,7 @@ export default class Login extends Component {
                   <Text style={{color: "white", fontSize: 32, textTransform: "uppercase", position: "absolute", top: (screen.height/2)-90, left: 60 }}>Bienvenue</Text>
                 </ImageBackground>
                 {loaderConnexion}
-              
+               
                 <ScrollView style={{ marginHorizontal: 50,marginTop:-20}}>
                   <Input
                     name='email' 
@@ -315,6 +315,7 @@ export default class Login extends Component {
                     type="clear"
                   />
                 </ScrollView>
+               
                 </ScrollView>
          
 
@@ -371,7 +372,9 @@ export default class Login extends Component {
                     </View>
                   </View>
                 </Modal>
+                </KeyboardAvoidingView>
             </View>
+       
         );
     }
 }

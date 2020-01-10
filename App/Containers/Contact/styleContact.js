@@ -1,4 +1,4 @@
-import { StyleSheet , Dimensions,} from 'react-native'
+import { StyleSheet , Dimensions,Platform} from 'react-native'
 import Colors from '../../Themes/Colors';
 const screen = Dimensions.get("window");
 export const Styles = StyleSheet.create({
@@ -41,12 +41,30 @@ export const Styles = StyleSheet.create({
         backgroundColor: "#F1F1F1", 
         borderWidth: 1, 
         borderRadius: 5, 
-        borderColor: "#DCDCDC" 
+        borderColor: "#DCDCDC" ,
+        marginBottom:Platform.OS === "ios" ?10:0,
     },
     viewModal:{ 
         backgroundColor: "white", 
         width: screen.width-50, 
         paddingVertical: 50, 
         borderRadius: 15 
+    },
+    textTitle:{ 
+        fontSize: Platform.OS === "ios" ?30:20,
+        fontWeight:"bold", 
+        textAlign: "center",
+        marginBottom:Platform.OS === "ios" ?25:15 
+    },
+    text:{ 
+        fontSize: Platform.OS === "ios" ?20:16, 
+        textAlign: "center" ,
+        marginBottom:Platform.OS === "ios" ?20:10
+    },
+    textContact:{ 
+        fontSize: Platform.OS === "ios" ?16:12, 
+        textAlign: "center",
+        marginBottom:Platform.OS === "ios" ?20:10 
     }
+
 })

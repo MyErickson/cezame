@@ -7,10 +7,10 @@ export const Styles = StyleSheet.create({
     header:{
         position: 'absolute',  
         paddingHorizontal: 25, 
-        marginTop: 40, 
-        flexDirection: "row", 
-        justifyContent: "space-between", 
-        alignItems: "center" 
+        marginTop: 45, 
+        flexDirection: "row",  
+        alignItems: "center" ,
+     
     },
     title:{ 
         textAlign: "center", 
