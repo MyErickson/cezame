@@ -13,6 +13,7 @@ import axios from 'axios';
     
     axios.defaults.baseURL = 'https://cezame-dev.digitalcube.fr/api/'
     next(action);
+    console.log("TCL: action", action)
      
     switch(action.type){
 

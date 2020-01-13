@@ -30,7 +30,7 @@ export default class LayoutContent extends Component {
                         type='material-community' 
                         onPress={ () => console.log('profil') }
                         color={'white'}
-                        containerStyle={{ position: "absolute", right: 25, top: 25 }}
+                        containerStyle={{ position: "absolute", right: 25, top: 55 }}
                         size={20}
                     />
                 </LinearGradient>

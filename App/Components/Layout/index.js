@@ -14,26 +14,37 @@ import {
     heightPercentageToDP as hp
   } from "react-native-responsive-screen";
 export default class Layout extends Component {
-    
+      state={
+        tokenConnection:undefined
+      }
     componentDidMount() {
         this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
             this.props.navigation.goBack()
             return true;
         });
     }
+  static  getDerivedStateFromProps (props,state) {
+
+    state.tokenConnection = props.tokenConnection
+  }
+
 
     render() {
-        const { allScreenHeader ,tokenConnection} = this.props
+        const { allScreenHeader ,title} = this.props
+        const { tokenConnection} = this.state
+        console.log("TCL: Layout -> render -> tokenConnection", tokenConnection)
+      
         return (
             <View style={{ flex: 1 }}>
                 <StatusBar translucent backgroundColor={Colors.rightColor} />
               
                 <Header
                     leftComponent={{ icon: 'arrow-back', color: '#fff', onPress: () => this.props.navigation.goBack() }}
-                    centerComponent={{ text: 'MY TITLE', style: { color: '#fff',fontSize:18,fontWeight: 'bold' } }}
+                    centerComponent={{ text: title, style: { color: '#fff',fontSize:18,fontWeight: 'bold' } }}
                     rightComponent={
-                        tokenConnection && 
+                        tokenConnection &&   this.props.chat == true ?
                     <View style={[AppStyles.style.flex, {  alignItems: "center"}]}>
+                      
                         <Icon 
                             name="home"
                             color="white"
@@ -45,8 +56,23 @@ export default class Layout extends Component {
                             color="white"
                             containerStyle={{ marginRight: 5 }}
                             onPress={ () => { this.props.navigation.toggleDrawer() } }
+                        /> 
+                    </View> 
+                        : 
+                    <View style={[AppStyles.style.flex, { alignItems: "center"}]}>
+                        <Icon 
+                            name="notifications" 
+                            color='white'
+                            onPress={() =>  NavigationService.navigate('Notifications')}
                         />
-                    </View>  }
+                        <TouchableOpacity 
+                            style={Styles.iconParam} 
+                            onPress={() => NavigationService.navigate("Parameters")} 
+                        >
+                            <Image source={Images.devProfil} style={{ width: 35, height: 35, borderRadius: 35 }} />
+                        </TouchableOpacity>
+                    </View>
+                 }
               
                     ViewComponent={LinearGradient}
                     linearGradientProps={{

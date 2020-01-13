@@ -23,10 +23,11 @@ const reducer = (state = initialState, action = {}) => {
   switch (action.type) {
     case RESPONSE_CONNECTION:
          
-      
+  
       return {
         ...state,
         tokenConnection:action.responseConnection,
+        
       
       };
 

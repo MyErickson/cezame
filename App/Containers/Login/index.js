@@ -152,8 +152,10 @@ export default class Login extends Component {
 
               })
             .then((response) => {
-            //handle success
+            console.log("TCL: Login -> Login -> response", response)
+            // handle success
             const token = response.data.token;
+           console.log("TCL: Login -> Login -> token", token)
             this.props.responseConnection(token)
             this.StoreToken('jwt_auth', token);
             AsyncStorage.getItem("jwt_auth").then((value) => {
@@ -164,8 +166,8 @@ export default class Login extends Component {
           })
           .catch((error) => {
             //handle error
-            console.log(error);
-            this.setState({ emailErrorMsg : errorsMsg.invalidLogin, passwordErrorMsg : errorsMsg.invalidLogin });
+            console.log(error.response);
+  
             this.ToogleLoader();
           });
         }

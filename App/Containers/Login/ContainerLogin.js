@@ -13,7 +13,7 @@ import Login from './index'
 import {responseConnection} from '../../store/actionCreator/Login'
 
 const mapStateToProps = (state, ownProps) => ({
-    receiveResponseConnection:state.receiveResponseConnection,
+    
    
 });
 

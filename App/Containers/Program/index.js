@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, Image, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
-import Layout from '../../Components/Layout';
+import ContainerLayout from '../../Components/Layout/ContainerLayout';
 import { Button, Icon } from 'react-native-elements';
 import Images from '../../Themes/Images';
 import Colors from '../../Themes/Colors';
@@ -19,7 +19,7 @@ export default class Program extends Component {
 
     render() {
         return (
-            <Layout title="Mon Programme" navigation={this.props.navigation}>
+            <ContainerLayout title="Mon Programme" navigation={this.props.navigation}>
                 <ScrollView>
                     <View style={[AppStyles.style.pH35Flex, { paddingBottom: 10, alignItems: "center", justifyContent: "space-between" }]}>
                         <View>
@@ -111,7 +111,7 @@ export default class Program extends Component {
                         <Text>Lorem ipsum dolor sit amet conse ctetur adipiscing elit sed do eiusmod tempor incididunt</Text>
                     </View>
                 </ScrollView>
-            </Layout>
+            </ContainerLayout>
         )
     }
 }
