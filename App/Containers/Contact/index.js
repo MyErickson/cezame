@@ -1,6 +1,6 @@
 import React, { Component, useRef } from 'react';
 import { Text, View, Dimensions, KeyboardAvoidingView,ScrollView,StatusBar   } from 'react-native';
-import Layout from '../../Components/Layout';
+import ContainerLayout from '../../Components/Layout/ContainerLayout';
 import Colors from '../../Themes/Colors';
 import { Icon, Input, Button, CheckBox } from 'react-native-elements';
 import AppStyles from '../../Themes/AppStyles';
@@ -74,7 +74,7 @@ export default class Contact extends Component {
         const keybord = Platform.OS === "ios" ? hp("5%") : hp("-65%")
         const behavior = Platform.OS === "ios" ? "padding":""
         return (
-            <Layout return title="Contact" style={{flex:1, }} navigation={this.props.navigation}>
+            <ContainerLayout return title="Contact" style={{flex:1, }} navigation={this.props.navigation}>
           
                  <StatusBar translucent backgroundColor={Colors.rightColor} />
 
@@ -132,7 +132,7 @@ export default class Contact extends Component {
                     </View>
                 </Modal>
           
-            </Layout>
+            </ContainerLayout>
         )
     }
 }

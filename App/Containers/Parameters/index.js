@@ -1,6 +1,7 @@
 import React, { Component, useRef } from 'react';
 import { Text, View, Dimensions, ScrollView, Image, Animated } from 'react-native';
-import Layout from '../../Components/Layout';
+import LinearGradient from 'react-native-linear-gradient';
+import ContainerLayout from '../../Components/Layout/ContainerLayout';
 import Colors from '../../Themes/Colors';
 import { Icon, Input, Button, CheckBox } from 'react-native-elements';
 import Font from '../../Themes/Font';
@@ -10,14 +11,16 @@ import Images from '../../Themes/Images';
 import { FlatList } from 'react-native-gesture-handler';
 const screen = Dimensions.get("window");
 
+import { Styles } from './styleParam'
 
 export default class Parameters extends Component {
 
     constructor(props){
         super(props);
         this.state = {
-            name: "John Doe", 
-            email: "email@address.com", 
+            firstName:undefined,
+            lastName:undefined,
+            email: undefined, 
             tel: "06478754852", 
             password: "mot de passe",
             checked: false
@@ -37,7 +40,13 @@ export default class Parameters extends Component {
 
     render() {
         // password eye icon
+        const { firstName,lastName,email } = this.state
+        const {info_User }= this.props
+        console.log("TCL: Parameters -> render -> info_User", info_User.firstName)
+
+
         let eyeIcon;
+
         if (this.state.isPasswordVisibility == false){
             // Visibility = true 
             eyeIcon =  <Icon name='eye-slash' type="font-awesome" size={18} color='#969696' onPress={this.TooglePasswordVisibility}/>;
@@ -46,19 +55,42 @@ export default class Parameters extends Component {
             // Visibility = false
             eyeIcon = <Icon name='eye' type="font-awesome" size={18} color='#969696' onPress={this.TooglePasswordVisibility}/>;
         }
+
+
         return (
-            <Layout roundHeader return title="Paramètres" navigation={this.props.navigation}>
-                <View style={{ width: 225, height: 225, borderRadius: 45, alignSelf: "center" }}>
-                    <Image source={Images.devProfil} style={{ width: 225, height: 225,  borderRadius: 45 }} />
+            <ContainerLayout  title="Paramètres" navigation={this.props.navigation}>
+                <LinearGradient 
+                colors={[Colors.leftColor, Colors.rightColor]}    
+                start={ {x: 0, y: 0 }} end ={{x: 1, y: 0 }} 
+                style={Styles.lineagradient}>
+              
+                </LinearGradient >
+             
+                <View style={Styles.viewLinea}>
+                     
+                </View>
+                <View style={{ width: 225, height: 225, borderRadius: 45,backgroundColor:"blue", alignSelf: "center" ,position:"absolute" }}>
+                        <Image source={Images.devProfil} style={{ width: 225, height: 225,  borderRadius: 45 }} />
                 </View>
                 <ScrollView style={{ width: screen.width-65, alignSelf: "center", marginTop: 25, height: screen.height-250 }}>
                     <Input 
-                        label='Mon identifiant' 
-                        name='name' 
-                        value={this.state.name}
+                        label='Prénom' 
+                        name='firstName' 
+                        value={firstName ?firstName :info_User.firstName}
                         errorStyle={{ color: 'red' }}
                         errorMessage={this.state.emailErrorMsg} 
-                        value={this.state.name} 
+                        onChange={this.UpdateInputToState}
+                        labelStyle={{ fontSize: 15, margin: 0, color: Colors.dark, fontWeight: "normal" }}
+                        inputStyle={{ padding: 0, marginTop: 15, fontSize: 15, color: "#6B6B6B" }}
+                        containerStyle={{ borderBottomWidth: 1, borderBottomColor: "#C6C6C6", marginTop: 5 }}
+                        inputContainerStyle={{ borderBottomWidth: 0,height: 25, marginBottom: 10 }}
+                    />
+                    <Input 
+                        label='Nom' 
+                        name='lastName' 
+                        value={lastName ?lastName :info_User.lastName}
+                        errorStyle={{ color: 'red' }}
+                        errorMessage={this.state.emailErrorMsg} 
                         onChange={this.UpdateInputToState}
                         labelStyle={{ fontSize: 15, margin: 0, color: Colors.dark, fontWeight: "normal" }}
                         inputStyle={{ padding: 0, marginTop: 15, fontSize: 15, color: "#6B6B6B" }}
@@ -68,10 +100,9 @@ export default class Parameters extends Component {
                     <Input 
                         label='Mon adresse e-mail' 
                         name='email' 
-                        value={this.state.email}
+                        value={email?email:info_User.email}
                         errorStyle={{ color: 'red' }}
                         errorMessage={this.state.emailErrorMsg} 
-                        value={this.state.email} 
                         onChange={this.UpdateInputToState}
                         labelStyle={{ fontSize: 15, margin: 0, color: Colors.dark, fontWeight: "normal" }}
                         inputStyle={{ padding: 0, marginTop: 15, fontSize: 15, color: "#6B6B6B" }}
@@ -84,7 +115,6 @@ export default class Parameters extends Component {
                         value={this.state.tel}
                         errorStyle={{ color: 'red' }}
                         errorMessage={this.state.emailErrorMsg} 
-                        value={this.state.tel} 
                         onChange={this.UpdateInputToState}
                         labelStyle={{ fontSize: 15, margin: 0, color: Colors.dark, fontWeight: "normal" }}
                         inputStyle={{ padding: 0, marginTop: 15, fontSize: 15, color: "#6B6B6B" }}
@@ -98,7 +128,6 @@ export default class Parameters extends Component {
                         value={this.state.password} 
                         errorStyle={{ color: 'red' }}
                         errorMessage={this.state.emailErrorMsg} 
-                        value={this.state.password} 
                         onChange={this.UpdateInputToState}
                         rightIcon={eyeIcon}
                         labelStyle={{ fontSize: 15, margin: 0, color: Colors.dark, fontWeight: "normal" }}
@@ -122,7 +151,7 @@ export default class Parameters extends Component {
                     /> 
                 </ScrollView>
                 
-            </Layout>
+            </ContainerLayout>
         )
     }
 }

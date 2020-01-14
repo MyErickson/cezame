@@ -10,13 +10,13 @@ import News from '../Containers/News';
 import AgendaScreen from '../Containers/Agenda';
 import AboutUs from '../Containers/AboutUs';
 import LegalNotice from '../Containers/LegalNotice';
-import Program from '../Containers/Program';
+import Program from '../Containers/Program/ContainerProgram';
 import { Dimensions } from 'react-native';
 import SideMenu from './Sidemenu';
 import Notifications from '../Containers/Notifications';
 import Chat from '../Containers/Chat/';
 import Places from '../Containers/Places';
-import Parameters from '../Containers/Parameters/';
+import ContainerParam from '../Containers/Parameters/ContainerParam';
 import Contact from '../Containers/Contact/';
 import Gallery from '../Containers/Gallery';
 
@@ -34,7 +34,7 @@ const MainNavigator = createStackNavigator(
     Notifications :  Notifications,
     Chat :  Chat,
     Places :  Places, 
-    Parameters :  Parameters, 
+    Parameters :  ContainerParam, 
     Contact :  Contact,
     Gallery :  Gallery,
   },

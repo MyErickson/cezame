@@ -4,39 +4,32 @@
 import { connect } from 'react-redux';
 
 /**
- * Local import
- */
+* Local import
+*/
 
-import Login from './index'
+import Parameters from './index'
 
 // Action Creators
 import {responseConnection} from '../../store/actionCreator/Login';
 import { getUsers } from '../../store/actionCreator/Parameters'
 
 const mapStateToProps = (state, ownProps) => ({
-    
-   
+    info_User:state.info_User
+  
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  responseConnection:(token)=>{
-    dispatch(responseConnection(token))
-  },
-
-  getUsers:(data)=>{
-    dispatch(getUsers(data))
-  }
 
 });
 
- const ContainerLogin  = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Login);
+const ContainerParameters   = connect(
+ mapStateToProps,
+ mapDispatchToProps,
+)(Parameters );
 
 
 
 /**
- * Export
- */
-export default ContainerLogin ;
+* Export
+*/
+export default ContainerParameters ;

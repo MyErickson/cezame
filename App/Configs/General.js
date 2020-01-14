@@ -3,7 +3,7 @@ import Colors from '../Themes/Colors';
 export const patternEmail = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 
 export const config = {
-    minLenPassword : 4,
+    minLenPassword : 3,
     maxLenPassword : 22
 }
 

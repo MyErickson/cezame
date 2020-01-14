@@ -31,8 +31,8 @@ export const Styles = StyleSheet.create({
         backgroundColor: Colors.lightSecondary, 
         flexDirection: "row",
         justifyContent: "space-between", 
-        paddingVertical: 15, 
-        paddingHorizontal: 60,
+        alignItems: "center", 
+        paddingHorizontal: 25,
         bottom: 0 
 }
     

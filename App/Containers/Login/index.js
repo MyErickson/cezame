@@ -10,6 +10,7 @@ import { config, patternEmail, errorsMsg } from '../../Configs/General'
 import Images from '../../Themes/Images';
 import Colors from '../../Themes/Colors';
 import NavigationService from '../../Services/NavigationService';
+var jwtDecode = require('jwt-decode');
 
 import {
   widthPercentageToDP as wp,
@@ -139,34 +140,42 @@ export default class Login extends Component {
         let validateInputs = await this.FormLoginValidator(email,password);
         // NavigationService.navigate('Program')
         if(validateInputs.email && validateInputs.password){
-     
 
-          // a décommenter si on ne veux pas taper le login/password
-          // bodyFormData.append("login", "bruno.cox");
-          // bodyFormData.append("pass", 123456);
-  
           axios.post("https://cezame-dev.digitalcube.fr/api/login_check",
               {    
                   username: validateInputs.email,
                   password: validateInputs.password
-
               })
             .then((response) => {
             console.log("TCL: Login -> Login -> response", response)
-            // handle success
+   
+            // // handle success
             const token = response.data.token;
-           console.log("TCL: Login -> Login -> token", token)
+
+      
             this.props.responseConnection(token)
             this.StoreToken('jwt_auth', token);
+            var decode = jwtDecode(token)
+            console.log("TCL: Login -> Login -> decode", decode)
+
+            const data = new FormData
+            data.token = token
+            data.id = decode.id
+
+            //request ask info Users
+            this.props.getUsers(data)
+
             AsyncStorage.getItem("jwt_auth").then((value) => {
               // remove loader
               this.ToogleLoader();
             });
             NavigationService.navigate('Program')
+
+
           })
           .catch((error) => {
+          console.log("TCL: Login -> Login -> error-> error", error.response)
             //handle error
-            console.log(error.response);
   
             this.ToogleLoader();
           });
@@ -177,7 +186,8 @@ export default class Login extends Component {
         }
       }
       catch(error){
-        console.log(error)
+        console.log("TCL: Login -> Login -> error", error)
+
       }
     }
 

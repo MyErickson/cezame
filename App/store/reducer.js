@@ -4,6 +4,7 @@
  */
 const initialState = {
   tokenConnection: undefined,
+  info_User:undefined
   
 };
 
@@ -11,7 +12,11 @@ const initialState = {
  * Types
  */
 export const RESPONSE_CONNECTION = 'REPONSE_CONNECTION';
-export const INITITALIZE_STATE = 'INITITALIZE_STATE'
+export const INITITALIZE_STATE = 'INITITALIZE_STATE';
+export const RECEIVE_TRIPS = "RECEIVE_TRIPS";
+export const  CALL_TRIPS = " CALL_TRIPS";
+export const GET_USERS = 'GET_USERS';
+export const INFO_USER ='INFO_USER';
 /**
  * Traitements
  */
@@ -22,14 +27,21 @@ export const INITITALIZE_STATE = 'INITITALIZE_STATE'
 const reducer = (state = initialState, action = {}) => {
   switch (action.type) {
     case RESPONSE_CONNECTION:
-         
-  
+
       return {
         ...state,
         tokenConnection:action.responseConnection,
-        
-      
+
       };
+
+      case INFO_USER :
+             console.log("TCL: reducer -> action", action.data)
+        return {
+          ...state,
+          info_User:action.data,
+  
+        
+        };
 
 
     case INITITALIZE_STATE:

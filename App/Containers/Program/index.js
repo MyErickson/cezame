@@ -8,13 +8,22 @@ import Font from '../../Themes/Font';
 import AppStyles from '../../Themes/AppStyles';
 import NavigationService from '../../Services/NavigationService';
 const screen = Dimensions.get('window');
-
+var jwtDecode = require('jwt-decode');
 export default class Program extends Component {
 
     constructor(props){
         super(props);
         this.state = {
         }
+    }
+
+    componentDidMount(){
+        const {tokenConnection } = this.props
+        console.log("TCL: Program -> componentDidMount -> tokenConnection ", tokenConnection )
+        var decode = jwtDecode(tokenConnection)
+        console.log("TCL: Program -> componentDidMount -> decode", decode.id)
+        
+        
     }
 
     render() {
