@@ -1,15 +1,11 @@
-import React, { Component, useRef } from 'react';
-import { Text, View, Dimensions, ScrollView, Image, Animated } from 'react-native';
+import React, { Component} from 'react';
+import { Text, View, Dimensions, ScrollView, Image,  Platform } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import ContainerLayout from '../../Components/Layout/ContainerLayout';
 import Colors from '../../Themes/Colors';
 import { Icon, Input, Button, CheckBox } from 'react-native-elements';
-import Font from '../../Themes/Font';
-import MapView, { Marker, Callout } from 'react-native-maps';
-import AppStyles from '../../Themes/AppStyles';
 import Images from '../../Themes/Images';
-import { FlatList } from 'react-native-gesture-handler';
-const screen = Dimensions.get("window");
+import ImagePicker from 'react-native-image-picker';
 
 import { Styles } from './styleParam'
 
@@ -18,13 +14,14 @@ export default class Parameters extends Component {
     constructor(props){
         super(props);
         this.state = {
-            firstName:undefined,
-            lastName:undefined,
-            email: undefined, 
-            tel: "06478754852", 
+            firstName:"",
+            lastName:"",
+            email: "" ,
+            tel: "", 
             password: "mot de passe",
             checked: false
-        }
+        };
+        this.input= {}
     }
 
     
@@ -37,10 +34,59 @@ export default class Parameters extends Component {
         this.setState({isPasswordVisibility : !this.state.isPasswordVisibility});
     }
 
+    inputFocus=(id)=>{  
+        this.input[id].focus()
+   }
+   
+   downloadImage=()=>{
+    const options = {
+        title: 'Changer votre photo de profil',
+        takePhotoButtonTitle:"Prendre une Photo...",
+        chooseFromLibraryButtonTitle:"Bibliothèque...",
+        cancelButtonTitle:"Annuler",
+        storageOptions: {
+          skipBackup: true,
+          path: 'images',
+        },
+      };
+      
+    
+      ImagePicker.showImagePicker(options, (response) => {
+        console.log('Response = ', response);
+      
+        if (response.didCancel) {
+          console.log('User cancelled image picker');
+        } else if (response.error) {
+          console.log('ImagePicker Error: ', response.error);
+        } else if (response.customButton) {
+          console.log('User tapped custom button: ', response.customButton);
+        } else {
+        //   const source = { uri: response.uri };
+      
+          // You can also display the image using data:
+           const source = { uri: 'data:image/jpeg;base64,' + response.data };
+      
+           console.log("TCL: Parameters -> downloadImage ->  source ",  source )
+          this.setState({
+            avatarSource: source,
+          });
+        }
+      });
+   }
 
     render() {
         // password eye icon
-        const { firstName,lastName,email } = this.state
+        const { 
+            firstName,
+            lastName,
+            email ,
+            tel,
+            emailErrorMsg ,
+            checked,
+            password,
+            isPasswordVisibility
+            }
+              = this.state
         const {info_User }= this.props
         console.log("TCL: Parameters -> render -> info_User", info_User.firstName)
 
@@ -59,96 +105,136 @@ export default class Parameters extends Component {
 
         return (
             <ContainerLayout  title="Paramètres" navigation={this.props.navigation}>
+                <ScrollView       
+                style={{ marginHorizontal: 0 ,marginBottom:10 }}
+                showsVerticalScrollIndicator = {false}
+                keyboardShouldPersistTaps="always"
+                keyboardDismissMode='on-drag'
+                keyboardShouldPersistTaps="handled"
+                contentInsetAdjustmentBehavior="never">
                 <LinearGradient 
                 colors={[Colors.leftColor, Colors.rightColor]}    
-                start={ {x: 0, y: 0 }} end ={{x: 1, y: 0 }} 
-                style={Styles.lineagradient}>
+                start={ {x: Platform.OS=== "ios"?0.3:0.2, y: Platform.OS=== "ios"? -1.5 : -1.1}} end ={{x:Platform.OS=== "ios"? 1 : 1, y: 0 }} 
+                style={Styles.lineagradient}/>
               
-                </LinearGradient >
+  
+              
+                <View style={Styles.containerImage} onPress={()=>console.log("change image")}>
+                        <Image source={Images.devProfil} style={{ width: 225, height: 225,  borderRadius: 45 }} onPress={()=>console.log("change image")}/>
              
-                <View style={Styles.viewLinea}>
-                     
                 </View>
-                <View style={{ width: 225, height: 225, borderRadius: 45,backgroundColor:"blue", alignSelf: "center" ,position:"absolute" }}>
-                        <Image source={Images.devProfil} style={{ width: 225, height: 225,  borderRadius: 45 }} />
-                </View>
-                <ScrollView style={{ width: screen.width-65, alignSelf: "center", marginTop: 25, height: screen.height-250 }}>
-                    <Input 
-                        label='Prénom' 
-                        name='firstName' 
-                        value={firstName ?firstName :info_User.firstName}
-                        errorStyle={{ color: 'red' }}
-                        errorMessage={this.state.emailErrorMsg} 
-                        onChange={this.UpdateInputToState}
-                        labelStyle={{ fontSize: 15, margin: 0, color: Colors.dark, fontWeight: "normal" }}
-                        inputStyle={{ padding: 0, marginTop: 15, fontSize: 15, color: "#6B6B6B" }}
-                        containerStyle={{ borderBottomWidth: 1, borderBottomColor: "#C6C6C6", marginTop: 5 }}
-                        inputContainerStyle={{ borderBottomWidth: 0,height: 25, marginBottom: 10 }}
+                <View style={{justifyContent:"center"}}>
+                <Icon 
+                        underlayColor="none"
+                        name="download"
+                        color="white"
+                        type="font-awesome"
+                        containerStyle={{ marginTop: 20 ,  }}
+                        iconStyle={{ backgroundColor: "rgba(0,0,0,.5)", padding:8, borderRadius:25}}
+                        onPress={()=>this.downloadImage()}
                     />
-                    <Input 
-                        label='Nom' 
-                        name='lastName' 
-                        value={lastName ?lastName :info_User.lastName}
-                        errorStyle={{ color: 'red' }}
-                        errorMessage={this.state.emailErrorMsg} 
-                        onChange={this.UpdateInputToState}
-                        labelStyle={{ fontSize: 15, margin: 0, color: Colors.dark, fontWeight: "normal" }}
-                        inputStyle={{ padding: 0, marginTop: 15, fontSize: 15, color: "#6B6B6B" }}
-                        containerStyle={{ borderBottomWidth: 1, borderBottomColor: "#C6C6C6", marginTop: 5 }}
-                        inputContainerStyle={{ borderBottomWidth: 0,height: 25, marginBottom: 10 }}
-                    />
-                    <Input 
-                        label='Mon adresse e-mail' 
-                        name='email' 
-                        value={email?email:info_User.email}
-                        errorStyle={{ color: 'red' }}
-                        errorMessage={this.state.emailErrorMsg} 
-                        onChange={this.UpdateInputToState}
-                        labelStyle={{ fontSize: 15, margin: 0, color: Colors.dark, fontWeight: "normal" }}
-                        inputStyle={{ padding: 0, marginTop: 15, fontSize: 15, color: "#6B6B6B" }}
-                        containerStyle={{ borderBottomWidth: 1, borderBottomColor: "#C6C6C6", marginTop: 5 }}
-                        inputContainerStyle={{ borderBottomWidth: 0,height: 25, marginBottom: 10 }}
-                    />
-                    <Input 
-                        label='Tel.' 
-                        name='tel' 
-                        value={this.state.tel}
-                        errorStyle={{ color: 'red' }}
-                        errorMessage={this.state.emailErrorMsg} 
-                        onChange={this.UpdateInputToState}
-                        labelStyle={{ fontSize: 15, margin: 0, color: Colors.dark, fontWeight: "normal" }}
-                        inputStyle={{ padding: 0, marginTop: 15, fontSize: 15, color: "#6B6B6B" }}
-                        containerStyle={{ borderBottomWidth: 1, borderBottomColor: "#C6C6C6", marginTop: 5 }}
-                        inputContainerStyle={{ borderBottomWidth: 0,height: 25, marginBottom: 10 }}
-                    />
-                    <Input 
-                        label='Changer mon mot de passe' 
-                        secureTextEntry={!this.state.isPasswordVisibility}
-                        name='password' 
-                        value={this.state.password} 
-                        errorStyle={{ color: 'red' }}
-                        errorMessage={this.state.emailErrorMsg} 
-                        onChange={this.UpdateInputToState}
-                        rightIcon={eyeIcon}
-                        labelStyle={{ fontSize: 15, margin: 0, color: Colors.dark, fontWeight: "normal" }}
-                        inputStyle={{ padding: 0, marginTop: 15, fontSize: 15, color: "#6B6B6B" }}
-                        containerStyle={{ borderBottomWidth: 1, borderBottomColor: "#C6C6C6", marginTop: 5 }}
-                        inputContainerStyle={{ borderBottomWidth: 0,height: 25, marginBottom: 10 }}
-                    />
-                    <View>
-                        <CheckBox
-                            title="* J'accepte d'être pris en photo"
-                            checked={this.state.checked}
-                            onPress={() => this.setState({checked: !this.state.checked})}
-                            containerStyle={{ backgroundColor: "transparent", borderWidth: 0, padding: 0, margin: 0, marginTop: 15, marginBottom: 10}}
-                            textStyle={{ color: "#6B6B6B", fontSize: 16 }}
+                </View> 
+           
+                    <View style={{ marginHorizontal: 40  }}>
+                        <Input 
+                            label='Prénom' 
+                            name='firstName' 
+                            value={firstName}
+                            placeholder={info_User.firstName}
+                            errorStyle={{ color: 'red' }}
+                            errorMessage={emailErrorMsg} 
+                            onChange={this.UpdateInputToState}
+                            labelStyle={Styles.labelInput}
+                            inputStyle={Styles.inputStyle}
+                            containerStyle={Styles.containterStyle}
+                            inputContainerStyle={Styles.inputContainerStyle}
+                            onSubmitEditing={() => { this.inputFocus("lastName") }}
+                            blurOnSubmit={false}
+                            returnKeyType="next"
                         />
+                        <Input 
+                           ref={ text => this.input["lastName"] = text}
+                            label='Nom' 
+                            name='lastName' 
+                            value={lastName}
+                            placeholder={info_User.lastName}
+                            errorStyle={{ color: 'red' }}
+                            errorMessage={emailErrorMsg} 
+                            onChange={this.UpdateInputToState}
+                            labelStyle={Styles.labelInput}
+                            inputStyle={Styles.inputStyle}
+                            containerStyle={Styles.containterStyle}
+                            inputContainerStyle={Styles.inputContainerStyle}
+                            onSubmitEditing={() => { this.inputFocus("email") }}
+                            blurOnSubmit={false}
+                            returnKeyType="next"
+                        />
+                        <Input 
+                            ref={ text => this.input["email"] = text}
+                            label='Mon adresse e-mail' 
+                            name='email' 
+                            value={email}
+                            placeholder={info_User.email}
+                            errorStyle={{ color: 'red' }}
+                            errorMessage={emailErrorMsg} 
+                            onChange={this.UpdateInputToState}
+                            labelStyle={Styles.labelInput}
+                            inputStyle={Styles.inputStyle}
+                            containerStyle={Styles.containterStyle}
+                            inputContainerStyle={Styles.inputContainerStyle}
+                            onSubmitEditing={() => { this.inputFocus("tel") }}
+                            blurOnSubmit={false}
+                            returnKeyType="next"
+                        />
+                        <Input 
+                            ref={ text => this.input["tel"] = text}
+                            label='Tel.' 
+                            name='tel' 
+                            value={tel}
+                            placeholder={tel}
+                            errorStyle={{ color: 'red' }}
+                            errorMessage={emailErrorMsg} 
+                            onChange={this.UpdateInputToState}
+                            labelStyle={Styles.labelInput}
+                            inputStyle={Styles.inputStyle}
+                            containerStyle={Styles.containterStyle}
+                            inputContainerStyle={Styles.inputContainerStyle}
+                            onSubmitEditing={() => { this.inputFocus("password") }}
+                            blurOnSubmit={false}
+                            returnKeyType="next"
+                        />
+                        <Input 
+                            ref={ text => this.input["password"] = text}
+                            label='Changer mon mot de passe' 
+                            secureTextEntry={!isPasswordVisibility}
+                            name='password' 
+                            value={password}
+                            errorStyle={{ color: 'red' }}
+                            errorMessage={emailErrorMsg} 
+                            onChange={this.UpdateInputToState}
+                            rightIcon={eyeIcon}
+                            labelStyle={Styles.labelInput}
+                            inputStyle={Styles.inputStyle}
+                            containerStyle={Styles.containterStyle}
+                            inputContainerStyle={Styles.inputContainerStyle}
+                            onSubmitEditing={()=>{}}
+                            returnKeyType="send"
+                        />
+                        <View>
+                            <CheckBox
+                                title="* J'accepte d'être pris en photo"
+                                checked={checked}
+                                onPress={() => this.setState({checked: !checked})}
+                                containerStyle={Styles.containerCheckbox}
+                                textStyle={{ color: "#6B6B6B", fontSize: 16 }}
+                            />
+                        </View>
+                        <Text style={{ color: "#6B6B6B", fontSize: 15 }}>Sans votre accord, votre visage n'apparaitra pas sur les images du séminaire</Text>
+                        <Button 
+                            title="Enregistrer" 
+                            buttonStyle={Styles.buttonStyle} 
+                        /> 
                     </View>
-                    <Text style={{ color: "#6B6B6B", fontSize: 15 }}>Sans votre accord, votre visage n'apparaitra pas sur les images du séminaire</Text>
-                    <Button 
-                        title="Enregistrer" 
-                        buttonStyle={{ backgroundColor: Colors.lightPrimary, borderRadius: 35, paddingVertical: 10, marginTop: 25, width: screen.width-125, alignSelf: "center" }} 
-                    /> 
                 </ScrollView>
                 
             </ContainerLayout>

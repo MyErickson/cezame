@@ -26,7 +26,6 @@ export const Styles = StyleSheet.create({
         marginLeft: 15 
     },
     containerMenu:{ 
-        width: screen.width, 
         height:50,
         backgroundColor: Colors.lightSecondary, 
         flexDirection: "row",
