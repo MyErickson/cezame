@@ -11,10 +11,11 @@ import Login from './index'
 
 // Action Creators
 import {responseConnection} from '../../store/actionCreator/Login';
-import { getUsers } from '../../store/actionCreator/Parameters'
+import { getUsers } from '../../store/actionCreator/Parameters';
+import { callTrips } from '../../store/actionCreator/Program';
 
 const mapStateToProps = (state, ownProps) => ({
-    
+  trip_User:state.trip_User 
    
 });
 
@@ -25,6 +26,9 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 
   getUsers:(data)=>{
     dispatch(getUsers(data))
+  },
+  callTrips:(data)=>{
+    dispatch(callTrips(data))
   }
 
 });

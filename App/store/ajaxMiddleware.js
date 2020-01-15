@@ -2,7 +2,8 @@ import axios from 'axios';
 
  import {  CALL_TRIPS,GET_USERS } from './reducer'
 
-import { requestParam} from './request/Parameters'
+import {requestParam} from './request/Parameters'
+import {requestCallProgram} from './request/Program'
 
 
  const  ajaxMiddleware = store => next => async action => {
@@ -19,12 +20,11 @@ import { requestParam} from './request/Parameters'
       case  GET_USERS:
         next(action)
 
-        const value = new FormData
-        value.action = action
-        value.store = store
-        console.log("TCL:  value",  value)
-
-        requestParam(value) 
+        let valueUser = new FormData
+        valueUser.action = action
+        valueUser.store = store
+        
+        requestParam(valueUser) 
      
          break;
 
@@ -32,20 +32,12 @@ import { requestParam} from './request/Parameters'
             
         case  CALL_TRIPS:
           next(action)
-          console.log("TCL: action", action)
-            axios.get(`trips/${action.data.id}`,{
-              headers:{
-                'Authorization':"Bearer "+action.data.token
-            } 
-            })
-             .then( res =>{
-             console.log("TCL: res", res)
-
-             })
-             .catch(err=>{
-             console.log("TCL: err", err.response)
-               
-             })
+      
+          let valueTrips = new FormData
+          valueTrips.action = action
+          valueTrips.store = store
+       
+          requestCallProgram(valueTrips)
        
            break;
 

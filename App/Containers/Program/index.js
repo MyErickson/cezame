@@ -8,30 +8,48 @@ import Font from '../../Themes/Font';
 import AppStyles from '../../Themes/AppStyles';
 import NavigationService from '../../Services/NavigationService';
 const screen = Dimensions.get('window');
+import MapView, { Marker, Callout } from 'react-native-maps';
 
 export default class Program extends Component {
 
     constructor(props){
         super(props);
         this.state = {
+            trip_User:undefined
         }
     }
 
     componentDidMount(){
         const {tokenConnection } = this.props
-        console.log("TCL: Program -> componentDidMount -> tokenConnection ", tokenConnection )
         
         
     }
 
+    static getDerivedStateFromProps(props,state){
+        state.trip_User = props.trip_User 
+    }
     render() {
+   
+            const { trip_User } =this.state
+            console.log("TCL: Program -> render -> this.state.trip_User", this.state.trip_User)
+            let  startDate,endDate,endMonth,startMonth = undefined
+         if(trip_User){
+            startDate = new Date(trip_User.startAt)
+            startMonth =  startDate.getMonth()+1 < 10 ? "0"+(startDate.getMonth()+1) : startDate.getMonth()+1
+            endDate =  new Date(trip_User.endAt)
+            endMonth = endDate.getMonth()+1 <10 ? "0" + (endDate.getMonth()+1) : endDate.getMonth()+1
+         }
+       
+        
+
+    
         return (
             <ContainerLayout title="Mon Programme" navigation={this.props.navigation}>
                 <ScrollView>
                     <View style={[AppStyles.style.pH35Flex, { paddingBottom: 10, alignItems: "center", justifyContent: "space-between" }]}>
                         <View>
-                            <Text style={Font.style.h1}>Madrid</Text>
-                            <Text style={Font.style.normal}>Séminaire Développement</Text>
+                            <Text style={Font.style.h1}>{trip_User && trip_User.location}</Text>
+                            <Text style={Font.style.normal}>{trip_User&& trip_User.title}</Text>
                         </View>
                         <Image source={Images.devGroup} />
                     </View>
@@ -39,11 +57,11 @@ export default class Program extends Component {
                     <View style={[AppStyles.style.pV15, {flexDirection: "row", justifyContent: "space-evenly"}]}>
                         <View>
                             <Text style={[Font.style.h3, {textAlign: "center"}]}>Du</Text>
-                            <Text style={Font.style.normal}>15 juillet 2019</Text>
+                            <Text style={Font.style.normal}>{ trip_User && startDate.getDate()+ "/" + startMonth  +"/"+ startDate.getFullYear()}</Text>
                         </View>
                         <View>
                             <Text style={[Font.style.h3, {textAlign: "center"}]}>Au</Text>
-                            <Text style={Font.style.normal}>25 juillet 2019</Text>
+                            <Text style={Font.style.normal}>{trip_User&& endDate.getDate()+ "/" +  endMonth +"/" +startDate.getFullYear()}</Text>
                         </View>
                     </View>
                     <View style={[AppStyles.style.flex, {justifyContent: "space-evenly"}]}>
@@ -78,9 +96,7 @@ export default class Program extends Component {
                         <Text  style={Font.style.h2}>Votre hôtel</Text>
                     </View>
                     <View  style={[AppStyles.style.flex, {justifyContent: "space-evenly"}]}>
-                        <View style={{ backgroundColor: "grey", width: (screen.width/3)+15, height: (screen.width/3)+15, borderRadius: 5 }}>
-                            <Text>Map</Text>
-                        </View>
+                        <MapView style={{ backgroundColor: "grey", width: (screen.width/3)+15, height: (screen.width/3)+15, borderRadius: 5 }}/>
                         <View style={{ width: (screen.width/2)+15 }}>
                             <TouchableOpacity onPress={()=>{ NavigationService.navigate('Places', { coord: {latitude: 40.415584, longitude: -3.707412, latitudeDelta: 0.0052, longitudeDelta: 0.0121, } }) }}>
                                 <Text style={[Font.style.h3, { flexShrink: 1}]}>Plaza de Las Cortes*****</Text>
@@ -115,7 +131,7 @@ export default class Program extends Component {
                     </View>
                     <View style={[AppStyles.style.pV15, {paddingLeft: 23}]}>
                         <Text style={Font.style.h2}>Informations</Text>
-                        <Text>Lorem ipsum dolor sit amet conse ctetur adipiscing elit sed do eiusmod tempor incididunt</Text>
+                         <Text>{trip_User && trip_User.hotelDescription}</Text>
                     </View>
                 </ScrollView>
             </ContainerLayout>

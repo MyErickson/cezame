@@ -37,7 +37,8 @@ export default class Login extends Component {
           // controls
           loaderConnexion   : false,
           isPasswordVisibility : false,
-          modalVisible      : false
+          modalVisible      : false,
+          trip_User :undefined
         };
         this.input = { };
         // axios requests 
@@ -48,7 +49,10 @@ export default class Login extends Component {
         this.UpdateInputToState = this.UpdateInputToState.bind(this);
         this.ToogleModal = this.ToogleModal.bind(this);
     }
- 
+
+
+
+
     //-----------------------------------//
     //------- Input Listener -----------//
     //---------------------------------//
@@ -150,10 +154,10 @@ export default class Login extends Component {
             console.log("TCL: Login -> Login -> response", response)
    
             // // handle success
-            const token = response.data.token;
-
+            const {token }= response.data;
+            const { responseConnection,getUsers ,callTrips} = this.props
       
-            this.props.responseConnection(token)
+            responseConnection(token)
             this.StoreToken('jwt_auth', token);
             var decode = jwtDecode(token)
             console.log("TCL: Login -> Login -> decode", decode)
@@ -161,15 +165,20 @@ export default class Login extends Component {
             const data = new FormData
             data.token = token
             data.id = decode.id
-
+            data.idTrip=decode.trip_id
             //request ask info Users
-            this.props.getUsers(data)
+            getUsers(data)
+
+            // request call program
+
+            callTrips(data)
 
             AsyncStorage.getItem("jwt_auth").then((value) => {
               // remove loader
               this.ToogleLoader();
+              NavigationService.navigate('Program')
             });
-            NavigationService.navigate('Program')
+          
 
 
           })
@@ -249,6 +258,7 @@ export default class Login extends Component {
           eyeIcon = <Icon name='eye' type="font-awesome" size={18} color='#969696' onPress={this.TooglePasswordVisibility}/>;
         }
         const keybord = Platform.OS === "ios" ? hp("-5%") : hp("-55%")
+
         return(
        
             <View style={{flex:1}}>

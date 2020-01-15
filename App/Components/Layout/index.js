@@ -41,7 +41,9 @@ export default class Layout extends Component {
                     rightComponent={
                         tokenConnection ?   this.props.chat == true ?
                     <View style={[AppStyles.style.flex, {  alignItems: "center"}]}>
-                      
+                          <TouchableOpacity 
+                         
+                          >
                         <Icon 
                             underlayColor="none"
                             name="home"
@@ -56,6 +58,7 @@ export default class Layout extends Component {
                             containerStyle={{ marginRight: 5 }}
                             onPress={ () => { this.props.navigation.toggleDrawer() } }
                         /> 
+                        </TouchableOpacity>
                     </View> 
                         : 
                     <View style={[AppStyles.style.flex, { alignItems: "center"}]}>
@@ -113,13 +116,14 @@ export default class Layout extends Component {
                                     onPress={() => NavigationService.navigate("Chat")}
                                 />  
                             </View>
-                  
+                            <TouchableOpacity >
                                 <Icon
+                                underlayColor="none"
                                     name="menu"
-                                    color="white"
+                                    color="white"  
                                     onPress={ () => { this.props.navigation.toggleDrawer() } }
                                 />
-                     
+                            </TouchableOpacity>
                         </View>
                     )}
                 </Fragment> }

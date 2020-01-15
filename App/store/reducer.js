@@ -4,7 +4,8 @@
  */
 const initialState = {
   tokenConnection: undefined,
-  info_User:undefined
+  info_User:undefined,
+  trip_User:undefined
   
 };
 
@@ -34,14 +35,23 @@ const reducer = (state = initialState, action = {}) => {
 
       };
 
-      case INFO_USER :
-             console.log("TCL: reducer -> action", action.data)
+    case INFO_USER :
+      
         return {
           ...state,
           info_User:action.data,
   
         
         };
+    
+    case RECEIVE_TRIPS :
+
+     return {
+       ...state,
+       trip_User:action.data,
+
+     
+     };
 
 
     case INITITALIZE_STATE:
