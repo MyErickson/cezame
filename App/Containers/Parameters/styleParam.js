@@ -57,10 +57,9 @@ export const Styles = StyleSheet.create({
         marginBottom: 10 
     },
     buttonStyle:{ 
-        backgroundColor: Colors.lightPrimary, 
+  
         borderRadius: 35, 
         paddingVertical: 10, 
-        marginTop: 25, 
         width: screen.width-125, 
         alignSelf: "center" 
     },

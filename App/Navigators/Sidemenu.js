@@ -16,9 +16,9 @@ class SideMenu extends Component {
           menu: [
               ["Mon programme", "Program"], 
               ["Points d'intérêts", 'Places'], 
-              ["Agenda       (bientôt)", 'Agenda'], //Agenda
-              ["Galerie photos       (bientôt)", 'Gallery'], //Gallery
-              ["Messagerie     (bientôt)", 'Chat'], //Chat
+              ["Agenda       (bientôt)", ''], //Agenda
+              ["Galerie photos       (bientôt)", ''], //Gallery
+              ["Messagerie     (bientôt)", ''], //Chat
               ["Paramètres", 'Parameters'],
               ["Contact", 'Contact']
             ],

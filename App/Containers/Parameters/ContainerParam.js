@@ -10,16 +10,24 @@ import { connect } from 'react-redux';
 import Parameters from './index'
 
 // Action Creators
-import {responseConnection} from '../../store/actionCreator/Login';
-import { getUsers } from '../../store/actionCreator/Parameters'
+
+import { initialize_State} from '../../store/actionCreator/Parameters'
 
 const mapStateToProps = (state, ownProps) => ({
-    info_User:state.info_User
+    info_User:state.info_User,
+    info_Token:state.info_Token,
+    tokenConnection:state.tokenConnection,
   
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
 
+      initialize_State:()=>{
+          dispatch(initialize_State())
+      },
+      info_user:(data)=>{
+          dispatch(info_user(data))
+      }
 });
 
 const ContainerParameters   = connect(

@@ -10,13 +10,13 @@ import { connect } from 'react-redux';
 import Login from './index'
 
 // Action Creators
-import {responseConnection} from '../../store/actionCreator/Login';
+import {responseConnection,decode_Token } from '../../store/actionCreator/Login';
 import { getUsers } from '../../store/actionCreator/Parameters';
 import { callTrips } from '../../store/actionCreator/Program';
 
 const mapStateToProps = (state, ownProps) => ({
-  trip_User:state.trip_User 
-   
+  trip_User:state.trip_User ,
+  
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
@@ -29,6 +29,9 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   },
   callTrips:(data)=>{
     dispatch(callTrips(data))
+  },
+  decode_Token :(data)=>{
+    dispatch(decode_Token(data))
   }
 
 });

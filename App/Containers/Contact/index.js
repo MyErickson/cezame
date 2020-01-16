@@ -123,7 +123,7 @@ export default class Contact extends Component {
                 </KeyboardAvoidingView>
                 <Modal isVisible={this.state.visibleModal}>
                     <View style={Styles.viewModal}>
-                        <Text style={{ textAlign: "center", fontSize: 18 }}>Votre message a bien été transmis.</Text>
+                        <Text style={{ textAlign: "center", fontSize: 18 }}>Cette fonctionnalité sera bientot disponible.</Text>
                         <Button 
                             title="OK"
                             buttonStyle={Styles.buttonStyle}

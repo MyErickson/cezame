@@ -51,9 +51,9 @@ export default class Program extends Component {
                             <Text style={Font.style.h1}>{trip_User && trip_User.location}</Text>
                             <Text style={Font.style.normal}>{trip_User&& trip_User.title}</Text>
                         </View>
-                        <Image source={Images.devGroup} />
+                        <Image source={{uri:"https://i.picsum.photos/id/722/200/300.jpg"}} style={{ width: "50%", height: 35,marginLeft:25 ,borderRadius:3}} />
                     </View>
-                    <Image  source={Images.devImageProgram} style={{ width: "100%", maxHeight: 200 }} />
+                    <Image  source={{uri:trip_User && trip_User.presentationImage}} style={{ width: "100%", height: 200 }} />
                     <View style={[AppStyles.style.pV15, {flexDirection: "row", justifyContent: "space-evenly"}]}>
                         <View>
                             <Text style={[Font.style.h3, {textAlign: "center"}]}>Du</Text>
@@ -127,6 +127,7 @@ export default class Program extends Component {
                                 title="Voir plus de détail sur l'hôtel" 
                                 titleStyle={{ marginLeft: 5, fontSize: 13, fontWeight: "normal" }}
                             />
+                            
                         </View>
                     </View>
                     <View style={[AppStyles.style.pV15, {paddingLeft: 23}]}>

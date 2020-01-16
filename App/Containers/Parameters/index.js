@@ -1,13 +1,16 @@
 import React, { Component} from 'react';
 import { Text, View, Dimensions, ScrollView, Image,  Platform } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import LinearGradient from 'react-native-linear-gradient';
 import ContainerLayout from '../../Components/Layout/ContainerLayout';
 import Colors from '../../Themes/Colors';
 import { Icon, Input, Button, CheckBox } from 'react-native-elements';
 import Images from '../../Themes/Images';
 import ImagePicker from 'react-native-image-picker';
-
+import AlertDialog from '../AlertDialog/AlertDialog'
 import { Styles } from './styleParam'
+import axios from 'axios';
+
 
 export default class Parameters extends Component {
 
@@ -18,12 +21,20 @@ export default class Parameters extends Component {
             lastName:"",
             email: "" ,
             tel: "", 
-            password: "mot de passe",
-            checked: false
+            password: "",
+            checked: false,
+            alertVisible:false, 
+            messageAlert:"",
+            style:false,    // color text alert (false = red & true = blue)
+            logOutOrRegister:undefined, // string logout or register
+            alertConfirm:undefined, //  confirm alert by yes or cancel button
+            avatarSource:undefined
         };
         this.input= {}
     }
-
+    componentDidMount(){
+ 
+    }
     
     UpdateInputToState = (event) => {
         const name = event._targetInst.pendingProps.name;
@@ -74,6 +85,125 @@ export default class Parameters extends Component {
       });
    }
 
+
+   logOut =()=>{
+ 
+    AsyncStorage.removeItem('jwt_auth')
+ 
+    this.props.initializeState()
+    this.props.navigation.navigate("Home")
+   }
+
+   goToRegister=()=>{
+     const { email , firstName , lastName , checked , tel , password,avatarSource} = this.state
+     const { info_User ,tokenConnection } = this.props
+     console.log("TCL: Parameters -> goToRegister -> info_User ", info_User )
+
+
+
+     var data = new Object ;
+    
+
+     data.id= info_User.id ;
+     data.token=tokenConnection;
+     data.password = password.trim() ?   password : info_User.password  
+     data.firstName = firstName.trim() ?  firstName : info_User.firstName  
+     data.lastName = lastName.trim() ?  lastName : info_User.lastName  
+     data.email = email.trim() ?  email : info_User.email 
+     data.tel = tel.trim() ?  tel  :info_User.tel  
+
+    if(avatarSource){
+        data.image=avatarSource  
+
+    }
+
+    console.log("TCL: Parameters -> goToRegister -> data", data)
+    axios.defaults.headers['Authorization']= "Bearer "+data.token;
+    axios.put(`users/${data.id}`,{
+        
+            email:data.email,
+            firstName:data.firstName,
+            lastName:data.lastName,
+            password:data.password,
+            tel:data.tel,
+            checked:checked,
+            image:"string string string"
+        }).then((response)=>{
+        console.log("axios update profile ",response)
+    
+            this.setState({
+                firstName:"",
+                lastName:"",
+                email:"" , 
+                password:"",
+                tel:"",
+                password:"",
+                messageAlert:"Modifié",
+                alertConfirm:false,
+                style:true,
+                messageAlertPWd:undefined
+
+                })
+      
+        this.props.info_user(response.data)
+       
+    
+        }).catch((err)=>{
+            console.log("axios error update profile ",err.response.data.violations)
+            err.response.data.violations.map((value)=>{
+                this.setState({
+                    login:"", 
+                    email:"" , 
+                    password:"",
+                    changePassword:"",
+                    messageAlert:value.message,
+                    alertConfirm:false,
+                    style:false,
+                    messageAlertPWd:undefined
+    
+                })
+
+            })
+        
+        } )
+    
+   }
+
+
+   logOut =()=>{
+ 
+    AsyncStorage.removeItem('jwt_auth')
+ 
+    this.props.initialize_State()
+    this.props.navigation.navigate("Home")
+   }
+
+
+   register=(value,text)=>{
+      this.setState({
+        alertVisible:true,
+        messageAlert:text,
+        alertConfirm:true,
+        logOutOrRegister:value,
+        style:true,
+      })
+   }
+
+   yesConfirm=(logOutOrRegister)=>{
+       
+        if(logOutOrRegister === "register"){
+            this.goToRegister()
+        }else{
+            this.logOut()
+        }
+    }
+
+    closeAlert =()=>{
+    this.setState({
+        alertVisible:false,
+    })
+    }
+
     render() {
         // password eye icon
         const { 
@@ -81,15 +211,18 @@ export default class Parameters extends Component {
             lastName,
             email ,
             tel,
-            emailErrorMsg ,
             checked,
             password,
-            isPasswordVisibility
-            }
-              = this.state
-        const {info_User }= this.props
-        console.log("TCL: Parameters -> render -> info_User", info_User.firstName)
+            isPasswordVisibility,
+            alertVisible,
+            messageAlert,
+            alertConfirm,
+            logOutOrRegister,
+            style,
 
+            }= this.state
+
+        const {info_User }= this.props
 
         let eyeIcon;
 
@@ -140,9 +273,8 @@ export default class Parameters extends Component {
                             label='Prénom' 
                             name='firstName' 
                             value={firstName}
-                            placeholder={info_User.firstName}
-                            errorStyle={{ color: 'red' }}
-                            errorMessage={emailErrorMsg} 
+                            placeholder={info_User&&info_User.firstName}
+                            placeholderTextColor="#CCCCCC"
                             onChange={this.UpdateInputToState}
                             labelStyle={Styles.labelInput}
                             inputStyle={Styles.inputStyle}
@@ -157,9 +289,7 @@ export default class Parameters extends Component {
                             label='Nom' 
                             name='lastName' 
                             value={lastName}
-                            placeholder={info_User.lastName}
-                            errorStyle={{ color: 'red' }}
-                            errorMessage={emailErrorMsg} 
+                            placeholder={info_User&&info_User.lastName}
                             onChange={this.UpdateInputToState}
                             labelStyle={Styles.labelInput}
                             inputStyle={Styles.inputStyle}
@@ -174,9 +304,8 @@ export default class Parameters extends Component {
                             label='Mon adresse e-mail' 
                             name='email' 
                             value={email}
-                            placeholder={info_User.email}
-                            errorStyle={{ color: 'red' }}
-                            errorMessage={emailErrorMsg} 
+                            placeholder={info_User&&info_User.email}
+                            placeholderTextColor="#CCCCCC"
                             onChange={this.UpdateInputToState}
                             labelStyle={Styles.labelInput}
                             inputStyle={Styles.inputStyle}
@@ -192,8 +321,7 @@ export default class Parameters extends Component {
                             name='tel' 
                             value={tel}
                             placeholder={tel}
-                            errorStyle={{ color: 'red' }}
-                            errorMessage={emailErrorMsg} 
+                            placeholderTextColor="#CCCCCC"
                             onChange={this.UpdateInputToState}
                             labelStyle={Styles.labelInput}
                             inputStyle={Styles.inputStyle}
@@ -209,8 +337,8 @@ export default class Parameters extends Component {
                             secureTextEntry={!isPasswordVisibility}
                             name='password' 
                             value={password}
-                            errorStyle={{ color: 'red' }}
-                            errorMessage={emailErrorMsg} 
+                            placeholder="**********"
+                            placeholderTextColor="#CCCCCC"
                             onChange={this.UpdateInputToState}
                             rightIcon={eyeIcon}
                             labelStyle={Styles.labelInput}
@@ -232,10 +360,25 @@ export default class Parameters extends Component {
                         <Text style={{ color: "#6B6B6B", fontSize: 15 }}>Sans votre accord, votre visage n'apparaitra pas sur les images du séminaire</Text>
                         <Button 
                             title="Enregistrer" 
-                            buttonStyle={Styles.buttonStyle} 
+                            buttonStyle={[Styles.buttonStyle,{backgroundColor: Colors.lightPrimary,marginTop: 25,}]} 
+                            onPress={()=>this.register("register","Êtes-vous sûre de vouloir modifier vos informations ? ")}
+                        /> 
+                          <Button 
+                            title="Déconnexion" 
+                            buttonStyle={[Styles.buttonStyle,{backgroundColor:Colors.youtube,marginTop:10  }]} 
+                            onPress={()=>this.register("logout","Êtes-vous sûre de vouloir quitter l'application ? ")}
                         /> 
                     </View>
                 </ScrollView>
+                <AlertDialog 
+                    alertVisible={alertVisible}
+                    messageAlert={messageAlert}
+                    closeAlert={this.closeAlert}
+                    style={style}
+                    logOutOrRegister={logOutOrRegister}
+                    alertConfirm={alertConfirm }
+                    yesConfirm={this.yesConfirm}
+                 />
                 
             </ContainerLayout>
         )

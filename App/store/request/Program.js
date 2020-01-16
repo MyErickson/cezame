@@ -11,6 +11,7 @@ export const requestCallProgram=(value)=>{
         } 
       })
        .then( res =>{
+       console.log("TCL: res", res)
     
 
        store.dispatch(receiveTrips(res.data))

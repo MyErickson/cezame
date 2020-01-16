@@ -12,6 +12,7 @@ import Colors from '../../Themes/Colors';
 import NavigationService from '../../Services/NavigationService';
 var jwtDecode = require('jwt-decode');
 
+import AlertDialog from '../AlertDialog/AlertDialog';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp
@@ -38,7 +39,12 @@ export default class Login extends Component {
           loaderConnexion   : false,
           isPasswordVisibility : false,
           modalVisible      : false,
-          trip_User :undefined
+          trip_User :undefined,
+
+          alertVisible:false,
+          messageAlert:"",
+          style:false
+
         };
         this.input = { };
         // axios requests 
@@ -155,12 +161,12 @@ export default class Login extends Component {
    
             // // handle success
             const {token }= response.data;
-            const { responseConnection,getUsers ,callTrips} = this.props
+            const { responseConnection,getUsers ,callTrips,decode_Token } = this.props
       
             responseConnection(token)
             this.StoreToken('jwt_auth', token);
             var decode = jwtDecode(token)
-            console.log("TCL: Login -> Login -> decode", decode)
+            decode_Token(decode)
 
             const data = new FormData
             data.token = token
@@ -185,8 +191,12 @@ export default class Login extends Component {
           .catch((error) => {
           console.log("TCL: Login -> Login -> error-> error", error.response)
             //handle error
-  
+            
             this.ToogleLoader();
+            this.setState({
+              alertVisible:true,
+              messageAlert:"Le mot de passe ou l'email est invalide.",
+            })
           });
         }
         else{
@@ -214,7 +224,13 @@ export default class Login extends Component {
             console.log(res);
             this.ToogleModal();
           })
-          .catch((err) => console.log(err));
+          .catch((err) => {
+            this.setState({
+              alertVisible:true,
+              messageAlert:"Ce mail n'est pas dans notre base de données",
+            })
+          });
+          
         }
       }
       catch(error){
@@ -239,9 +255,13 @@ export default class Login extends Component {
        this.input[id].focus()
   }
 
+  closeAlert=()=>{
+    this.setState({alertVisible:!this.state.alertVisible})
+}
 
     render(){
         // loader
+        const { messageAlert, style , alertVisible } = this.state
         let loaderConnexion;
         if (this.state.loaderConnexion){
           loaderConnexion =  <ActivityIndicator size="large" color="#0000ff" />;
@@ -299,8 +319,9 @@ export default class Login extends Component {
                     errorMessage={this.state.emailErrorMsg} 
                     value={this.state.email} 
                     onChange={this.UpdateInputToState}
+                    placeholderTextColor="#CCCCCC"
                     labelStyle={{ fontSize: 15, margin: 0, color: Colors.dark, fontWeight: "normal" }}
-                    inputStyle={{ padding: 0, marginTop: 15, fontSize: 15 }}
+                    inputStyle={{ padding: 0, marginTop: 15, fontSize: 15 ,}}
                     containerStyle={{ borderBottomWidth: 1, borderBottomColor: "#C6C6C6" }}
                     inputContainerStyle={{ borderBottomWidth: 0,height: 25, marginBottom: 10 }}
                     onSubmitEditing={() => { this.inputFocus("password") }}
@@ -318,6 +339,7 @@ export default class Login extends Component {
                     value={this.state.password} 
                     onChange={this.UpdateInputToState} 
                     rightIcon={eyeIcon}
+                    placeholderTextColor="#CCCCCC"
                     labelStyle={{ fontSize: 15, marginTop: 15, color: Colors.dark, fontWeight: "normal" }}
                     inputStyle={{ padding: 0, marginTop: 15, fontSize: 15,  }}
                     containerStyle={{ borderBottomWidth: 1, borderBottomColor: "#C6C6C6" }}
@@ -349,7 +371,7 @@ export default class Login extends Component {
                   transparent={false}
                   visible={this.state.modalVisible}
                   onRequestClose={() => {
-                    Alert.alert('Modal has been closed.');
+                    Alert.alert(`Touch sur "annuler" pour revenir à la page précèdente. `);
                   }}>
                   <View>
                     <View>
@@ -357,6 +379,7 @@ export default class Login extends Component {
                         Saisissez votre adresse email, nous vous enverrons un email de récupération de mot de passe
                       </Text>
                       <Input
+                       inputContainerStyle={{color:"black"}}
                         name='passwordForgotten' 
                         label='Votre email'
                         placeholder='email@my_email.com'
@@ -395,6 +418,13 @@ export default class Login extends Component {
                   </View>
                 </Modal>
                 </KeyboardAvoidingView>
+                        
+                <AlertDialog
+                alertVisible={alertVisible}
+                closeAlert={this.closeAlert}
+                messageAlert={messageAlert}
+                style={style}
+                />
             </View>
        
         );

@@ -113,7 +113,7 @@ export default class Layout extends Component {
                                     name="comments"
                                     color="white"
                                     type="font-awesome"
-                                    onPress={() => NavigationService.navigate("Chat")}
+                                    onPress={() => NavigationService.navigate("")}
                                 />  
                             </View>
                             <TouchableOpacity >
