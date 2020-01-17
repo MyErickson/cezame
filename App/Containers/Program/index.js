@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Image, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
+import { View, Text, Image, ScrollView, Dimensions, TouchableOpacity , Platform } from 'react-native';
 import ContainerLayout from '../../Components/Layout/ContainerLayout';
 import { Button, Icon } from 'react-native-elements';
 import Images from '../../Themes/Images';
@@ -41,19 +41,22 @@ export default class Program extends Component {
          }
        
         
-
+       const random1 = Math.floor(Math.random() * (999 - 1 +1)) + 1
+       const random2 = Math.floor(Math.random() * (999 - 1 +1)) + 1
     
         return (
             <ContainerLayout title="Mon Programme" navigation={this.props.navigation}>
                 <ScrollView>
-                    <View style={[AppStyles.style.pH35Flex, { paddingBottom: 10, alignItems: "center", justifyContent: "space-between" }]}>
-                        <View>
-                            <Text style={Font.style.h1}>{trip_User && trip_User.location}</Text>
-                            <Text style={Font.style.normal}>{trip_User&& trip_User.title}</Text>
+                    <View style={[AppStyles.style.pH35Flex, { paddingVertical: 10, alignItems: "center", justifyContent: "space-between" }]}>
+                        <View style={{flex:3}}>
+                            <Text style={{fontSize:16,fontWeight:"bold"}}>{trip_User && trip_User.location}</Text>
+                            <Text style={{fontSize:14}}>{trip_User&& trip_User.title}</Text>
                         </View>
-                        <Image source={{uri:"https://i.picsum.photos/id/722/200/300.jpg"}} style={{ width: "50%", height: 35,marginLeft:25 ,borderRadius:3}} />
+                        <View style={{flex:3}}>
+                            <Image source={{uri:`https://i.picsum.photos/id/${random1}/200/300.jpg`}} style={{ width: "100%", height: 45,marginLeft:25 ,borderRadius:3}} />
+                        </View>
                     </View>
-                    <Image  source={{uri:trip_User && trip_User.presentationImage}} style={{ width: "100%", height: 200 }} />
+                    <Image  source={{uri:`https://i.picsum.photos/id/${random2}/500/700.jpg`}} style={{ width: "100%", height: 200 }} />
                     <View style={[AppStyles.style.pV15, {flexDirection: "row", justifyContent: "space-evenly"}]}>
                         <View>
                             <Text style={[Font.style.h3, {textAlign: "center"}]}>Du</Text>
@@ -76,7 +79,8 @@ export default class Program extends Component {
                                 color="white"
                                 />
                             }
-                            titleStyle={{ marginLeft: 5, }}
+                            titleStyle={{ marginLeft: 5,fontSize: 16, fontWeight: "normal" 
+                         }}
                         />
                         <Button 
                             buttonStyle={[AppStyles.style.pH7, { backgroundColor: Colors.primary, borderRadius: 5, minWidth: 190 }]} 
@@ -92,14 +96,14 @@ export default class Program extends Component {
                             titleStyle={{ marginLeft: 5, fontSize: 16, fontWeight: "normal" }}
                         />
                     </View>
-                    <View style={[AppStyles.style.pV15, {paddingLeft: 20}]}>
+                    {/* <View style={[AppStyles.style.pV15, ]}>
                         <Text  style={Font.style.h2}>Votre hôtel</Text>
-                    </View>
-                    <View  style={[AppStyles.style.flex, {justifyContent: "space-evenly"}]}>
-                        <MapView style={{ backgroundColor: "grey", width: (screen.width/3)+15, height: (screen.width/3)+15, borderRadius: 5 }}/>
+                    </View> */}
+                    <View  style={[AppStyles.style.flex, {justifyContent: "space-evenly",marginTop:25}]}>
+                        <MapView style={{ backgroundColor: "grey", width: (screen.width/3)+15, height: (screen.width/3)+15, borderRadius: 5 ,marginTop:Platform.OS ==="ios"?5:10}}/>
                         <View style={{ width: (screen.width/2)+15 }}>
                             <TouchableOpacity onPress={()=>{ NavigationService.navigate('Places', { coord: {latitude: 40.415584, longitude: -3.707412, latitudeDelta: 0.0052, longitudeDelta: 0.0121, } }) }}>
-                                <Text style={[Font.style.h3, { flexShrink: 1}]}>Plaza de Las Cortes*****</Text>
+                                <Text style={[Font.style.h2, { flexShrink: 1,paddingLeft: 15}]}>Votre hôtel</Text>
                             </TouchableOpacity>
                             <View style={{ marginTop: 10, marginBottom: 5, flexDirection: "row" }}>
                                 <Icon
@@ -109,7 +113,7 @@ export default class Program extends Component {
                                     size={14}
                                     containerStyle={{ marginRight: 5 }}
                                 />
-                                <Text style={[Font.style.normal, { flexShrink: 1, color: Colors.primary }]}>Plaza de las Cortes, 7 28014, Madrid, Espagne</Text>
+                                <Text style={[Font.style.normal, { flexShrink: 1, color: Colors.primary }]}>{trip_User && trip_User.address}</Text>
                             </View>
                             <View style={{ marginTop: 5, marginBottom: 15, flexDirection: "row" }}>
                                 <Icon

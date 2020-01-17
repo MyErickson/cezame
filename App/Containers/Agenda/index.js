@@ -1,11 +1,18 @@
 import React, { Component } from 'react'
 import {Calendar, LocaleConfig} from 'react-native-calendars';
-import { Text, View, FlatList, TouchableWithoutFeedback } from 'react-native';
-import Layout from '../../Components/Layout';
+import { Text, View, FlatList, TouchableWithoutFeedback ,Platform} from 'react-native';
+import ContainerLayout from '../../Components/Layout/ContainerLayout';
 import style from './style';
 import { Icon } from 'react-native-elements';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
+// import { Colors} from '../../Themes/Colors'
 import AppStyles from '../../Themes/AppStyles';
+import LinearGradient from 'react-native-linear-gradient';
+
+
+
+
+
 
 LocaleConfig.locales['fr'] = {
     monthNames: ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'],
@@ -99,8 +106,13 @@ export default class AgendaScreen extends Component {
 
     render() {
         return (
-            <Layout noPaddingTop allScreenHeader return title="Agenda" navigation={this.props.navigation}>
-                <View>
+            <ContainerLayout noPaddingTop allScreenHeader return title="Agenda" navigation={this.props.navigation}>
+                <View style={{flex:1}}>
+                <LinearGradient 
+                colors={["#0062EC", "#07318D"]}    
+                start={ {x: 0 ,y: 1}} end ={{x:1, y: 0 }} 
+                style={{flex:1}}
+                >
                     <Calendar
                     theme={{  
                         foregroundColor : "transparent", 
@@ -187,8 +199,10 @@ export default class AgendaScreen extends Component {
                                 <Item item={item} />
                         )}} 
                     />
+                    </LinearGradient>
                 </View>
-            </Layout>
+                
+            </ContainerLayout>
         )
     }
 }

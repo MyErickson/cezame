@@ -77,3 +77,27 @@ export const socialNetwork= [
         color:Colors.youtube
     },
 ]
+
+
+export const sideMenuApropos =[
+    {
+        title:"Actualités",
+        iconName:"newspaper-o",
+        navigate:"news"
+    },
+    {
+        title:"Qui sommes-nous ?",
+        iconName:"globe",
+        navigate:"program"
+    },
+    {
+        title:"Mentions légales",
+        iconName:"file-text",
+        navigate:"program"
+    },
+    {
+        title:"Confidentialité",
+        iconName:"lock",
+        navigate:"program"
+    }
+]

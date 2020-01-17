@@ -8,7 +8,7 @@ import Colors from '../Themes/Colors';
 import Font from '../Themes/Font';
 import NavigationService from '../Services/NavigationService';
 const screen = Dimensions.get('window');
-
+import { sideMenuApropos  } from "../Configs/General"
 class SideMenu extends Component {
     constructor(props){
         super(props);
@@ -16,7 +16,7 @@ class SideMenu extends Component {
           menu: [
               ["Mon programme", "Program"], 
               ["Points d'intérêts", 'Places'], 
-              ["Agenda       (bientôt)", ''], //Agenda
+              ["Agenda       (bientôt)", 'Agenda'], //Agenda
               ["Galerie photos       (bientôt)", ''], //Gallery
               ["Messagerie     (bientôt)", ''], //Chat
               ["Paramètres", 'Parameters'],
@@ -56,7 +56,7 @@ class SideMenu extends Component {
     return (
     <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 0}} colors={['#fff','#E9ECF5']}>
         <ImageBackground source={Images.bgSidemenu} style={{width: '100%', height: '100%'}} resizeMode={"cover"}>
-            <ScrollView style={{width: screen.width, height: screen.height}}>
+            <ScrollView style={{ flex:1}}>
                 <View style={{ flexDirection: "row", justifyContent: "space-between", marginHorizontal: 25, marginBottom: 0, marginTop: 55 }}>
                     <Icon 
                         name={this.state.iconBack} 
@@ -101,7 +101,7 @@ class SideMenu extends Component {
                                 keyExtractor={item => item.id}
                             />
 
-                            <View style={{ position: "relative" }}>
+                            <View style={{  }}>
                                 <Button 
                                     title={"A propos de Cézame"} 
                                     buttonStyle={{ justifyContent: "flex-start", paddingHorizontal: 15, paddingVertical: 12, marginHorizontal: 25, marginVertical: 5, backgroundColor: Colors.white }}
@@ -119,56 +119,28 @@ class SideMenu extends Component {
 
 
 
-                        <View style={{ width: screen.width }}>
-                            <Button 
-                                title={"Actualités"} 
-                                buttonStyle={{ justifyContent: "flex-start", paddingHorizontal: 15, paddingVertical: 12, marginHorizontal: 25, marginVertical: 5, backgroundColor: Colors.primary }}
-                                titleStyle={{ marginLeft: 15, color: Colors.white }}
-                                icon={
-                                    <Icon 
-                                        name="newspaper-o" 
-                                        type="font-awesome" 
-                                        color="white"
-                                    />
-                                }
-                                onPress={() => {  this.goBack(), this.props.navigation.toggleDrawer(), NavigationService.navigate("News") } }
-                            />
-                            <Button 
-                                title={"Qui sommes-nous ?"} 
-                                buttonStyle={{ justifyContent: "flex-start", paddingHorizontal: 15, paddingVertical: 12, marginHorizontal: 25, marginVertical: 5, backgroundColor: Colors.primary }}
-                                titleStyle={{ marginLeft: 15, color: Colors.white }}
-                                icon={
-                                    <Icon 
-                                        name="globe" 
-                                        type="font-awesome" 
-                                        color="white"
-                                    />
-                                }
-                            />
-                            <Button 
-                                title={"Mentions légales"} 
-                                buttonStyle={{ justifyContent: "flex-start", paddingHorizontal: 15, paddingVertical: 12, marginHorizontal: 25, marginVertical: 5, backgroundColor: Colors.primary }}
-                                titleStyle={{ marginLeft: 15, color: Colors.white }}
-                                icon={
-                                    <Icon 
-                                        name="file-text" 
-                                        type="font-awesome" 
-                                        color="white"
-                                    />
-                                }
-                            />
-                            <Button 
-                                title={"Confidentialité"} 
-                                buttonStyle={{ justifyContent: "flex-start", paddingHorizontal: 15, paddingVertical: 12, marginHorizontal: 25, marginVertical: 5, backgroundColor: Colors.primary }}
-                                titleStyle={{ marginLeft: 15, color: Colors.white }}
-                                icon={
-                                    <Icon 
-                                        name="lock" 
-                                        type="font-awesome" 
-                                        color="white"
-                                    />
-                                }
-                            />
+                        <View style={{ width: screen.width ,}}>
+                            { sideMenuApropos.map((value,key)=>{
+
+                                return (
+                                    <Button 
+                                    key={key}
+                                    title={value.title} 
+                                    buttonStyle={{ justifyContent: "flex-start", paddingHorizontal: 15, paddingVertical: 12, marginHorizontal: 25, marginVertical: 5, backgroundColor: Colors.primary }}
+                                    titleStyle={{ marginLeft: 15, color: Colors.white }}
+                                    icon={
+                                        <Icon 
+                                            name={value.iconName} 
+                                            type="font-awesome" 
+                                            color="white"
+                                        />
+                                    }
+                                    onPress={() => {  this.goBack(), this.props.navigation.toggleDrawer(), NavigationService.navigate(value.navigate) } }
+                                />
+                                )
+                            })}
+                                      
+           
                         </View>
                     </Animated.View>
                     <SocialNetwork />

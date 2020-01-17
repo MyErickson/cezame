@@ -28,7 +28,7 @@ export default class Layout extends Component {
     render() {
         const { tokenConnection,title} = this.props
  
-        console.log("TCL: Layout -> render -> tokenConnection", tokenConnection)
+
       
         return (
             <View style={{ flex: 1 }}>

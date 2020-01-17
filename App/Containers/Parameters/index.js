@@ -20,7 +20,7 @@ export default class Parameters extends Component {
             firstName:"",
             lastName:"",
             email: "" ,
-            tel: "", 
+            phone: "", 
             password: "",
             checked: false,
             alertVisible:false, 
@@ -28,14 +28,17 @@ export default class Parameters extends Component {
             style:false,    // color text alert (false = red & true = blue)
             logOutOrRegister:undefined, // string logout or register
             alertConfirm:undefined, //  confirm alert by yes or cancel button
-            avatarSource:undefined
+            avatarSource:undefined,
+            infoUser:undefined
         };
         this.input= {}
     }
-    componentDidMount(){
- 
-    }
-    
+    static getDerivedStateFromProps(props,state){
+        state.infoUser = props.infoUser
+       
+    }    
+
+
     UpdateInputToState = (event) => {
         const name = event._targetInst.pendingProps.name;
         this.setState({ [name] :  event.nativeEvent.text})
@@ -52,6 +55,7 @@ export default class Parameters extends Component {
    downloadImage=()=>{
     const options = {
         title: 'Changer votre photo de profil',
+        tintColor:'white',
         takePhotoButtonTitle:"Prendre une Photo...",
         chooseFromLibraryButtonTitle:"Bibliothèque...",
         cancelButtonTitle:"Annuler",
@@ -95,29 +99,33 @@ export default class Parameters extends Component {
    }
 
    goToRegister=()=>{
-     const { email , firstName , lastName , checked , tel , password,avatarSource} = this.state
-     const { info_User ,tokenConnection } = this.props
-     console.log("TCL: Parameters -> goToRegister -> info_User ", info_User )
+     const { email , firstName , lastName , checked , phone , password,avatarSource} = this.state
+     const { infoUser ,tokenConnection } = this.props
+     console.log("TCL: Parameters -> goToRegister -> info_User ", infoUser )
 
 
 
      var data = new Object ;
     
 
-     data.id= info_User.id ;
+     data.id= infoUser.id ;
      data.token=tokenConnection;
-     data.password = password.trim() ?   password : info_User.password  
-     data.firstName = firstName.trim() ?  firstName : info_User.firstName  
-     data.lastName = lastName.trim() ?  lastName : info_User.lastName  
-     data.email = email.trim() ?  email : info_User.email 
-     data.tel = tel.trim() ?  tel  :info_User.tel  
+    //  data.password = password.trim() ?   password : "" 
+     data.firstName = firstName.trim() ?  firstName : infoUser.firstName  
+     data.lastName = lastName.trim() ?  lastName : infoUser.lastName  
+     data.email = email.trim() ?  email : infoUser.email 
+     data.phone = phone.trim() ?  phone :infoUser.phone 
+    if( data.password){
+        data.password =   password  
+    }
+
 
     if(avatarSource){
         data.image=avatarSource  
 
     }
 
-    console.log("TCL: Parameters -> goToRegister -> data", data)
+
     axios.defaults.headers['Authorization']= "Bearer "+data.token;
     axios.put(`users/${data.id}`,{
         
@@ -125,18 +133,19 @@ export default class Parameters extends Component {
             firstName:data.firstName,
             lastName:data.lastName,
             password:data.password,
-            tel:data.tel,
-            checked:checked,
-            image:"string string string"
+            phone:data.phone,
+            imageRights:checked,
+            // image:"string string string"
         }).then((response)=>{
-        console.log("axios update profile ",response)
+        console.log("TCL: Parameters -> goToRegister -> response", response)
+
     
             this.setState({
                 firstName:"",
                 lastName:"",
                 email:"" , 
                 password:"",
-                tel:"",
+                phone:"",
                 password:"",
                 messageAlert:"Modifié",
                 alertConfirm:false,
@@ -149,21 +158,21 @@ export default class Parameters extends Component {
        
     
         }).catch((err)=>{
-            console.log("axios error update profile ",err.response.data.violations)
-            err.response.data.violations.map((value)=>{
-                this.setState({
-                    login:"", 
-                    email:"" , 
-                    password:"",
-                    changePassword:"",
-                    messageAlert:value.message,
-                    alertConfirm:false,
-                    style:false,
-                    messageAlertPWd:undefined
+            console.log("axios error update profile ",err.response)
+            // err.response.data.violations.map((value)=>{
+            //     this.setState({
+            //         login:"", 
+            //         email:"" , 
+            //         password:"",
+            //         changePassword:"",
+            //         messageAlert:value.message,
+            //         alertConfirm:false,
+            //         style:false,
+            //         messageAlertPWd:undefined
     
-                })
+            //     })
 
-            })
+            // })
         
         } )
     
@@ -210,7 +219,7 @@ export default class Parameters extends Component {
             firstName,
             lastName,
             email ,
-            tel,
+            phone,
             checked,
             password,
             isPasswordVisibility,
@@ -219,10 +228,10 @@ export default class Parameters extends Component {
             alertConfirm,
             logOutOrRegister,
             style,
-
+            infoUser
             }= this.state
 
-        const {info_User }= this.props
+
 
         let eyeIcon;
 
@@ -273,7 +282,7 @@ export default class Parameters extends Component {
                             label='Prénom' 
                             name='firstName' 
                             value={firstName}
-                            placeholder={info_User&&info_User.firstName}
+                            placeholder={infoUser&&infoUser.firstName}
                             placeholderTextColor="#CCCCCC"
                             onChange={this.UpdateInputToState}
                             labelStyle={Styles.labelInput}
@@ -289,7 +298,8 @@ export default class Parameters extends Component {
                             label='Nom' 
                             name='lastName' 
                             value={lastName}
-                            placeholder={info_User&&info_User.lastName}
+                            placeholderTextColor="#CCCCCC"
+                            placeholder={infoUser&&infoUser.lastName}
                             onChange={this.UpdateInputToState}
                             labelStyle={Styles.labelInput}
                             inputStyle={Styles.inputStyle}
@@ -304,23 +314,23 @@ export default class Parameters extends Component {
                             label='Mon adresse e-mail' 
                             name='email' 
                             value={email}
-                            placeholder={info_User&&info_User.email}
+                            placeholder={infoUser&&infoUser.email}
                             placeholderTextColor="#CCCCCC"
                             onChange={this.UpdateInputToState}
                             labelStyle={Styles.labelInput}
                             inputStyle={Styles.inputStyle}
                             containerStyle={Styles.containterStyle}
                             inputContainerStyle={Styles.inputContainerStyle}
-                            onSubmitEditing={() => { this.inputFocus("tel") }}
+                            onSubmitEditing={() => { this.inputFocus("phone") }}
                             blurOnSubmit={false}
                             returnKeyType="next"
                         />
                         <Input 
-                            ref={ text => this.input["tel"] = text}
+                            ref={ text => this.input["phone"] = text}
                             label='Tel.' 
-                            name='tel' 
-                            value={tel}
-                            placeholder={tel}
+                            name='phone' 
+                            value={phone}
+                            placeholder={infoUser&&infoUser.phone}
                             placeholderTextColor="#CCCCCC"
                             onChange={this.UpdateInputToState}
                             labelStyle={Styles.labelInput}
@@ -352,12 +362,20 @@ export default class Parameters extends Component {
                             <CheckBox
                                 title="* J'accepte d'être pris en photo"
                                 checked={checked}
+                                checkedColor
+                                uncheckedColor={infoUser && infoUser.imageRights?'green' : '#6B6B6B'}
                                 onPress={() => this.setState({checked: !checked})}
                                 containerStyle={Styles.containerCheckbox}
                                 textStyle={{ color: "#6B6B6B", fontSize: 16 }}
                             />
                         </View>
-                        <Text style={{ color: "#6B6B6B", fontSize: 15 }}>Sans votre accord, votre visage n'apparaitra pas sur les images du séminaire</Text>
+                        {infoUser && infoUser.imageRights?
+                        <Text style={{ color: "green", fontSize: 15 }}>
+                        Vous avez accepte d'apparaitre sur les images du séminaire</Text>
+                        :
+                        <Text style={{ color: "#6B6B6B", fontSize: 15 }}>
+                        Sans votre accord, votre visage n'apparaitra pas sur les images du séminaire'</Text>
+                        }
                         <Button 
                             title="Enregistrer" 
                             buttonStyle={[Styles.buttonStyle,{backgroundColor: Colors.lightPrimary,marginTop: 25,}]} 

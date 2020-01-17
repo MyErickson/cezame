@@ -11,10 +11,10 @@ import Parameters from './index'
 
 // Action Creators
 
-import { initialize_State} from '../../store/actionCreator/Parameters'
+import { initialize_State,info_user} from '../../store/actionCreator/Parameters'
 
 const mapStateToProps = (state, ownProps) => ({
-    info_User:state.info_User,
+    infoUser:state.info_User,
     info_Token:state.info_Token,
     tokenConnection:state.tokenConnection,
   
