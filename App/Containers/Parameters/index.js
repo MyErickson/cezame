@@ -33,8 +33,19 @@ export default class Parameters extends Component {
         };
         this.input= {}
     }
+    componentDidMount(){
+        const{ infoUser}  = this.props
+        if( infoUser){
+            this.setState({
+                checked:infoUser.imageRights
+            })
+        }
+    }
     static getDerivedStateFromProps(props,state){
-        state.infoUser = props.infoUser
+        if( props.infoUser){
+            state.infoUser = props.infoUser
+        }
+
        
     }    
 
@@ -76,10 +87,10 @@ export default class Parameters extends Component {
         } else if (response.customButton) {
           console.log('User tapped custom button: ', response.customButton);
         } else {
-        //   const source = { uri: response.uri };
+          const source = { uri: response.uri };
       
           // You can also display the image using data:
-           const source = { uri: 'data:image/jpeg;base64,' + response.data };
+        //    const source = { uri: 'data:image/jpeg;base64,' + response.data };
       
            console.log("TCL: Parameters -> downloadImage ->  source ",  source )
           this.setState({
@@ -135,7 +146,7 @@ export default class Parameters extends Component {
             password:data.password,
             phone:data.phone,
             imageRights:checked,
-            // image:"string string string"
+           
         }).then((response)=>{
         console.log("TCL: Parameters -> goToRegister -> response", response)
 
@@ -158,27 +169,55 @@ export default class Parameters extends Component {
        
     
         }).catch((err)=>{
-            console.log("axios error update profile ",err.response)
-            // err.response.data.violations.map((value)=>{
-            //     this.setState({
-            //         login:"", 
-            //         email:"" , 
-            //         password:"",
-            //         changePassword:"",
-            //         messageAlert:value.message,
-            //         alertConfirm:false,
-            //         style:false,
-            //         messageAlertPWd:undefined
+      
+            err.response.data.violations.map((value)=>{
+                this.setState({
+                    login:"", 
+                    email:"" , 
+                    password:"",
+                    changePassword:"",
+                    messageAlert:value.message,
+                    alertConfirm:false,
+                    style:false,
+                    messageAlertPWd:undefined
     
-            //     })
+                })
 
-            // })
+            })
         
         } )
     
    }
 
 
+   updateImage=()=>{
+       const { avatarSource } =this.state
+       if(avatarSource){
+        axios.defaults.headers['Authorization']= "Bearer "+data.token;
+        axios.put(`users/${data.id}`,{
+        image:avatarSource
+       }).then(res=>{
+       console.log("TCL: updateImage -> res", res)
+        this.setState({
+            firstName:"",
+            lastName:"",
+            email:"" , 
+            password:"",
+            phone:"",
+            password:"",
+            messageAlert:"Modifié",
+            alertConfirm:false,
+            style:true,
+            messageAlertPWd:undefined
+    
+            })
+    
+       })
+       }
+
+   }
+
+   
    logOut =()=>{
  
     AsyncStorage.removeItem('jwt_auth')
@@ -207,11 +246,17 @@ export default class Parameters extends Component {
         }
     }
 
+
     closeAlert =()=>{
     this.setState({
         alertVisible:false,
     })
     }
+
+
+
+
+
 
     render() {
         // password eye icon
@@ -228,7 +273,8 @@ export default class Parameters extends Component {
             alertConfirm,
             logOutOrRegister,
             style,
-            infoUser
+            infoUser,
+            avatarSource
             }= this.state
 
 
@@ -247,6 +293,7 @@ export default class Parameters extends Component {
 
         return (
             <ContainerLayout  title="Paramètres" navigation={this.props.navigation}>
+               
                 <ScrollView       
                 style={{ marginHorizontal: 0 ,marginBottom:10 }}
                 showsVerticalScrollIndicator = {false}
@@ -262,7 +309,7 @@ export default class Parameters extends Component {
   
               
                 <View style={Styles.containerImage} onPress={()=>console.log("change image")}>
-                        <Image source={Images.devProfil} style={{ width: 225, height: 225,  borderRadius: 45 }} onPress={()=>console.log("change image")}/>
+                        <Image source={ avatarSource? avatarSource:Images.devProfil} style={{ width: 225, height: 225,  borderRadius: 45 }} onPress={()=>console.log("change image")}/>
              
                 </View>
                 <View style={{justifyContent:"center"}}>
@@ -362,8 +409,7 @@ export default class Parameters extends Component {
                             <CheckBox
                                 title="* J'accepte d'être pris en photo"
                                 checked={checked}
-                                checkedColor
-                                uncheckedColor={infoUser && infoUser.imageRights?'green' : '#6B6B6B'}
+                                uncheckedColor={checked?'green' : '#6B6B6B'}
                                 onPress={() => this.setState({checked: !checked})}
                                 containerStyle={Styles.containerCheckbox}
                                 textStyle={{ color: "#6B6B6B", fontSize: 16 }}

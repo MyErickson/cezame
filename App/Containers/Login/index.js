@@ -1,5 +1,12 @@
 import React, { Component } from 'react';
-import { Text, View, Modal, Alert, ActivityIndicator, ImageBackground, Dimensions, KeyboardAvoidingView, StatusBar, ScrollView, Platform } from 'react-native';
+import { Text,
+  View,
+  Modal, 
+  Alert, 
+  ActivityIndicator, 
+  ImageBackground, 
+  Dimensions, 
+  KeyboardAvoidingView, StatusBar, ScrollView, Platform,TouchableHighlight } from 'react-native';
 
 import axios from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -13,6 +20,7 @@ import NavigationService from '../../Services/NavigationService';
 var jwtDecode = require('jwt-decode');
 
 import AlertDialog from '../AlertDialog/AlertDialog';
+import AlertAdmin from '../AlertDialog/AlertAdmin';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp
@@ -157,7 +165,7 @@ export default class Login extends Component {
                   password: validateInputs.password
               })
             .then((response) => {
-            console.log("TCL: Login -> Login -> response", response)
+
    
             // // handle success
             const {token }= response.data;
@@ -167,7 +175,16 @@ export default class Login extends Component {
             this.StoreToken('jwt_auth', token);
             var decode = jwtDecode(token)
             decode_Token(decode)
-
+            if(decode.roles[0] !== "ROLE_USER"){
+              console.log("TCL: Login -> Login -> decode", decode)
+              this.ToogleLoader();
+              this.setState({
+                alertVisible:true,
+                messageAlert:"En tant que V.I.P, vous avez le privilège de vous connecter sur le Web",
+              })
+              
+              return
+            }
             const data = new FormData
             data.token = token
             data.id = decode.id
@@ -297,6 +314,7 @@ export default class Login extends Component {
                  imageStyle={{ resizeMode: 'stretch'}}
                  style={{width: screen.width, height: screen.height-281}}
                 >
+                  
                   <Icon 
                     underlayColor="none"
                     name="ios-arrow-round-back" 
@@ -425,6 +443,7 @@ export default class Login extends Component {
                 messageAlert={messageAlert}
                 style={style}
                 />
+
             </View>
        
         );

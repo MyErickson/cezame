@@ -1,5 +1,5 @@
 import React, { Component, useRef } from 'react';
-import { Text, View, Dimensions, KeyboardAvoidingView,ScrollView,StatusBar   } from 'react-native';
+import { Text, View, Dimensions, KeyboardAvoidingView,ScrollView,StatusBar,SafeAreaView   } from 'react-native';
 import ContainerLayout from '../../Components/Layout/ContainerLayout';
 import Colors from '../../Themes/Colors';
 import { Icon, Input, Button, CheckBox } from 'react-native-elements';
@@ -92,10 +92,13 @@ export default class Contact extends Component {
                             <Text style={Styles.text}>Nous vous accompagnons durant votre seminaire</Text>
                             <Text style={Styles.textContact}>Contacts utiles</Text>
                         </View>
-                        <FlatList data={data} renderItem={({ item }) => 
-                            <Item item={item} />
-                        } />
-                    
+                        <SafeAreaView style={{flex: 1}}>
+                            <FlatList data={data} keyExtractor={item => item.id} renderItem={({ item }) => 
+                          
+                                 <Item  item={item} />
+                            } />
+                 
+                        </SafeAreaView>
                         <View style={{ width: screen.width-75, alignSelf: "center" ,marginVertical:20}}>
                             <Input 
                                 label="Commentaire" 

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import {Calendar, LocaleConfig} from 'react-native-calendars';
-import { Text, View, FlatList, TouchableWithoutFeedback ,Platform} from 'react-native';
+import { Text, View, FlatList, TouchableWithoutFeedback ,Platform,SafeAreaView} from 'react-native';
 import ContainerLayout from '../../Components/Layout/ContainerLayout';
 import style from './style';
 import { Icon } from 'react-native-elements';
@@ -185,20 +185,22 @@ export default class AgendaScreen extends Component {
                     onPressArrowLeft={substractMonth => substractMonth()}
                     onPressArrowRight={addMonth => addMonth()}
                     markedDates={{
-                        '2019-12-17': {selected: true, startingDay: true, color: 'white', textColor: '#1991EB'},
-                        '2019-12-18': {selected: true,  color: 'white', textColor: '#1991EB'},
-                        '2019-12-19': {selected: true,  color: 'white', textColor: '#1991EB'},
-                        '2019-12-20': {selected: true,  color: 'white', textColor: '#1991EB'},
-                        '2019-12-21': {selected: true,  color: 'white', textColor: '#1991EB', endingDay: true,},
+                        '2020-01-17': {selected: true, startingDay: true, color: 'white', textColor: '#1991EB'},
+                        '2020-01-18': {selected: true,  color: 'white', textColor: '#1991EB'},
+                        '2020-01-19': {selected: true,  color: 'white', textColor: '#1991EB'},
+                        '2020-01-20': {selected: true,  color: 'white', textColor: '#1991EB'},
+                        '2020-01-21': {selected: true,  color: 'white', textColor: '#1991EB', endingDay: true,},
                     }}
                     markingType={'period'}
                     />
-                    <FlatList data={this.state.date} keyExtractor={item => item.id}
-                        renderItem={({ item, index }) => {
-                        return(
-                                <Item item={item} />
-                        )}} 
-                    />
+                    <SafeAreaView>
+                        <FlatList data={this.state.date} keyExtractor={item => item.id}
+                            renderItem={({ item, index }) => {
+                            return(
+                                    <Item item={item} />
+                            )}} 
+                        />
+                    </SafeAreaView>
                     </LinearGradient>
                 </View>
                 

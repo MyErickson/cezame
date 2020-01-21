@@ -17,7 +17,7 @@ class SideMenu extends Component {
               ["Mon programme", "Program"], 
               ["Points d'intérêts", 'Places'], 
               ["Agenda       (bientôt)", 'Agenda'], //Agenda
-              ["Galerie photos       (bientôt)", ''], //Gallery
+              ["Galerie photos       (bientôt)", 'Gallery'], //Gallery
               ["Messagerie     (bientôt)", ''], //Chat
               ["Paramètres", 'Parameters'],
               ["Contact", 'Contact']
@@ -57,7 +57,7 @@ class SideMenu extends Component {
     <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 0}} colors={['#fff','#E9ECF5']}>
         <ImageBackground source={Images.bgSidemenu} style={{width: '100%', height: '100%'}} resizeMode={"cover"}>
             <ScrollView style={{ flex:1}}>
-                <View style={{ flexDirection: "row", justifyContent: "space-between", marginHorizontal: 25, marginBottom: 0, marginTop: 55 }}>
+                <View style={{ flexDirection: "row", justifyContent: "space-between", marginHorizontal: 25, marginBottom: 0, marginTop: Platform.OS==='ios'?55:10 }}>
                     <Icon 
                         name={this.state.iconBack} 
                         color="#000" 

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Image, ScrollView, Dimensions, TouchableOpacity , Platform } from 'react-native';
+import { View, Text, Image, ScrollView, Dimensions, TouchableOpacity , Platform ,ActivityIndicator} from 'react-native';
 import ContainerLayout from '../../Components/Layout/ContainerLayout';
 import { Button, Icon } from 'react-native-elements';
 import Images from '../../Themes/Images';
@@ -26,7 +26,10 @@ export default class Program extends Component {
     }
 
     static getDerivedStateFromProps(props,state){
-        state.trip_User = props.trip_User 
+        if( props.trip_User ){
+            state.trip_User = props.trip_User 
+        }
+     
     }
     render() {
    
@@ -46,6 +49,7 @@ export default class Program extends Component {
     
         return (
             <ContainerLayout title="Mon Programme" navigation={this.props.navigation}>
+                { trip_User ? 
                 <ScrollView>
                     <View style={[AppStyles.style.pH35Flex, { paddingVertical: 10, alignItems: "center", justifyContent: "space-between" }]}>
                         <View style={{flex:3}}>
@@ -69,7 +73,7 @@ export default class Program extends Component {
                     </View>
                     <View style={[AppStyles.style.flex, {justifyContent: "space-evenly"}]}>
                         <Button 
-                            buttonStyle={[AppStyles.style.pH7, { backgroundColor: Colors.lightPrimary, borderRadius: 5, minWidth: 190 }]} 
+                            buttonStyle={[AppStyles.style.pH7, { backgroundColor: Colors.lightPrimary, borderRadius: 5, minWidth: '50%' }]} 
                             title="Votre convocation" 
                             icon={
                                 <Icon
@@ -83,7 +87,7 @@ export default class Program extends Component {
                          }}
                         />
                         <Button 
-                            buttonStyle={[AppStyles.style.pH7, { backgroundColor: Colors.primary, borderRadius: 5, minWidth: 190 }]} 
+                            buttonStyle={[AppStyles.style.pH7, { backgroundColor: Colors.primary, borderRadius: 5, minWidth: '50%' }]} 
                             title="Carnet de voyage" 
                             icon={
                                 <Icon
@@ -126,7 +130,7 @@ export default class Program extends Component {
                                 <Text style={[Font.style.normal, { flexShrink: 1, color: Colors.primary }]}>+34 913 60 80 00</Text>
                             </View>
                             <Button 
-                                buttonStyle={{ backgroundColor: Colors.lightSecondary, borderRadius: 5 }} 
+                                buttonStyle={[{ backgroundColor: Colors.lightSecondary, borderRadius: 5 , },Platform.OS ==="ios" &&{marginTop:18}]} 
                                 onPress={()=>{ NavigationService.navigate('Places', { coord: {latitude: 40.415584, longitude: -3.707412, latitudeDelta: 0.0052, longitudeDelta: 0.0121, } }) }}
                                 title="Voir plus de détail sur l'hôtel" 
                                 titleStyle={{ marginLeft: 5, fontSize: 13, fontWeight: "normal" }}
@@ -139,6 +143,16 @@ export default class Program extends Component {
                          <Text>{trip_User && trip_User.hotelDescription}</Text>
                     </View>
                 </ScrollView>
+     : <View style={{
+
+        justifyContent: 'center',
+        flexDirection: 'column',
+        justifyContent: 'space-around',
+        top: screen.height * 0.4
+      }}>
+         <ActivityIndicator  size="large" color="#0000ff"/>
+  <Text style={{   textAlign:'center'}}>Chargement ...</Text>
+     </View>}
             </ContainerLayout>
         )
     }

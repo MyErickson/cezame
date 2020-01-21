@@ -4,6 +4,8 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>fr_FR</string>
+	<key>CFBundleIconName</key>
+	<string>Cezame</string>
 	<key>CFBundleDisplayName</key>
 	<string>Cezame</string>
 	<key>CFBundleExecutable</key>

@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import LinearGradient from 'react-native-linear-gradient';
-import { View, Text, Dimensions, BackHandler, Image, StatusBar, TouchableOpacity ,ScrollView } from 'react-native';
+import { View, Text, Dimensions, BackHandler, Image, StatusBar, TouchableOpacity ,ScrollView,SafeAreaView } from 'react-native';
 import { Icon,Header } from 'react-native-elements';
 import Colors from '../../Themes/Colors';
 import NavigationService from '../../Services/NavigationService';
@@ -27,6 +27,7 @@ export default class Layout extends Component {
 
     render() {
         const { tokenConnection,title} = this.props
+
  
 
       
@@ -35,39 +36,58 @@ export default class Layout extends Component {
                 <StatusBar translucent backgroundColor={Colors.rightColor} />
               
                 <Header
-                containerStyle={{marginBottom:-0.2}}
-                    leftComponent={{ icon: 'arrow-back', color: '#fff', onPress: () => this.props.navigation.goBack() ,underlayColor:"none"}}
+                    containerStyle={{marginBottom:-0.2}}
+                    leftComponent={
+                        <TouchableOpacity 
+                        onPress={ () => this.props.navigation.goBack()}
+                         >
+                           <Icon 
+                               underlayColor="none"
+                               name='arrow-back'
+                               color="white"
+                               containerStyle={{ marginRight: 15 }}
+                               
+                           />
+                       </TouchableOpacity>}
                     centerComponent={{ text: title, style: { color: '#fff',fontSize:18,fontWeight: 'bold' } }}
                     rightComponent={
                         tokenConnection ?   this.props.chat == true ?
                     <View style={[AppStyles.style.flex, {  alignItems: "center"}]}>
                           <TouchableOpacity 
-                         
+                         onPress={() => NavigationService.navigate("Program")}
                           >
-                        <Icon 
-                            underlayColor="none"
-                            name="home"
-                            color="white"
-                            containerStyle={{ marginRight: 15 }}
-                            onPress={() => NavigationService.navigate("Program")}
-                        />
-                        <Icon
-                            underlayColor="none"
-                            name="menu"
-                            color="white"
-                            containerStyle={{ marginRight: 5 }}
-                            onPress={ () => { this.props.navigation.toggleDrawer() } }
+                            <Icon 
+                                underlayColor="none"
+                                name="home"
+                                color="white"
+                                containerStyle={{ marginRight: 15 }}
+                                
+                            />
+                        </TouchableOpacity>
+                        <TouchableOpacity 
+                         onPress={ () => { this.props.navigation.toggleDrawer() } }
+                         >
+                            <Icon
+                                underlayColor="none"
+                                name="menu"
+                                color="white"
+                                containerStyle={{ marginRight: 5 }}
+                                
                         /> 
                         </TouchableOpacity>
                     </View> 
                         : 
                     <View style={[AppStyles.style.flex, { alignItems: "center"}]}>
+                    <TouchableOpacity 
+                         onPress={() =>  NavigationService.navigate('Notifications')}
+                         >
                         <Icon 
                             underlayColor="none"
                             name="notifications" 
                             color='white'
-                            onPress={() =>  NavigationService.navigate('Notifications')}
+                         
                         />
+                        </TouchableOpacity>
                         <TouchableOpacity 
                             style={Styles.iconParam} 
                             onPress={() => NavigationService.navigate("Parameters")} 
@@ -93,40 +113,50 @@ export default class Layout extends Component {
 
 
                 {tokenConnection && 
-                <Fragment>
+                <SafeAreaView style={{backgroundColor:Colors.lightSecondary,marginTop:-10}}>
                     {!this.props.chat && (
                         <View style={[Styles.containerMenu]}>
                             {this.props.gallery && (
                                 <UploadImage />
                             )}
                             <View style={AppStyles.style.flex}>
+                            <TouchableOpacity 
+                              onPress={() => NavigationService.navigate("Program")}
+                            >
                                 <Icon 
                                     underlayColor="none"
                                     name="home"
                                     color="white"
                                     type="font-awesome"
                                     containerStyle={{ marginRight: 20 }}
-                                    onPress={() => NavigationService.navigate("Program")}
+                                  
                                 />
-                                <Icon 
-                                    underlayColor="none"
-                                    name="comments"
-                                    color="white"
-                                    type="font-awesome"
-                                    onPress={() => NavigationService.navigate("")}
-                                />  
+                                </TouchableOpacity>
+                                <TouchableOpacity 
+                                onPress={() => NavigationService.navigate("")}
+                                >
+                                    <Icon 
+                                        underlayColor="none"
+                                        name="comments"
+                                        color="white"
+                                        type="font-awesome"
+                                   
+                                    />  
+                            </TouchableOpacity>
                             </View>
-                            <TouchableOpacity >
+                            <TouchableOpacity 
+                             onPress={ () => { this.props.navigation.toggleDrawer() } }
+                            >
                                 <Icon
                                 underlayColor="none"
                                     name="menu"
                                     color="white"  
-                                    onPress={ () => { this.props.navigation.toggleDrawer() } }
+                                   
                                 />
                             </TouchableOpacity>
                         </View>
                     )}
-                </Fragment> }
+                </SafeAreaView> }
       
 
             </View>

@@ -32,7 +32,7 @@ export const Styles = StyleSheet.create({
         justifyContent: "space-between", 
         alignItems: "center", 
         paddingHorizontal: 25,
-        bottom: 0 
+        bottom: 0
 }
     
     

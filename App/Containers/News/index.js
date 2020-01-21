@@ -15,7 +15,7 @@ export default class News extends Component {
 
     componentDidMount(){
         console.log('hey')
-        axios.get('https://cezame-dev.digitalcube.fr/api/articles')
+        axios.get('https://cezame-dev.digitalcube.fr/api/articles?visible=true')
             .then((res) => {
             console.log("TCL: News -> componentDidMount -> res", res)
                  this.setState({newsArticles : res.data["hydra:member"]});
@@ -44,7 +44,7 @@ export default class News extends Component {
                                 <View  key={news.id}>
                                     <Text style={{fontWeight: 'bold',fontSize:15,marginBottom:15}}>{news.title}</Text>
                                     <Text style={{marginBottom:10}} >{news.content}</Text>
-                                    <Text style={{marginBottom:25,fontSize:11}}> publier le  :{ showDate }</Text>
+                                    <Text style={{marginBottom:25,fontSize:11}}> publier le : { showDate }</Text>
                                 </View>
                             )
                     })}

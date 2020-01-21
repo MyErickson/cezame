@@ -49,6 +49,7 @@ export default class UploadImage extends Component {
         return (
             <View style={{ position: "absolute", justifyContent: "center", left: (screen.width/2)-30, top: -18 }}>
                 <Icon 
+                    underlayColor="none"
                     name="add-circle"
                     color="white"
                     size={60}

@@ -71,7 +71,7 @@ export default class Notifications extends Component {
 
     render() {
         return (
-            <Layout return title="Notification" navigation={this.props.navigation}>
+            <Layout return title="Notification (bientot)" navigation={this.props.navigation}>
                 <FlatList 
                     data={data}
                     renderItem={({ item }) => 

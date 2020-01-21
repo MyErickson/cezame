@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
-import { Text, View, Dimensions, TouchableWithoutFeedback, Image, Animated } from 'react-native';
+import { Text, View, Dimensions, TouchableWithoutFeedback, Image, Animated,StatusBar, Platform  } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import Layout from '../../Components/Layout';
+import ContainerLayout from '../../Components/Layout/ContainerLayout';
 import ImageLayout from "react-native-image-layout";
-import { Icon } from 'react-native-elements';
+import { Icon,Header } from 'react-native-elements';
 import Colors from '../../Themes/Colors';
 import RNFS from "react-native-fs";
 import NavigationService from '../../Services/NavigationService';
 import AppStyles from '../../Themes/AppStyles';
 import {PermissionsAndroid} from 'react-native';
-
+import { Styles } from './styleGallery'
 const screen = Dimensions.get("window");
 
 async function requestCameraPermission() {
@@ -99,20 +99,24 @@ export default class Gallery extends Component {
     // HEADER PAGE DETAIL IMAGE
     _renderPageHeader = (image, index, onClose) => {
         return (
-            <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 0}} colors={[Colors.leftColor, Colors.rightColor]} 
-                style={{ 
-                    width: screen.width,
-                    paddingVertical: 10, alignItems: 'flex-start'
+            <View style={{flex:1}}>
+            
+            <StatusBar translucent backgroundColor={Colors.rightColor} style={{zIndex:1}} />
+     
+            <Header
+                containerStyle={Platform.OS==="android"&&{marginBottom:-0.2,height:40}}
+                leftComponent={{ icon: 'close', color: '#fff', onPress: () => onClose() ,underlayColor:"none"}}
+                leftContainerStyle={{height:40}}
+                ViewComponent={LinearGradient}
+                linearGradientProps={{
+                    colors: [Colors.leftColor, Colors.rightColor],
+                    start: { x: 0, y: 0 },
+                    end: { x: 1, y: 0 },
                 }}
-            >
-                <Icon
-                    name="close" 
-                    onPress={() => {onClose();}}
-                    color="white"
-                    containerStyle={{ marginLeft: 15 }}
-                />
-            </LinearGradient>
+            />
+   </View>
         );
+     
     }
 
     // FOOTER PAGE DETAIL IMAGE
@@ -120,28 +124,23 @@ export default class Gallery extends Component {
         return(
             <View>
                 <View style={{width: screen.width, height: 45 }}>
-                    <View style={{ zIndex: 5, backgroundColor: "rgba(0,0,0,.5)", borderRadius: 25, width: 45, height: 45, alignSelf: "center", justifyContent: "center", alignContent: "center" }}>
+                    <View style={Styles.footerIconDownload}>
                         <Icon
+                            underlayColor="none"
                             name="download"
                             color="white"
                             type="font-awesome"
                             onPress={() => {this._download(image)} }
                         />
                     </View>
-                    <Animated.View style={{ opacity: this.state.isDone, backgroundColor: 'rgba(255,255,255,.5)', width: 200, borderRadius: 10, alignSelf: "center" }}>
+                    <Animated.View style={[Styles.animetedFooter,{opacity: this.state.isDone, }]}>
                         <Text style={{ textAlign: "center" }}>Téléchargement terminé.</Text>
                     </Animated.View>
                 </View>
-                <View style={{ 
-                    width: screen.width, 
-                    backgroundColor: Colors.lightSecondary, 
-                    flexDirection: "row", justifyContent: "space-between", 
-                    paddingVertical: 15, paddingHorizontal: 15, 
-                    position: this.props.roundHeader == true ? "absolute" : "relative",
-                    bottom: 0
-                }}>
+                <View style={Styles.footerContainer}>
                     <View style={AppStyles.style.flex}>
                         <Icon 
+                            underlayColor="none"
                             name="home"
                             color="white"
                             type="font-awesome"
@@ -149,6 +148,7 @@ export default class Gallery extends Component {
                             onPress={() => {NavigationService.navigate("Program"), onClose()}}
                         />
                         <Icon 
+                            underlayColor="none"
                             name="comments"
                             color="white"
                             type="font-awesome"
@@ -156,6 +156,7 @@ export default class Gallery extends Component {
                         />  
                     </View>
                     <Icon
+                        underlayColor="none"
                         name="menu"
                         color="white"
                         onPress={ () => { this.props.navigation.toggleDrawer(), onClose() } }
@@ -168,19 +169,25 @@ export default class Gallery extends Component {
     render() {
         this._createFolder();
         return (
-            <Layout noPaddingTop allScreenHeader gallery return title="Galerie Photos" navigation={this.props.navigation}>
+            <ContainerLayout noPaddingTop allScreenHeader gallery return title="Galerie Photos" navigation={this.props.navigation}>
+                    <LinearGradient 
+                colors={["#0062EC", "#07318D"]}    
+                start= { {x: 0, y: 0 }}
+                end={ {x: 1, y: 0 }}
+                style={{flex:1}}
+                >
                 <ImageLayout
                     images={[
-                        { uri: "https://source.unsplash.com/random/800x600" },
-                        {uri: "https://source.unsplash.com/random/500x1000"},
-                        { uri: "https://source.unsplash.com/random/400x600" },
-                        { uri: "https://source.unsplash.com/random/900x600" },
-                        { uri: "https://source.unsplash.com/random/800x500" },
-                        { uri: "https://source.unsplash.com/random/800x400" },
-                        { uri: "https://source.unsplash.com/random/1200x600" },
-                        { uri: "https://source.unsplash.com/random/300x600" },
-                        { uri: "https://source.unsplash.com/random/1200x700" },
-                        { uri: "https://source.unsplash.com/random/500x700" },
+                        { uri: "https://source.unsplash.com/random/",dimensions:{width:800 , height: 600} },
+                        {uri: "https://source.unsplash.com/random/500x1000",dimensions:{width:500 , height: 1000} },
+                        { uri: "https://source.unsplash.com/random/400x600" ,dimensions:{width:400 , height: 600} },
+                        { uri: "https://source.unsplash.com/random/900x600",dimensions:{width:900 , height: 600}  },
+                        { uri: "https://source.unsplash.com/random/800x500" ,dimensions:{width:800 , height: 500} },
+                        { uri: "https://source.unsplash.com/random/800x400" ,dimensions:{width:800 , height: 400} },
+                        { uri: "https://source.unsplash.com/random/1200x600" ,dimensions:{width:1200 , height: 600} },
+                        { uri: "https://source.unsplash.com/random/300x600" ,dimensions:{width:300 , height: 600} },
+                        { uri: "https://source.unsplash.com/random/1200x700" ,dimensions:{width:1200 , height: 700} },
+                        { uri: "https://source.unsplash.com/random/500x700" ,dimensions:{width:500 , height: 700} },
                     ]}
                     imageContainerStyle={{borderRadius: 15}}
                     spacing={3}
@@ -189,7 +196,8 @@ export default class Gallery extends Component {
                     renderPageHeader={this._renderPageHeader}
                     renderPageFooter={this._renderPageFooter}
                 />
-            </Layout>
+            </LinearGradient>
+            </ContainerLayout>
         )
     }
 }
