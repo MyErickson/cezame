@@ -10,7 +10,7 @@ import ImagePicker from 'react-native-image-picker';
 import AlertDialog from '../AlertDialog/AlertDialog'
 import { Styles } from './styleParam'
 import axios from 'axios';
-
+import RNFetchBlob from 'rn-fetch-blob';
 
 export default class Parameters extends Component {
 
@@ -25,6 +25,7 @@ export default class Parameters extends Component {
             checked: false,
             alertVisible:false, 
             messageAlert:"",
+            avatar:"",
             style:false,    // color text alert (false = red & true = blue)
             logOutOrRegister:undefined, // string logout or register
             alertConfirm:undefined, //  confirm alert by yes or cancel button
@@ -40,6 +41,7 @@ export default class Parameters extends Component {
                 checked:infoUser.imageRights
             })
         }
+        console.log("je suis ici ")
     }
     static getDerivedStateFromProps(props,state){
         if( props.infoUser){
@@ -87,7 +89,7 @@ export default class Parameters extends Component {
         } else if (response.customButton) {
           console.log('User tapped custom button: ', response.customButton);
         } else {
-          const source = { uri: response.uri };
+          const source = response;
       
           // You can also display the image using data:
         //    const source = { uri: 'data:image/jpeg;base64,' + response.data };
@@ -96,6 +98,7 @@ export default class Parameters extends Component {
           this.setState({
             avatarSource: source,
           });
+          this.updateImage()
         }
       });
    }
@@ -110,7 +113,7 @@ export default class Parameters extends Component {
    }
 
    goToRegister=()=>{
-     const { email , firstName , lastName , checked , phone , password,avatarSource} = this.state
+     const { email , firstName , lastName , checked , phone , password,avatarSource, avatar} = this.state
      const { infoUser ,tokenConnection } = this.props
      console.log("TCL: Parameters -> goToRegister -> info_User ", infoUser )
 
@@ -146,6 +149,7 @@ export default class Parameters extends Component {
             password:data.password,
             phone:data.phone,
             imageRights:checked,
+            avatar:avatar && avatar
            
         }).then((response)=>{
         console.log("TCL: Parameters -> goToRegister -> response", response)
@@ -154,8 +158,7 @@ export default class Parameters extends Component {
             this.setState({
                 firstName:"",
                 lastName:"",
-                email:"" , 
-                password:"",
+                email:"" ,
                 phone:"",
                 password:"",
                 messageAlert:"Modifié",
@@ -169,13 +172,10 @@ export default class Parameters extends Component {
        
     
         }).catch((err)=>{
-      
+        console.log("TCL: Parameters -> goToRegister -> err", err.response)
+            
             err.response.data.violations.map((value)=>{
                 this.setState({
-                    login:"", 
-                    email:"" , 
-                    password:"",
-                    changePassword:"",
                     messageAlert:value.message,
                     alertConfirm:false,
                     style:false,
@@ -192,29 +192,64 @@ export default class Parameters extends Component {
 
    updateImage=()=>{
        const { avatarSource } =this.state
+       console.log("TCL: updateImage -> avatarSource", avatarSource.uri)
+       const { tokenConnection } = this.props
+   
        if(avatarSource){
-        axios.defaults.headers['Authorization']= "Bearer "+data.token;
-        axios.put(`users/${data.id}`,{
-        image:avatarSource
-       }).then(res=>{
-       console.log("TCL: updateImage -> res", res)
-        this.setState({
-            firstName:"",
-            lastName:"",
-            email:"" , 
-            password:"",
-            phone:"",
-            password:"",
-            messageAlert:"Modifié",
-            alertConfirm:false,
-            style:true,
-            messageAlertPWd:undefined
-    
-            })
-    
-       })
-       }
+    //     axios.defaults.headers['Authorization']= "Bearer "+tokenConnection ;
+    //     axios.post(`https://cezame-dev.digitalcube.fr/api/media_objects`,{
+    //     file:avatarSource.uri
+    //    }).then(res=>{
+    //    console.log("TCL: updateImage -> res", res)
 
+    //    }).catch((err)=>{
+    //     console.log("TCL: updateImage -> err", err.response)
+    //    })
+        const uri = Platform.OS ==='android'? avatarSource.path.slice(1) :avatarSource.uri.replace("file://","")
+        console.log("TCL: updateImage -> uri rnf ", RNFetchBlob.wrap(uri))
+        console.log("TCL: updateImage -> uri", uri)
+       RNFetchBlob.fetch("post",`https://cezame-dev.digitalcube.fr/api/media_objects`,{
+      Authorization : "Bearer "+tokenConnection,
+      headers: JSON.stringify({ 'content-type': 'multipart/form-data' }),
+      },[
+        {
+      // name est la clé attendu pour le backend
+        name:'file',
+        
+        filename : avatarSource.fileName,
+        // use custom MIME type
+          type :'image/jpg',
+        // data it's the path
+        data:RNFetchBlob.wrap(uri)
+        },
+     
+      ]).then((res) => {
+    //   console.log("TCL: updateImage -> res", RNFetchBlob.wrap(avatarSource))
+      console.log("TCL: MyQuestions -> onStartRecord -> res", res.json()["@id"])
+        this.setState({
+            avatar:res.json()["@id"]
+    
+           })
+
+      })
+      .catch((err) => {
+      console.log("TCL: MyQuestions -> onStopRecord -> err", err)
+      })
+        // this.setState({
+        //     firstName:"",
+        //     lastName:"",
+        //     email:"" , 
+        //     password:"",
+        //     phone:"",
+        //     password:"",
+        //     messageAlert:"Modifié",
+        //     alertConfirm:false,
+        //     style:true,
+        //     messageAlertPWd:undefined
+    
+        //     })
+    
+    }
    }
 
    
@@ -274,7 +309,8 @@ export default class Parameters extends Component {
             logOutOrRegister,
             style,
             infoUser,
-            avatarSource
+            avatarSource,
+            avatar
             }= this.state
 
 
@@ -309,10 +345,14 @@ export default class Parameters extends Component {
   
               
                 <View style={Styles.containerImage} onPress={()=>console.log("change image")}>
-                        <Image source={ avatarSource? avatarSource:Images.devProfil} style={{ width: 225, height: 225,  borderRadius: 45 }} onPress={()=>console.log("change image")}/>
+                        <Image source={avatarSource?avatarSource :  infoUser && infoUser.avatar? {uri:infoUser.avatar.contentUrl } :Images.devProfil} style={{ width: 225, height: 225,  borderRadius: 45 }} onPress={()=>console.log("change image")}/>
              
                 </View>
                 <View style={{justifyContent:"center"}}>
+
+
+
+
                 <Icon 
                         underlayColor="none"
                         name="download"

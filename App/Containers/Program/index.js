@@ -44,8 +44,8 @@ export default class Program extends Component {
          }
        
         
-       const random1 = Math.floor(Math.random() * (999 - 1 +1)) + 1
-       const random2 = Math.floor(Math.random() * (999 - 1 +1)) + 1
+       const random1 = Math.floor(Math.random() * (100 - 1 +2)) + 1
+       const random2 = Math.floor(Math.random() * (100 - 1 +2)) + 1
     
         return (
             <ContainerLayout title="Mon Programme" navigation={this.props.navigation}>

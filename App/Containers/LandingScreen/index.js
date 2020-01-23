@@ -24,11 +24,12 @@ export default class LandingScreen extends Component {
                     />
                 </View>
             <View style={Styles.buttonContainer}>
-                    {dataLanding.map(value=>{
+                    {dataLanding.map((value,key)=>{
                         const { backgroundColor , title , navigateName , dataNavigate } = value
 
                         return  (
                                 <Button 
+                                key={key}
                                 buttonStyle={{ borderRadius: 30, height: 50, backgroundColor: backgroundColor}} 
                                 containerStyle= {{ paddingVertical: 5 }} 
                                 onPress={() => navigate(navigateName, dataNavigate && dataNavigate)} 

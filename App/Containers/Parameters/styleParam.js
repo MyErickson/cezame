@@ -32,7 +32,8 @@ export const Styles = StyleSheet.create({
         borderRadius: 45,
         backgroundColor:"blue", 
         alignSelf: "center" ,
-        position:"absolute" 
+        position:"absolute" ,
+        backgroundColor:"#C6C6C6" 
     },
     labelInput:{ 
         fontSize: 15, 

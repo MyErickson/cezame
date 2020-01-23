@@ -13,9 +13,12 @@ import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp
   } from "react-native-responsive-screen";
+
+
 export default class Layout extends Component {
       state={
-        tokenConnection:undefined
+        tokenConnection:undefined,
+        infoUser:undefined
       }
     componentDidMount() {
         this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
@@ -24,9 +27,16 @@ export default class Layout extends Component {
         });
     }
 
+  static getDerivedStateFromProps(props,state){
+            if(props.infoUser){
+                state.infoUser = props.infoUser
+            }
+  }
+
 
     render() {
         const { tokenConnection,title} = this.props
+        const { infoUser } =this.state
 
  
 
@@ -92,7 +102,7 @@ export default class Layout extends Component {
                             style={Styles.iconParam} 
                             onPress={() => NavigationService.navigate("Parameters")} 
                         >
-                            <Image source={Images.devProfil} style={{ width: 35, height: 35, borderRadius: 35 }} />
+                            <Image source={infoUser && infoUser.avatar? {uri:infoUser.avatar.contentUrl}: Images.devProfil} style={{ width: 35, height: 35, borderRadius: 35 }} />
                         </TouchableOpacity>
                     </View>
                     :null

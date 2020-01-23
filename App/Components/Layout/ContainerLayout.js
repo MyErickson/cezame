@@ -14,6 +14,7 @@ import Layout from './index'
 
 const mapStateToProps = (state, ownProps) => ({
     tokenConnection:state.tokenConnection,
+    infoUser:state.info_User,
    
 });
 
