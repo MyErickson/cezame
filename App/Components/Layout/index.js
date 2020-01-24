@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { PureComponent , Fragment } from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import { View, Text, Dimensions, BackHandler, Image, StatusBar, TouchableOpacity ,ScrollView,SafeAreaView } from 'react-native';
 import { Icon,Header } from 'react-native-elements';
@@ -15,11 +15,15 @@ import {
   } from "react-native-responsive-screen";
 
 
-export default class Layout extends Component {
+export default class Layout extends PureComponent {
+
+
       state={
         tokenConnection:undefined,
         infoUser:undefined
       }
+
+
     componentDidMount() {
         this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
             this.props.navigation.goBack()
@@ -28,8 +32,11 @@ export default class Layout extends Component {
     }
 
   static getDerivedStateFromProps(props,state){
+      
             if(props.infoUser){
                 state.infoUser = props.infoUser
+            }else{
+                return null
             }
   }
 
@@ -37,6 +44,7 @@ export default class Layout extends Component {
     render() {
         const { tokenConnection,title} = this.props
         const { infoUser } =this.state
+    
 
  
 

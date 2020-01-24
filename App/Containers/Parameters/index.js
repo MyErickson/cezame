@@ -1,4 +1,4 @@
-import React, { Component} from 'react';
+import React, {PureComponent} from 'react';
 import { Text, View, Dimensions, ScrollView, Image,  Platform } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import LinearGradient from 'react-native-linear-gradient';
@@ -12,7 +12,7 @@ import { Styles } from './styleParam'
 import axios from 'axios';
 import RNFetchBlob from 'rn-fetch-blob';
 
-export default class Parameters extends Component {
+export default class Parameters extends PureComponent {
 
     constructor(props){
         super(props);
@@ -25,7 +25,7 @@ export default class Parameters extends Component {
             checked: false,
             alertVisible:false, 
             messageAlert:"",
-            avatar:"",
+            avatar:null,
             style:false,    // color text alert (false = red & true = blue)
             logOutOrRegister:undefined, // string logout or register
             alertConfirm:undefined, //  confirm alert by yes or cancel button
@@ -46,6 +46,8 @@ export default class Parameters extends Component {
     static getDerivedStateFromProps(props,state){
         if( props.infoUser){
             state.infoUser = props.infoUser
+        }else{
+            return null
         }
 
        
@@ -67,9 +69,10 @@ export default class Parameters extends Component {
    
    downloadImage=()=>{
     const options = {
-        title: 'Changer votre photo de profil',
+        title: 'Changer votre Avatar',
         tintColor:'white',
-        takePhotoButtonTitle:"Prendre une Photo...",
+        quality:0.5,
+        takePhotoButtonTitle:null,
         chooseFromLibraryButtonTitle:"Bibliothèque...",
         cancelButtonTitle:"Annuler",
         storageOptions: {
@@ -89,14 +92,8 @@ export default class Parameters extends Component {
         } else if (response.customButton) {
           console.log('User tapped custom button: ', response.customButton);
         } else {
-          const source = response;
-      
-          // You can also display the image using data:
-        //    const source = { uri: 'data:image/jpeg;base64,' + response.data };
-      
-           console.log("TCL: Parameters -> downloadImage ->  source ",  source )
           this.setState({
-            avatarSource: source,
+            avatarSource: response,
           });
           this.updateImage()
         }
@@ -115,7 +112,7 @@ export default class Parameters extends Component {
    goToRegister=()=>{
      const { email , firstName , lastName , checked , phone , password,avatarSource, avatar} = this.state
      const { infoUser ,tokenConnection } = this.props
-     console.log("TCL: Parameters -> goToRegister -> info_User ", infoUser )
+     console.log("TCL: Parameters -> goToRegister -> info_User ", avatar )
 
 
 
@@ -124,11 +121,11 @@ export default class Parameters extends Component {
 
      data.id= infoUser.id ;
      data.token=tokenConnection;
-    //  data.password = password.trim() ?   password : "" 
      data.firstName = firstName.trim() ?  firstName : infoUser.firstName  
      data.lastName = lastName.trim() ?  lastName : infoUser.lastName  
      data.email = email.trim() ?  email : infoUser.email 
      data.phone = phone.trim() ?  phone :infoUser.phone 
+     data.avatar = avatar ? avatar : infoUser.avatar["@id"]
     if( data.password){
         data.password =   password  
     }
@@ -141,7 +138,7 @@ export default class Parameters extends Component {
 
 
     axios.defaults.headers['Authorization']= "Bearer "+data.token;
-    axios.put(`users/${data.id}`,{
+    axios.put(`https://cezame-dev.digitalcube.fr/api/users/${data.id}`,{
         
             email:data.email,
             firstName:data.firstName,
@@ -149,7 +146,7 @@ export default class Parameters extends Component {
             password:data.password,
             phone:data.phone,
             imageRights:checked,
-            avatar:avatar && avatar
+            avatar:data.avatar
            
         }).then((response)=>{
         console.log("TCL: Parameters -> goToRegister -> response", response)
@@ -173,7 +170,7 @@ export default class Parameters extends Component {
     
         }).catch((err)=>{
         console.log("TCL: Parameters -> goToRegister -> err", err.response)
-            
+       
             err.response.data.violations.map((value)=>{
                 this.setState({
                     messageAlert:value.message,
@@ -196,36 +193,28 @@ export default class Parameters extends Component {
        const { tokenConnection } = this.props
    
        if(avatarSource){
-    //     axios.defaults.headers['Authorization']= "Bearer "+tokenConnection ;
-    //     axios.post(`https://cezame-dev.digitalcube.fr/api/media_objects`,{
-    //     file:avatarSource.uri
-    //    }).then(res=>{
-    //    console.log("TCL: updateImage -> res", res)
 
-    //    }).catch((err)=>{
-    //     console.log("TCL: updateImage -> err", err.response)
-    //    })
         const uri = Platform.OS ==='android'? avatarSource.path.slice(1) :avatarSource.uri.replace("file://","")
-        console.log("TCL: updateImage -> uri rnf ", RNFetchBlob.wrap(uri))
-        console.log("TCL: updateImage -> uri", uri)
-       RNFetchBlob.fetch("post",`https://cezame-dev.digitalcube.fr/api/media_objects`,{
+
+
+    RNFetchBlob.fetch("post",`https://cezame-dev.digitalcube.fr/api/media_objects`,{
       Authorization : "Bearer "+tokenConnection,
       headers: JSON.stringify({ 'content-type': 'multipart/form-data' }),
       },[
         {
-      // name est la clé attendu pour le backend
+
+       // name est la clé attendu pour le backend
         name:'file',
-        
+        // filename est le nom ddonné au fichier
         filename : avatarSource.fileName,
         // use custom MIME type
-          type :'image/jpg',
+        type :'image/jpg',
         // data it's the path
         data:RNFetchBlob.wrap(uri)
         },
      
       ]).then((res) => {
-    //   console.log("TCL: updateImage -> res", RNFetchBlob.wrap(avatarSource))
-      console.log("TCL: MyQuestions -> onStartRecord -> res", res.json()["@id"])
+
         this.setState({
             avatar:res.json()["@id"]
     
@@ -235,19 +224,6 @@ export default class Parameters extends Component {
       .catch((err) => {
       console.log("TCL: MyQuestions -> onStopRecord -> err", err)
       })
-        // this.setState({
-        //     firstName:"",
-        //     lastName:"",
-        //     email:"" , 
-        //     password:"",
-        //     phone:"",
-        //     password:"",
-        //     messageAlert:"Modifié",
-        //     alertConfirm:false,
-        //     style:true,
-        //     messageAlertPWd:undefined
-    
-        //     })
     
     }
    }
@@ -348,22 +324,20 @@ export default class Parameters extends Component {
                         <Image source={avatarSource?avatarSource :  infoUser && infoUser.avatar? {uri:infoUser.avatar.contentUrl } :Images.devProfil} style={{ width: 225, height: 225,  borderRadius: 45 }} onPress={()=>console.log("change image")}/>
              
                 </View>
-                <View style={{justifyContent:"center"}}>
-
-
-
+                <View style={{ alignItems:'center'}}>
+                <View style={{width:80,borderRadius:40}}>
 
                 <Icon 
                         underlayColor="none"
                         name="download"
                         color="white"
                         type="font-awesome"
-                        containerStyle={{ marginTop: 20 ,  }}
+                        containerStyle={{ margin: 20 }}
                         iconStyle={{ backgroundColor: "rgba(0,0,0,.5)", padding:8, borderRadius:25}}
                         onPress={()=>this.downloadImage()}
                     />
                 </View> 
-           
+                </View>
                     <View style={{ marginHorizontal: 40  }}>
                         <Input 
                             label='Prénom' 
@@ -469,7 +443,7 @@ export default class Parameters extends Component {
                         /> 
                           <Button 
                             title="Déconnexion" 
-                            buttonStyle={[Styles.buttonStyle,{backgroundColor:Colors.youtube,marginTop:10  }]} 
+                            buttonStyle={[Styles.buttonStyle,{backgroundColor:Colors.youtube,marginTop:10,marginBottom:20  }]} 
                             onPress={()=>this.register("logout","Êtes-vous sûre de vouloir quitter l'application ? ")}
                         /> 
                     </View>

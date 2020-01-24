@@ -28,6 +28,8 @@ export default class Program extends Component {
     static getDerivedStateFromProps(props,state){
         if( props.trip_User ){
             state.trip_User = props.trip_User 
+        }else{
+            return null
         }
      
     }
