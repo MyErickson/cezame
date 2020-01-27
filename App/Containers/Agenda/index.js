@@ -93,7 +93,7 @@ LocaleConfig.locales['fr'] = {
 
 
 
-export default class AgendaScreen extends Component {
+export default class Agenda extends Component {
     constructor(props){
         super(props);
         this.state = {
@@ -105,6 +105,8 @@ export default class AgendaScreen extends Component {
     }
 
     render() {
+
+        console.log("agenda agenda render", this.props.infoUser)
         return (
             <ContainerLayout noPaddingTop allScreenHeader return title="Agenda" navigation={this.props.navigation}>
                 <View style={{flex:1}}>

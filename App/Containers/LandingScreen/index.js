@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Image, ImageBackground, StatusBar,Text } from 'react-native';
+import { View, Image, ImageBackground, StatusBar,Text,ScrollView } from 'react-native';
 import Styles from './StyleLandingScreen';
 import SocialNetworkButtons from '../../Components/SocialNetworkButtons';
 import Colors from '../../Themes/Colors';
@@ -15,8 +15,14 @@ export default class LandingScreen extends Component {
         const {navigate} = this.props.navigation;
    
         return (
+
             <View style={{ flex: 1 , backgroundColor: Colors.generalBackground }}>
+                     
                 <StatusBar translucent backgroundColor={Colors.rightColor} />
+                <ScrollView 
+                    style={{ marginHorizontal: 0 , zIndex:1  }}
+                    showsVerticalScrollIndicator = {false}
+                >
                 <View style={Styles.imageContainer}>
                     <Image
                         style={{ width: 153, height: 187 }}
@@ -38,12 +44,13 @@ export default class LandingScreen extends Component {
                         )
                    })}
                </View>
-                
+               </ScrollView>
                <ImageBackground source={Images.bgImage} style={Styles.backgroundLanding}>
                     <View style={{ position : "absolute", bottom : 20, left : 0, right : 0,zIndex: 0}}>
                         <SocialNetworkButtons />
                     </View>
                 </ImageBackground> 
+             
           </View>
         )
     }

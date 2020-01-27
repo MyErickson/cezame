@@ -6,7 +6,7 @@ import { Text,
   ActivityIndicator, 
   ImageBackground, 
   Dimensions, 
-  KeyboardAvoidingView, StatusBar, ScrollView, Platform,TouchableHighlight } from 'react-native';
+  KeyboardAvoidingView, StatusBar, ScrollView, Platform,TouchableOpacity} from 'react-native';
 
 import axios from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -25,6 +25,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp
 } from "react-native-responsive-screen";
+
 const screen = Dimensions.get("screen");
 
 
@@ -314,16 +315,19 @@ export default class Login extends Component {
                  imageStyle={{ resizeMode: 'stretch'}}
                  style={{width: screen.width, height: screen.height-281}}
                 >
-                  
+                  <TouchableOpacity
+                      onPress={ () => this.props.navigation.goBack() }
+                 
+                  >
                   <Icon 
                     underlayColor="none"
                     name="ios-arrow-round-back" 
                     type='ionicon' 
-                    onPress={ () => this.props.navigation.goBack() }
                     color={'white'}
-                    containerStyle={{ position: "absolute", left: 25, top: 25 }}
+                    containerStyle={{ position: "absolute", left: 30, top: 25 }}
                     size={55}
                   />
+                  </TouchableOpacity>
                   <Text style={{color: "white", fontSize: 32, textTransform: "uppercase", position: "absolute", top: (screen.height/2)-90, left: 60 }}>Bienvenue</Text>
                 </ImageBackground>
                 {loaderConnexion}

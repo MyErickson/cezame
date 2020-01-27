@@ -7,7 +7,7 @@ import { createDrawerNavigator } from 'react-navigation-drawer';
 import LandingScreen from '../Containers/LandingScreen';
 import ContainerLogin from '../Containers/Login/ContainerLogin';
 import News from '../Containers/News';
-import AgendaScreen from '../Containers/Agenda';
+import ContainerAgenda  from '../Containers/Agenda/ContainerAgenda';
 import AboutUs from '../Containers/AboutUs';
 import LegalNotice from '../Containers/LegalNotice';
 import Program from '../Containers/Program/ContainerProgram';
@@ -27,7 +27,7 @@ const MainNavigator = createStackNavigator(
     Home:  LandingScreen,
     Login:  ContainerLogin,
     News : News,
-    Agenda : AgendaScreen,
+    Agenda : ContainerAgenda ,
     AboutUs :  AboutUs,
     LegalNotice :  LegalNotice,
     Program :  Program,
