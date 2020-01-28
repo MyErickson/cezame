@@ -16,6 +16,7 @@ import { callTrips } from '../../store/actionCreator/Program';
 
 const mapStateToProps = (state, ownProps) => ({
   trip_User:state.trip_User ,
+  tokenConnection:state.tokenConnection,
   
 });
 

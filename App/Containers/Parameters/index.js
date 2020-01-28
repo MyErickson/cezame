@@ -70,7 +70,7 @@ export default class Parameters extends PureComponent {
    downloadImage=()=>{
     const options = {
         title: 'Changer votre Avatar',
-        tintColor:'white',
+        tintColor:'#337FF9',
         quality:0.5,
         takePhotoButtonTitle:null,
         chooseFromLibraryButtonTitle:"Bibliothèque...",
@@ -230,9 +230,9 @@ export default class Parameters extends PureComponent {
 
    
    logOut =()=>{
- 
+  
     AsyncStorage.removeItem('jwt_auth')
- 
+    
     this.props.initialize_State()
     this.props.navigation.navigate("Home")
    }
@@ -253,7 +253,13 @@ export default class Parameters extends PureComponent {
         if(logOutOrRegister === "register"){
             this.goToRegister()
         }else{
-            this.logOut()
+            this.setState({
+                alertVisible:false,
+            })
+            setTimeout(() => 
+                this.logOut()
+            , 200);
+            
         }
     }
 

@@ -56,7 +56,8 @@ export default class Contact extends Component {
             password: "mot de passe",
             checked: false,
             visibleModal: false
-        }
+        };
+        this.input ={};
     }
 
     
@@ -69,7 +70,9 @@ export default class Contact extends Component {
         this.setState({ visibleModal: true })
     }
     
-
+    inputFocus=(id)=>{  
+        this.input[id].focus()
+   }
     render() {
         const keybord = Platform.OS === "ios" ? hp("5%") : hp("-65%")
         const behavior = Platform.OS === "ios" ? "padding":""
@@ -89,19 +92,50 @@ export default class Contact extends Component {
                     <View >
                         <View style={{ width: screen.width-50, alignSelf: "center" ,marginTop:15,marginBottom:10}}>
                             <Text style={Styles.textTitle}>Une question ? Besoin d'information ?</Text>
-                            <Text style={Styles.text}>Nous vous accompagnons durant votre seminaire</Text>
-                            <Text style={Styles.textContact}>Contacts utiles</Text>
+                            <Text style={{fontSize:18,textAlign: "center" ,}}>CEZAME 5 rue Gallieni 92100 Boulogne</Text>
+                            <Text style={{fontSize:18,textAlign: "center" ,}}>Téléphone : 01.58.17.01.01</Text>
+                            <Text style={Styles.text}>Email: contac@cezamz.fr</Text>
+                            
                         </View>
+                        { this.props.tokenConnection && 
                         <SafeAreaView style={{flex: 1}}>
+                            <Text style={Styles.textContact}>Contacts utiles</Text>
                             <FlatList data={data} keyExtractor={item => item.id} renderItem={({ item }) => 
                           
                                  <Item  item={item} />
                             } />
                  
                         </SafeAreaView>
+                        }
                         <View style={{ width: screen.width-75, alignSelf: "center" ,marginVertical:20}}>
+                        { !this.props.tokenConnection && 
+                        <>
                             <Input 
-                                label="Commentaire" 
+
+                                label="Prénom"
+                                labelStyle={Styles.labelStyle}
+                                containerStyle={{ marginTop: 10 }}
+                                onSubmitEditing={this.sendMessage}
+                                onSubmitEditing={() => { this.inputFocus("tel") }}
+                                blurOnSubmit={false}
+                                returnKeyType="next"
+                            />
+                            <Input 
+                                 ref = { text=>this.input.tel = text}
+                                 name='tel'
+                                label="télephone"
+                                labelStyle={Styles.labelStyle}
+                                containerStyle={{ marginTop: 15 }}
+                                onSubmitEditing={this.sendMessage}
+                                onSubmitEditing={() => { this.inputFocus("comments") }}
+                                blurOnSubmit={false}
+                                returnKeyType="next"
+                            />
+                            </>
+                        }
+                            <Input 
+                                ref = { text=>this.input.comments = text}
+                                name='comments'
                                 multiline
                                 numberOfLines={6}
                                 label="Commentaire"
@@ -110,9 +144,7 @@ export default class Contact extends Component {
                                 inputStyle={Styles.inputStyle}
                                 inputContainerStyle={{ borderBottomWidth: 0 }}
                                 containerStyle={{ marginTop: 15 }}
-                                onSubmitEditing={this.sendMessage}
-                                returnKeyType="send"
-                            />
+                                />
                             <Button 
                                 title="Envoyer" 
                                 onPress={() => { this.sendMessage() }}

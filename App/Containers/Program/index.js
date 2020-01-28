@@ -22,7 +22,6 @@ export default class Program extends Component {
     componentDidMount(){
         const {tokenConnection } = this.props
         
-        
     }
 
     static getDerivedStateFromProps(props,state){
@@ -36,7 +35,7 @@ export default class Program extends Component {
     render() {
    
             const { trip_User } =this.state
-            console.log("TCL: Program -> render -> this.state.trip_User", this.state.trip_User)
+           
             let  startDate,endDate,endMonth,startMonth = undefined
          if(trip_User){
             startDate = new Date(trip_User.startAt)
@@ -102,16 +101,16 @@ export default class Program extends Component {
                             titleStyle={{ marginLeft: 5, fontSize: 16, fontWeight: "normal" }}
                         />
                     </View>
-                    {/* <View style={[AppStyles.style.pV15, ]}>
+                    <View style={[AppStyles.style.pV15, {marginTop:5, marginLeft:10}]}>
                         <Text  style={Font.style.h2}>Votre hôtel</Text>
-                    </View> */}
-                    <View  style={[AppStyles.style.flex, {justifyContent: "space-evenly",marginTop:25}]}>
+                    </View>
+                    <View  style={[AppStyles.style.flex, {justifyContent: "space-evenly",marginTop:5,}]}>
                         <MapView style={{ backgroundColor: "grey", width: (screen.width/3)+15, height: (screen.width/3)+15, borderRadius: 5 ,marginTop:Platform.OS ==="ios"?5:10}}/>
                         <View style={{ width: (screen.width/2)+15 }}>
                             <TouchableOpacity onPress={()=>{ NavigationService.navigate('Places', { coord: {latitude: 40.415584, longitude: -3.707412, latitudeDelta: 0.0052, longitudeDelta: 0.0121, } }) }}>
-                                <Text style={[Font.style.h2, { flexShrink: 1,paddingLeft: 15}]}>Votre hôtel</Text>
+                                <Text style={[Font.style.h2, { flexShrink: 1,paddingLeft: 15}]}>Nom de l'hôtel</Text>
                             </TouchableOpacity>
-                            <View style={{ marginTop: 10, marginBottom: 5, flexDirection: "row" }}>
+                            <View style={{ marginTop: 20, marginBottom: 5, flexDirection: "row" }}>
                                 <Icon
                                     name='map-marker'
                                     type='material-community'
@@ -119,7 +118,7 @@ export default class Program extends Component {
                                     size={14}
                                     containerStyle={{ marginRight: 5 }}
                                 />
-                                <Text style={[Font.style.normal, { flexShrink: 1, color: Colors.primary }]}>{trip_User && trip_User.address}</Text>
+                                <Text style={[Font.style.normal, { flexShrink: 1, color: Colors.primary }]}>{trip_User && trip_User.address}latitude: 40.415584, longitude: -3.707412, latitudeDelta: 0.0052, longitudeDelta: 0.0121</Text>
                             </View>
                             <View style={{ marginTop: 5, marginBottom: 15, flexDirection: "row" }}>
                                 <Icon
@@ -132,8 +131,8 @@ export default class Program extends Component {
                                 <Text style={[Font.style.normal, { flexShrink: 1, color: Colors.primary }]}>+34 913 60 80 00</Text>
                             </View>
                             <Button 
-                                buttonStyle={[{ backgroundColor: Colors.lightSecondary, borderRadius: 5 , },Platform.OS ==="ios" &&{marginTop:18}]} 
-                                onPress={()=>{ NavigationService.navigate('Places', { coord: {latitude: 40.415584, longitude: -3.707412, latitudeDelta: 0.0052, longitudeDelta: 0.0121, } }) }}
+                                buttonStyle={[{ backgroundColor: Colors.lightSecondary, borderRadius: 5 , },Platform.OS ==="ios" &&{marginTop:0}]} 
+                                onPress={()=>{ NavigationService.navigate('Hotel') }}
                                 title="Voir plus de détail sur l'hôtel" 
                                 titleStyle={{ marginLeft: 5, fontSize: 13, fontWeight: "normal" }}
                             />

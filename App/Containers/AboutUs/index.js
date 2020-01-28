@@ -14,7 +14,7 @@ export default class AboutUs extends Component {
 
     render() {
         return (
-            <LayoutContent navigation={this.props.navigation}>
+            <LayoutContent title="A propos" navigation={this.props.navigation}>
                 <Text>Qui sommes-nous ?</Text>
             </LayoutContent>
         )

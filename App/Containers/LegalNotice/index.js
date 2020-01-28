@@ -14,7 +14,7 @@ export default class LegalNotice extends Component {
 
     render() {
         return (
-            <LayoutContent navigation={this.props.navigation}>
+            <LayoutContent title="Mentions Légales" navigation={this.props.navigation}>
                 <Text>Mentions légales</Text>
             </LayoutContent>
         )

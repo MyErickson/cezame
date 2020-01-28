@@ -35,7 +35,7 @@ export const Styles = StyleSheet.create({
         fontWeight: "normal", 
         color: Colors.text, 
         fontSize: 18, 
-        marginBottom: 8  
+        marginTop:8
     },
     inputStyle:{ 
         backgroundColor: "#F1F1F1", 
@@ -51,13 +51,13 @@ export const Styles = StyleSheet.create({
         borderRadius: 15 
     },
     textTitle:{ 
-        fontSize: Platform.OS === "ios" ?30:20,
+        fontSize: Platform.OS === "ios" ?24:24,
         fontWeight:"bold", 
         textAlign: "center",
-        marginBottom:Platform.OS === "ios" ?25:15 
+        marginBottom:Platform.OS === "ios" ?35:20 
     },
     text:{ 
-        fontSize: Platform.OS === "ios" ?20:16, 
+        fontSize: Platform.OS === "ios" ?18:16, 
         textAlign: "center" ,
         marginBottom:Platform.OS === "ios" ?20:10
     },

@@ -4,11 +4,10 @@ const screen = Dimensions.get("window");
 
 export const Styles = StyleSheet.create({
     title:{ 
-        marginTop: 15, 
+        marginTop: 20, 
         textAlign: "center", 
         color: "white", 
-        textTransform: "uppercase", 
-        fontSize: 25, 
+        fontSize: 18, 
         fontWeight: "bold" 
     },
     containerChildrend:{

@@ -10,10 +10,26 @@ import { dataLanding } from '../../Configs/General'
 
 
 export default class LandingScreen extends Component {
-    render() {
+  
 
-        const {navigate} = this.props.navigation;
+
+    goToScreen=(value )=>{
+        const { title , navigateName , dataNavigate } = value
+        const {tokenConnection,navigation} = this.props;
+  
+        if(tokenConnection && title === "Accès client"){
+            navigation.navigate("Program")
+        }else{
+            navigation.navigate(navigateName, dataNavigate && dataNavigate)
+        }
+       
+    }
+
+
+
+    render() {
    
+       
         return (
 
             <View style={{ flex: 1 , backgroundColor: Colors.generalBackground }}>
@@ -31,14 +47,14 @@ export default class LandingScreen extends Component {
                 </View>
             <View style={Styles.buttonContainer}>
                     {dataLanding.map((value,key)=>{
-                        const { backgroundColor , title , navigateName , dataNavigate } = value
+                        const { backgroundColor , title } = value
 
                         return  (
                                 <Button 
                                 key={key}
                                 buttonStyle={{ borderRadius: 30, height: 50, backgroundColor: backgroundColor}} 
                                 containerStyle= {{ paddingVertical: 5 }} 
-                                onPress={() => navigate(navigateName, dataNavigate && dataNavigate)} 
+                                onPress={() => this.goToScreen(value)} 
                                 title={title}
                             />
                         )

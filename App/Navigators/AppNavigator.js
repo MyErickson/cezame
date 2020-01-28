@@ -4,7 +4,7 @@ import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createDrawerNavigator } from 'react-navigation-drawer';
 // Pages/Screen 
-import LandingScreen from '../Containers/LandingScreen';
+import LandingScreen from '../Containers/LandingScreen/ContainerLandingScreen';
 import ContainerLogin from '../Containers/Login/ContainerLogin';
 import News from '../Containers/News';
 import ContainerAgenda  from '../Containers/Agenda/ContainerAgenda';
@@ -17,7 +17,8 @@ import Notifications from '../Containers/Notifications';
 import Chat from '../Containers/Chat/';
 import Places from '../Containers/Places';
 import ContainerParam from '../Containers/Parameters/ContainerParam';
-import Contact from '../Containers/Contact/';
+import ContainerHotel from '../Containers/Hotel/ContainerHotel'
+import ContainerContact from '../Containers/Contact/ContainerContact';
 import Gallery from '../Containers/Gallery';
 
 const screen = Dimensions.get("window");
@@ -35,8 +36,10 @@ const MainNavigator = createStackNavigator(
     Chat :  Chat,
     Places :  Places, 
     Parameters :  ContainerParam, 
-    Contact :  Contact,
+    Contact :  ContainerContact,
     Gallery :  Gallery,
+    Hotel: ContainerHotel,
+
   },
   {
     initialRouteName: 'Home',

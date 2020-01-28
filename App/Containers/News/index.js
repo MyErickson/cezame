@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, Button ,ScrollView } from 'react-native';
+import { Text, View, Button ,ScrollView,Image,Linking  } from 'react-native';
 import axios from 'axios';
 
 import LayoutContent from '../../Components/LayoutContent/LayoutContent';
@@ -27,9 +27,9 @@ export default class News extends Component {
     render() {
 
         const { newsArticles} = this.state
-
+        const random1 = Math.floor(Math.random() * (100 - 1 +2)) + 1
         return (
-            <LayoutContent navigation={this.props.navigation}>
+            <LayoutContent title="Actualités" navigation={this.props.navigation}>
                 <ScrollView
                    style={{ marginHorizontal: 0,marginBottom:25 }}
                    showsVerticalScrollIndicator = {false}
@@ -39,11 +39,18 @@ export default class News extends Component {
                         const date = new Date(news.updatedAt)
                         const month = date.getUTCMonth()
                         const modifMonth = month <10 ? "0"+(month+1):month
-                        const showDate = modifMonth  +"/"+ date.getDate()+"/"+date.getFullYear()
+                        const showDate = date.getDate() +"/"+ modifMonth +"/"+date.getFullYear()
                             return(
                                 <View  key={news.id}>
-                                    <Text style={{fontWeight: 'bold',fontSize:15,marginBottom:15}}>{news.title}</Text>
-                                    <Text style={{marginBottom:10}} >{news.content}</Text>
+                                    <View style={{flex:3}}>
+                                        <Image source={{uri:`https://i.picsum.photos/id/${random1}/200/300.jpg`}} style={{ width: "100%", height: 150,borderRadius:8}} />
+                                    </View>
+                                    <Text style={{fontWeight: 'bold',fontSize:15,marginVertical:15,textAlign:"center"}}>{news.title}</Text>
+                                    <Text style={{marginBottom:10,}} >{news.content}</Text>
+                                    <Text 
+                                    style={{marginBottom:20,fontSize:13,textAlign:"center",textDecorationLine:"underline"}}
+                                    onPress={()=>Linking.openURL("https://www.google.fr")}  
+                                    > En savoir plus... </Text>
                                     <Text style={{marginBottom:25,fontSize:11}}> publié le : { showDate }</Text>
                                 </View>
                             )

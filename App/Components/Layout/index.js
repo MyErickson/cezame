@@ -40,7 +40,14 @@ export default class Layout extends PureComponent {
             }
   }
 
-
+ gotBackScreen =()=>{
+     const { title ,navigation} =  this.props
+     if(title === 'Mon Programme'){
+        navigation.navigate("Home")
+     }else {
+        navigation.goBack()
+     }
+ }
     render() {
         const { tokenConnection,title} = this.props
         const { infoUser } =this.state
@@ -57,7 +64,7 @@ export default class Layout extends PureComponent {
                     containerStyle={{marginBottom:-0.2}}
                     leftComponent={
                         <TouchableOpacity 
-                        onPress={ () => this.props.navigation.goBack()}
+                        onPress={ () =>this.gotBackScreen() }
                          >
                            <Icon 
                                underlayColor="none"

@@ -8,6 +8,7 @@ const screen = Dimensions.get("window");
 import { Styles } from './styleLayoutContent'
 export default class LayoutContent extends Component {
     render() {
+        const { title ,navigation} = this.props
         return (
             <View>
                 <StatusBar translucent backgroundColor={Colors.rightColor} />
@@ -18,13 +19,13 @@ export default class LayoutContent extends Component {
                         underlayColor="none"
                         name="ios-arrow-round-back" 
                         type='ionicon' 
-                        onPress={ () => this.props.navigation.goBack() }
+                        onPress={ () => navigation.goBack() }
                         color={'white'}
                         containerStyle={{ position: "absolute", left: 35, top: 45, zIndex: 10 }}
                         hitSlop={{top: 10, bottom: 10, left: 0, right: 0}} 
                         size={40}
                     />
-                    <Text style={Styles.title}>Cézame</Text>
+                    <Text style={Styles.title}>{title} </Text>
                     <Icon 
                         name="account-circle" 
                         type='material-community' 
