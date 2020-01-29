@@ -1,10 +1,10 @@
 import axios from 'axios';
 
- import {  CALL_TRIPS,GET_USERS } from './reducer'
+ import {  CALL_TRIPS,GET_USERS, GET_INFO_HOTEL } from './reducer'
 
 import {requestParam} from './request/Parameters'
 import {requestCallProgram} from './request/Program'
-
+import {requestHotel} from './request/Hotel'
 
  const  ajaxMiddleware = store => next => async action => {
     //  console.log(next,'action')
@@ -30,7 +30,7 @@ import {requestCallProgram} from './request/Program'
 
      
             
-        case  CALL_TRIPS:
+      case  CALL_TRIPS:
           next(action)
       
           let valueTrips = new FormData
@@ -40,6 +40,17 @@ import {requestCallProgram} from './request/Program'
           requestCallProgram(valueTrips)
        
            break;
+      
+      case  GET_INFO_HOTEL:
+        next(action)
+
+        let valueHotel = new FormData
+        valueHotel.action = action
+        valueHotel.store = store
+        
+        requestHotel(valueHotel) 
+     
+         break;
 
 
 

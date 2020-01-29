@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Text, View, Button ,ScrollView,Image,Linking  } from 'react-native';
+import { Text, View, Button ,ScrollView,Image,Linking ,TouchableOpacity,TouchableHighlight } from 'react-native';
 import axios from 'axios';
 
 import LayoutContent from '../../Components/LayoutContent/LayoutContent';
+
 
 export default class News extends Component {
 
@@ -47,10 +48,14 @@ export default class News extends Component {
                                     </View>
                                     <Text style={{fontWeight: 'bold',fontSize:15,marginVertical:15,textAlign:"center"}}>{news.title}</Text>
                                     <Text style={{marginBottom:10,}} >{news.content}</Text>
-                                    <Text 
-                                    style={{marginBottom:20,fontSize:13,textAlign:"center",textDecorationLine:"underline"}}
-                                    onPress={()=>Linking.openURL("https://www.google.fr")}  
-                                    > En savoir plus... </Text>
+                                    <TouchableOpacity onPress={()=>Linking.openURL("https://www.google.fr")} >
+                                        <Text 
+                                        style={{marginBottom:20,fontSize:13,textAlign:"center",textDecorationLine:"underline"}}
+                                         
+                                        > 
+                                            En savoir plus... 
+                                        </Text>
+                                    </TouchableOpacity>
                                     <Text style={{marginBottom:25,fontSize:11}}> publié le : { showDate }</Text>
                                 </View>
                             )

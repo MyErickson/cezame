@@ -14,8 +14,9 @@ import Hotel from './Hotel'
 
 const mapStateToProps = (state, ownProps) => ({
 
-    tokenConnection:state.tokenConnection,
-    trip_User:state.trip_User
+    tokenConnection: state.tokenConnection,
+    trip_User: state.trip_User,
+    info_hotel: state.info_hotel
   
 });
 

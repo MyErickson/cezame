@@ -9,10 +9,7 @@ import Images from '../../Themes/Images';
 import UploadImage from '../../Containers/Gallery/UploadImage';
 import { Styles } from './styleLayout'
 const screen = Dimensions.get("window");
-import {
-    widthPercentageToDP as wp,
-    heightPercentageToDP as hp
-  } from "react-native-responsive-screen";
+
 
 
 export default class Layout extends PureComponent {
