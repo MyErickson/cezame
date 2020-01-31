@@ -307,10 +307,7 @@ export default class Login extends Component {
                 <ScrollView 
                 style={{ marginHorizontal: 0  }}
                 showsVerticalScrollIndicator = {false}
-                keyboardShouldPersistTaps="always"
-                keyboardDismissMode='on-drag'
-                keyboardShouldPersistTaps="handled"
-                contentInsetAdjustmentBehavior="never"
+             
                 >
                 <ImageBackground 
                   source={Images.bgLogin}
@@ -332,7 +329,11 @@ export default class Login extends Component {
                 </ImageBackground>
                 {loaderConnexion}
                
-                <ScrollView style={{ marginHorizontal: 50,marginTop:-20}}>
+                <ScrollView style={{ marginHorizontal: 50,marginTop:-20}}
+                  keyboardDismissMode='on-drag'
+                  keyboardShouldPersistTaps='always'
+                  contentInsetAdjustmentBehavior="never"
+                >
                   <Input
                     name='email' 
                     label='Identifiant'

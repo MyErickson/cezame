@@ -2,7 +2,7 @@ import axios from 'axios';
 import {info_hotel} from "../actionCreator/Hotel"
 
 
-export const requestParam=(value)=>{
+export const requestHotel=(value)=>{
 
     const { id , token } = value.action.data
     const { store } = value

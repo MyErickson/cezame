@@ -12,13 +12,14 @@ import AboutUs from '../Containers/AboutUs';
 import LegalNotice from '../Containers/LegalNotice';
 import Program from '../Containers/Program/ContainerProgram';
 import { Dimensions } from 'react-native';
-import SideMenu from './Sidemenu';
+import ContainerSideMenu from './ContainerSideMenu ';
 import Notifications from '../Containers/Notifications';
 import Chat from '../Containers/Chat/';
 import Places from '../Containers/Places';
 import ContainerParam from '../Containers/Parameters/ContainerParam';
 import ContainerHotel from '../Containers/Hotel/ContainerHotel'
 import ContainerContact from '../Containers/Contact/ContainerContact';
+import CurrentImage from '../Containers/Gallery/CurrentImage/CurrentImage'
 import Gallery from '../Containers/Gallery';
 
 const screen = Dimensions.get("window");
@@ -39,6 +40,7 @@ const MainNavigator = createStackNavigator(
     Contact :  ContainerContact,
     Gallery :  Gallery,
     Hotel: ContainerHotel,
+    CurrentImage:CurrentImage
 
   },
   {
@@ -58,7 +60,7 @@ export const DrawerNavigator = createDrawerNavigator({
   keyboardDismissMode:'none',
   unmountInactiveRoutes: true,
   contentComponent: props => {
-    return <SideMenu {...props} />
+    return <ContainerSideMenu {...props} />
   }
 }
 );

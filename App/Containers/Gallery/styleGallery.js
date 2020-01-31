@@ -1,4 +1,4 @@
-import { StyleSheet  } from 'react-native'
+import { StyleSheet , Platform } from 'react-native'
 import Colors from '../../Themes/Colors';
 export const Styles = StyleSheet.create({
     footerIconDownload:{ 
@@ -18,14 +18,19 @@ export const Styles = StyleSheet.create({
         alignSelf: "center" },
 
     footerContainer:{ 
-        height:50,
+        height: 45, 
         zIndex: -1, 
         backgroundColor: Colors.lightSecondary, 
         flexDirection: "row",
         justifyContent: "space-between", 
         alignItems: "center", 
         paddingHorizontal: 25,
-        bottom: 22 
+        bottom: Platform.OS ==="android" ? 28 : 5
 
-        }
+        },
+     containerImage:{
+        margin:10,
+        borderRadius:10,
+        width:"90%",
+     }   
 })

@@ -6,8 +6,8 @@ const initialState = {
   tokenConnection: undefined,
   info_User:undefined,
   trip_User:undefined,
-  info_Token:undefined
-  
+  info_Token:undefined,
+  info_hotel:undefined,
 };
 
 /**
@@ -20,6 +20,8 @@ export const  CALL_TRIPS = " CALL_TRIPS";
 export const GET_USERS = 'GET_USERS';
 export const INFO_USER ='INFO_USER';
 export const DECODE_TOKEN = 'DECODE_TOKEN';
+export const GET_INFO_HOTEL = 'GET_INFO_HOTEL';
+export const INFO_HOTEL = 'INFO_HOTEL '
 /**
  * Traitements
  */
@@ -64,6 +66,11 @@ const reducer = (state = initialState, action = {}) => {
       
       };
  
+      case INFO_HOTEL:
+        return { 
+          ...state,
+          info_hotel:action.data
+        }
 
     case INITITALIZE_STATE:
     
@@ -71,7 +78,8 @@ const reducer = (state = initialState, action = {}) => {
         tokenConnection: undefined,
         info_User:undefined,
         trip_User:undefined,
-        info_Token:undefined
+        info_Token:undefined,
+        info_hotel:undefined
       };
 
 

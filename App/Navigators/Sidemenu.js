@@ -25,9 +25,11 @@ class SideMenu extends Component {
           left: new Animated.Value(0),
           iconBack: "clear",
           return: () => {  this.props.navigation.toggleDrawer() },
-          titleMenu: ""
+          titleMenu: "",
+          trip_User:undefined
         }
     }
+
 
     changeMenu = () => {
         this.setState({ iconBack: "arrow-back", return: () => { this.goBack() }, titleMenu: "A propos de Cézame" })
@@ -53,6 +55,8 @@ class SideMenu extends Component {
     }
 
   render () {
+ 
+      const { infoUser } = this.props
     return (
     <LinearGradient  start={{x: 0, y: 0}} end={{x: 1, y: 0}} colors={['#fff','#E9ECF5']}>
         <ImageBackground source={Images.bgSidemenu} style={{width: '100%', height: '100%',}} resizeMode={"cover"}>
@@ -70,7 +74,7 @@ class SideMenu extends Component {
                         style={{ width: 35, height: 35, borderRadius: 35, backgroundColor: Colors.dark}} 
                         onPress={() => { NavigationService.navigate("Parameters"),this.props.navigation.closeDrawer()} } 
                     >
-                        <Image source={Images.devProfil} style={{ width: 35, height: 35, borderRadius: 35, }} />
+                        <Image source={ infoUser && infoUser.avatar? {uri : infoUser.avatar.contentUrl}:Images.devProfil} style={{ width: 35, height: 35, borderRadius: 35, }} />
                     </TouchableOpacity>
                 </View>
                 
