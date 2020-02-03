@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Image, ScrollView, Dimensions, TouchableOpacity , Platform ,ActivityIndicator} from 'react-native';
+import { View, Text, Image, ScrollView, Dimensions, TouchableOpacity , Linking,Platform ,ActivityIndicator} from 'react-native';
 import ContainerLayout from '../../Components/Layout/ContainerLayout';
 import { Button, Icon } from 'react-native-elements';
 import Images from '../../Themes/Images';
@@ -9,13 +9,19 @@ import AppStyles from '../../Themes/AppStyles';
 import NavigationService from '../../Services/NavigationService';
 const screen = Dimensions.get('window');
 import MapView, { Marker, Callout } from 'react-native-maps';
+import AlertDialog from '../AlertDialog/AlertDialog';
+
 
 export default class Program extends Component {
 
     constructor(props){
         super(props);
         this.state = {
-            trip_User:undefined
+            trip_User:undefined,
+            alertVisible:undefined,
+            messageAlert:undefined,
+            style:undefined,
+            infoUser :undefined
         }
     }
 
@@ -27,14 +33,35 @@ export default class Program extends Component {
     static getDerivedStateFromProps(props,state){
         if( props.trip_User ){
             state.trip_User = props.trip_User 
+            state.infoUser = props.infoUser
         }else{
             return null
         }
      
     }
+
+    openAlert=(text)=>{
+        this.setState({
+            alertVisible:true,
+            messageAlert:text,
+            style:false
+
+        })
+    }
+
+    closeAlert=()=>{
+        this.setState({alertVisible:false})
+        
+    }
+    
+
     render() {
    
-            const { trip_User } =this.state
+            const { trip_User,
+                alertVisible,
+                messageAlert,
+                infoUser ,
+                style} =this.state
            
             let  startDate,endDate,endMonth,startMonth = undefined
          if(trip_User){
@@ -58,10 +85,21 @@ export default class Program extends Component {
                             <Text style={{fontSize:14}}>{trip_User&& trip_User.title}</Text>
                         </View>
                         <View style={{flex:3}}>
-                            <Image source={{uri:`https://i.picsum.photos/id/${random1}/200/300.jpg`}} style={{ width: "100%", height: 45,marginLeft:25 ,borderRadius:3}} />
+                            <Image source={
+                                trip_User && trip_User.logoSociety ? 
+                                {uri:trip_User.logoSociety.contentUrl}:
+                                {uri:`https://i.picsum.photos/id/${random1}/200/300.jpg`}
+                            } 
+                                
+                                style={{ width: "100%", height: 45,marginLeft:25 ,borderRadius:3}} />
                         </View>
                     </View>
-                    <Image  source={{uri:`https://i.picsum.photos/id/${random2}/500/700.jpg`}} style={{ width: "100%", height: 200 }} />
+                    <Image  source={
+                        trip_User && trip_User.presentationImage? 
+                        {uri:trip_User.presentationImage.contentUrl}:
+                        {uri:`https://i.picsum.photos/id/${random2}/500/700.jpg`}
+                    } 
+                        style={{ width: "100%", height: 200 }} />
                     <View style={[AppStyles.style.pV15, {flexDirection: "row", justifyContent: "space-evenly"}]}>
                         <View>
                             <Text style={[Font.style.h3, {textAlign: "center"}]}>Du</Text>
@@ -76,6 +114,11 @@ export default class Program extends Component {
                         <Button 
                             buttonStyle={[AppStyles.style.pH7, { backgroundColor: Colors.lightPrimary, borderRadius: 5, minWidth: '50%' }]} 
                             title="Votre convocation" 
+                            onPress={()=>{
+                                infoUser  && infoUser.convocation
+                                ? Linking.openURL(infoUser.convocation.contentUrl)
+                                : this.openAlert("Votre convocation sera bientôt disponible")
+                            }}
                             icon={
                                 <Icon
                                 name="file-document"
@@ -90,6 +133,11 @@ export default class Program extends Component {
                         <Button 
                             buttonStyle={[AppStyles.style.pH7, { backgroundColor: Colors.primary, borderRadius: 5, minWidth: '50%' }]} 
                             title="Carnet de voyage" 
+                            onPress={()=>{
+                                trip_User && trip_User.tripGuide
+                                ? Linking.openURL(trip_User.tripGuide.contentUrl)
+                                : this.openAlert("Le carnet de voyage sera bientôt disponible")
+                            }}
                             icon={
                                 <Icon
                                 name="email"
@@ -118,7 +166,7 @@ export default class Program extends Component {
                                     size={14}
                                     containerStyle={{ marginRight: 5 }}
                                 />
-                                <Text style={[Font.style.normal, { flexShrink: 1, color: Colors.primary }]}>{trip_User && trip_User.address}latitude: 40.415584, longitude: -3.707412, latitudeDelta: 0.0052, longitudeDelta: 0.0121</Text>
+                                <Text style={[Font.style.normal, { flexShrink: 1, color: Colors.primary }]}>latitude: 40.415584, longitude: -3.707412, latitudeDelta: 0.0052, longitudeDelta: 0.0121</Text>
                             </View>
                             <View style={{ marginTop: 5, marginBottom: 15, flexDirection: "row" }}>
                                 <Icon
@@ -141,8 +189,9 @@ export default class Program extends Component {
                     </View>
                     <View style={[AppStyles.style.pV15, {paddingLeft: 23}]}>
                         <Text style={Font.style.h2}>Informations</Text>
-                         <Text>{trip_User && trip_User.hotelDescription}</Text>
+                         <Text style={{marginVertical:10}}>Bientot...</Text>
                     </View>
+                    
                 </ScrollView>
      : <View style={{
 
@@ -154,6 +203,12 @@ export default class Program extends Component {
          <ActivityIndicator  size="large" color="#0000ff"/>
   <Text style={{   textAlign:'center'}}>Chargement ...</Text>
      </View>}
+                <AlertDialog
+                alertVisible={alertVisible}
+                closeAlert={this.closeAlert}
+                messageAlert={messageAlert}
+                style={style}
+                />
             </ContainerLayout>
         )
     }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, Button ,ScrollView,Image,Linking ,TouchableOpacity,TouchableHighlight } from 'react-native';
+import { Text, View, Button ,ScrollView,Image,Linking ,TouchableOpacity,ActivityIndicator } from 'react-native';
 import axios from 'axios';
 
 import LayoutContent from '../../Components/LayoutContent/LayoutContent';
@@ -10,16 +10,22 @@ export default class News extends Component {
     constructor(props){
         super(props);
         this.state = {
-            newsArticles : undefined
+            newsArticles : undefined,
+            loading:false
         }
     }
 
     componentDidMount(){
         console.log('hey')
+
         axios.get('https://cezame-dev.digitalcube.fr/api/articles?visible=true')
             .then((res) => {
             console.log("TCL: News -> componentDidMount -> res", res)
-                 this.setState({newsArticles : res.data["hydra:member"]});
+
+                 this.setState({
+                     newsArticles : res.data["hydra:member"] ,
+                     loading:true
+                });
             })
             .catch((error) => {
                 console.log(error);
@@ -27,16 +33,17 @@ export default class News extends Component {
     }
     render() {
 
-        const { newsArticles} = this.state
+        const { newsArticles , loading} = this.state
+        console.log("TCL: News -> render -> newsArticles", !newsArticles)
         const random1 = Math.floor(Math.random() * (100 - 1 +2)) + 1
         return (
             <LayoutContent title="Actualités" navigation={this.props.navigation}>
-                <ScrollView
+                { loading ? ( <ScrollView
                    style={{ marginHorizontal: 0,marginBottom:25 }}
                    showsVerticalScrollIndicator = {false}
                    contentInsetAdjustmentBehavior="automatic"
                 >
-                    {  newsArticles && newsArticles.map((news) => {
+                    {  !newsArticles ? newsArticles.map((news) => {
                         const date = new Date(news.updatedAt)
                         const month = date.getUTCMonth()
                         const modifMonth = month <10 ? "0"+(month+1):month
@@ -59,8 +66,9 @@ export default class News extends Component {
                                     <Text style={{marginBottom:25,fontSize:11}}> publié le : { showDate }</Text>
                                 </View>
                             )
-                    })}
-                </ScrollView>
+                    }) :  <Text style={{fontSize:16, fontWeight:'bold'}}> Les actualitèes seront bientôt ajoutés</Text>}
+                </ScrollView>) : <ActivityIndicator size="large" color="#0000ff" />}
+               
             </LayoutContent>
         )
     }

@@ -1,4 +1,4 @@
-import React, { Component, useRef } from 'react';
+import React, { Component, useRef, Fragment } from 'react';
 import { Text, View, Dimensions, KeyboardAvoidingView,ScrollView,StatusBar,SafeAreaView   } from 'react-native';
 import ContainerLayout from '../../Components/Layout/ContainerLayout';
 import Colors from '../../Themes/Colors';
@@ -90,14 +90,30 @@ export default class Contact extends Component {
                 >
                 
                     <View >
-                        <View style={{ width: screen.width-50, alignSelf: "center" ,marginTop:15,marginBottom:10}}>
+                    <View style={{ width: screen.width-50, alignSelf: "center" ,marginTop:15,marginBottom:10}}>
                             <Text style={Styles.textTitle}>Une question ? Besoin d'information ?</Text>
-                            <Text style={{fontSize:18,textAlign: "center" ,}}>CEZAME 5 rue Gallieni 92100 Boulogne</Text>
-                            <Text style={{fontSize:18,textAlign: "center" ,}}>Téléphone : 01.58.17.01.01</Text>
-                            <Text style={Styles.text}>Email: contac@cezamz.fr</Text>
-                            
-                        </View>
-                        { this.props.tokenConnection && 
+                    { this.props.tokenConnection ?
+
+                     
+                     <Text style={Styles.text}> 
+                        Nous vous accompagnons durant votre seminaire
+                     </Text>
+                
+
+                 :
+
+                    <Fragment>
+                        <Text style={{fontSize:22,textAlign: "center" , fontWeight:'bold',marginBottom:10}}>CEZAME</Text>
+                        <Text style={Styles.text}> 
+                            5 rue Gallieni {"\n"} 92100 Boulogne {"\n"}Téléphone : 01.58.17.01.01 {"\n"}Email: contact@cezame.fr
+                        </Text>
+                    </Fragment>   
+                    }  
+
+                    </View>
+                    { this.props.tokenConnection && 
+                
+                     
                         <SafeAreaView style={{flex: 1}}>
                             <Text style={Styles.textContact}>Contacts utiles</Text>
                             <FlatList data={data} keyExtractor={item => item.id} renderItem={({ item }) => 
@@ -110,9 +126,29 @@ export default class Contact extends Component {
                         <View style={{ width: screen.width-75, alignSelf: "center" ,marginVertical:20}}>
                         { !this.props.tokenConnection && 
                         <>
+                              <Input 
+                                placeholder="Nom"
+                                containerStyle={{ marginTop: 10 }}
+                                onSubmitEditing={this.sendMessage}
+                                onSubmitEditing={() => { this.inputFocus("prenom") }}
+                                blurOnSubmit={false}
+                                returnKeyType="next"
+                                />
                             <Input 
+                                ref = { text=>this.input.prenom = text}
+                                name='prenom'
+                                placeholder="Prénom"
+                                containerStyle={{ marginTop: 10 }}
+                                onSubmitEditing={this.sendMessage}
+                                onSubmitEditing={() => { this.inputFocus("email") }}
+                                blurOnSubmit={false}
+                                returnKeyType="next"
+                            />
 
-                                label="Prénom"
+                            <Input 
+                                ref = { text=>this.input.email = text}
+                                name='email'
+                                placeholder="Email"
                                 labelStyle={Styles.labelStyle}
                                 containerStyle={{ marginTop: 10 }}
                                 onSubmitEditing={this.sendMessage}
@@ -120,11 +156,11 @@ export default class Contact extends Component {
                                 blurOnSubmit={false}
                                 returnKeyType="next"
                             />
+
                             <Input 
-                                 ref = { text=>this.input.tel = text}
-                                 name='tel'
-                                label="télephone"
-                                labelStyle={Styles.labelStyle}
+                                ref = { text=>this.input.tel = text}
+                                name='tel'
+                                placeholder="Portable"
                                 containerStyle={{ marginTop: 15 }}
                                 onSubmitEditing={this.sendMessage}
                                 onSubmitEditing={() => { this.inputFocus("comments") }}

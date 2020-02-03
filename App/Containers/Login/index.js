@@ -20,7 +20,7 @@ import NavigationService from '../../Services/NavigationService';
 var jwtDecode = require('jwt-decode');
 
 import AlertDialog from '../AlertDialog/AlertDialog';
-import AlertAdmin from '../AlertDialog/AlertAdmin';
+
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp
@@ -176,7 +176,9 @@ export default class Login extends Component {
             responseConnection(token)
             this.StoreToken('jwt_auth', token);
             var decode = jwtDecode(token)
+            console.log("TCL: Login -> Login -> decode", decode)
             decode_Token(decode)
+            
             if(decode.roles[0] !== "ROLE_USER"){
               console.log("TCL: Login -> Login -> decode", decode)
               this.ToogleLoader();

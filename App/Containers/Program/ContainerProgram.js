@@ -14,7 +14,8 @@ import {responseConnection} from '../../store/actionCreator/Login'
 
 const mapStateToProps = (state, ownProps) => ({
     tokenConnection:state.tokenConnection,
-    trip_User:state.trip_User
+    trip_User:state.trip_User,
+    infoUser:state.info_User,
    
 });
 

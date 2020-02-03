@@ -59,7 +59,7 @@ export const Styles = StyleSheet.create({
     text:{ 
         fontSize: Platform.OS === "ios" ?18:16, 
         textAlign: "center" ,
-        marginBottom:Platform.OS === "ios" ?20:10
+        marginBottom:Platform.OS === "ios" ?12:10
     },
     textContact:{ 
         fontSize: Platform.OS === "ios" ?16:12, 

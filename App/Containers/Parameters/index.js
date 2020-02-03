@@ -125,7 +125,7 @@ export default class Parameters extends PureComponent {
      data.lastName = lastName.trim() ?  lastName : infoUser.lastName  
      data.email = email.trim() ?  email : infoUser.email 
      data.phone = phone.trim() ?  phone :infoUser.phone 
-     data.avatar = avatar ? avatar : infoUser.avatar["@id"]
+     data.avatar = avatar ? avatar : infoUser.avatar && infoUser.avatar["@id"]
     if( data.password){
         data.password =   password  
     }
@@ -133,10 +133,11 @@ export default class Parameters extends PureComponent {
 
     if(avatarSource){
         data.image=avatarSource  
+   
 
     }
 
-
+    console.log("TCL: Parameters -> goToRegister -> data", data)
     axios.defaults.headers['Authorization']= "Bearer "+data.token;
     axios.put(`https://cezame-dev.digitalcube.fr/api/users/${data.id}`,{
         
