@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, KeyboardAvoidingView , Dimensions, FlatList } from 'react-native';
+import { Text, View, KeyboardAvoidingView , Dimensions, FlatList, Platform } from 'react-native';
 import Layout from '../../Components/Layout';
 import Colors from '../../Themes/Colors';
 import { Icon, Input } from 'react-native-elements';
@@ -127,11 +127,9 @@ function Item({item}) {
 
 export default class Chat extends Component {
 
-    constructor(props){
-        super(props);
-        this.state = {
+        state={
+            topBarModo:false
         }
-    }
 
     _uploadImage = () => {
         ImagePicker.launchImageLibrary(optionsImagePicker, (response) => {
@@ -155,13 +153,24 @@ export default class Chat extends Component {
             }
         });
     }
+    
+    viewTopBarModo =()=>{
+        this.setState({
+            topBarModo:true
+        })
+        setTimeout(()=>{ this.setState({
+            topBarModo:false
+        })},2500)
+    }
+
 
     render() {
+        const { topBarModo } = this.state
+        
         return (
             
         <Layout noPaddingTop chat return title="Messagerie instantanée" navigation={this.props.navigation}>
-
-            <View style={[AppStyles.style.flex, { alignItems: "center", backgroundColor: Colors.lightPrimary, paddingVertical: 15, paddingHorizontal: 25, justifyContent: "space-between", zIndex: 3, }]}>
+            {topBarModo && ( <View style={[AppStyles.style.flex, { alignItems: "center", backgroundColor: Colors.lightPrimary, paddingVertical: 15, paddingHorizontal: 25, justifyContent: "space-between", zIndex: 3, }]}>
                 <View style={[AppStyles.style.flex, { alignItems: "center" }]}>
                     <View style={{ width: 35, height: 35, backgroundColor: Colors.primary, borderRadius: 35, marginRight: 15 }}></View>
                     <View>
@@ -177,24 +186,33 @@ export default class Chat extends Component {
                         onPress={() => NavigationService.navigate("Contact")}
                     />
                 </View>
-            </View>
+            </View>)}
+           
             <FlatList 
                 ref={ref => (this.scrollView = ref)}
                 data={data}  
                 renderItem={({ item }) => <Item item={item} />}
                 keyboardShouldPersistTaps="always" style={{ height: screen.height-360 }} 
+                onScrollBeginDrag={()=>this.viewTopBarModo()}
                 onContentSizeChange={() => {
                     this.scrollView.scrollToEnd({ animated: true, index: -1 }, 200);
                 }}
             />
-            <KeyboardAvoidingView  behavior={'position'} keyboardVerticalOffset={70} style={{flex: 1}}>  
-                <View style={[AppStyles.style.flex, {backgroundColor: Colors.white, paddingTop: 30,  alignItems: "center"}]}>
+            <KeyboardAvoidingView  behavior={Platform.OS === "android"?'height':'position'} keyboardVerticalOffset={74} style={{flex: 1}}>  
+                <View style={[AppStyles.style.flex, {backgroundColor: Colors.white, paddingTop: 20,  alignItems: "center"}]}>
                     <Input 
                         containerStyle={{ width: "80%" }}
-                        inputContainerStyle={{ backgroundColor: Colors.inputBg, borderRadius: 35, paddingVertical: 10, paddingHorizontal: 18, borderBottomWidth: 0, height: 50 }}
+                        inputContainerStyle={{ backgroundColor: Colors.inputBg, borderRadius: 35,  paddingHorizontal: 18, borderBottomWidth: 0, height: 50,marginBottom:20 }}
                         inputStyle={{ padding: 0 }}
+                        placeholderTextColor="#9E9E9E"
                         placeholder='Tapez votre message'
-                        rightIcon={{ type: 'font-awesome', name: 'send', size: 18, color: "#4C4C4C" }}
+                        rightIcon={{ 
+                            type: 'font-awesome',
+                            name: 'send', 
+                            size: 18, 
+                            color: "#4C4C4C",
+                            onPress:()=>console.log('test') ,
+                            underlayColor:"none" }}
                     />
                     <View style={AppStyles.style.flex}>
                         <Icon name="smile-o"  type='font-awesome' color="#B6B6B6" size={34} containerStyle={{ marginRight: 8 }} />

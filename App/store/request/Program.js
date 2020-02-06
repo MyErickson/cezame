@@ -19,6 +19,7 @@ export const requestCallProgram=(value)=>{
        })
        .catch(err=>{
        console.log("TCL: err", err.response)
+       store.dispatch(receiveTrips("error"))
          
        })
 }

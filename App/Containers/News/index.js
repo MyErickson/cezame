@@ -1,5 +1,12 @@
 import React, { Component } from 'react';
-import { Text, View, Button ,ScrollView,Image,Linking ,TouchableOpacity,ActivityIndicator } from 'react-native';
+import { Text, View,
+     Button ,
+     ScrollView,
+     Image,
+     Linking ,
+     RefreshControl ,
+     TouchableOpacity,
+     ActivityIndicator } from 'react-native';
 import axios from 'axios';
 
 import LayoutContent from '../../Components/LayoutContent/LayoutContent';
@@ -11,29 +18,53 @@ export default class News extends Component {
         super(props);
         this.state = {
             newsArticles : undefined,
-            loading:false
+            loading:false,
+            refreshing:false
         }
     }
 
     componentDidMount(){
         console.log('hey')
-
-        axios.get('https://cezame-dev.digitalcube.fr/api/articles?visible=true')
-            .then((res) => {
-            console.log("TCL: News -> componentDidMount -> res", res)
-
-                 this.setState({
-                     newsArticles : res.data["hydra:member"] ,
-                     loading:true
-                });
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+        this.setState({
+            loading:false
+       });
+       this.getNews()
     }
+
+    getNews =()=>{
+        axios.get('https://cezame-dev.digitalcube.fr/api/articles?visible=true')
+        .then((res) => {
+        console.log("TCL: News -> componentDidMount -> res", res)
+
+             this.setState({
+                 newsArticles : res.data["hydra:member"] ,
+                 loading:true
+            });
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    }
+
+
+    onRefresh =()=>{ 
+        const { refreshing} = this.state
+       
+        this.setState({
+            refreshing:true
+        });
+        
+        this.getNews()
+        setTimeout(()=>{ this.setState({
+            refreshing:false
+        })},1000)
+
+      
+    }
+
     render() {
 
-        const { newsArticles , loading} = this.state
+        const { newsArticles , loading , refreshing} = this.state
         console.log("TCL: News -> render -> newsArticles", !newsArticles)
         const random1 = Math.floor(Math.random() * (100 - 1 +2)) + 1
         return (
@@ -42,6 +73,9 @@ export default class News extends Component {
                    style={{ marginHorizontal: 0,marginBottom:25 }}
                    showsVerticalScrollIndicator = {false}
                    contentInsetAdjustmentBehavior="automatic"
+                   refreshControl={
+                    <RefreshControl refreshing={refreshing} onRefresh={()=>this.onRefresh()} />
+                  }
                 >
                     {  !newsArticles ? newsArticles.map((news) => {
                         const date = new Date(news.updatedAt)

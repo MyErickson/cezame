@@ -26,6 +26,7 @@ const ViewGallery = ({
         { uri: "je n'utiise pas ce champs"},
         { uri: "je n'utiise pas ce champs"},
         { uri: "je n'utiise pas ce champs"},
+        { uri: "je n'utiise pas ce champs"},
 
 
     ]
@@ -45,11 +46,11 @@ const ViewGallery = ({
                     return <TouchableHighlight underlayColor="none" 
                     onPress={()=>{navigate.navigate("CurrentImage",
                     {
-                        image:`https://i.picsum.photos/id/${random}/200/300.jpg`,
+                        image:`https://i.picsum.photos/id/${random}/1024/512.jpg`,
                         download:download
                     })}}>
                         <Image 
-                    source={{uri:`https://i.picsum.photos/id/${random}/1200/1800.jpg`} } 
+                    source={{uri:`https://i.picsum.photos/id/${random}/1024/512.jpg`} } 
                     style={[Styles.containerImage, { height: i*10}]}
                    
                     />
@@ -69,11 +70,11 @@ const ViewGallery = ({
                     return  <TouchableHighlight underlayColor="none" 
                     onPress={()=>{navigate.navigate("CurrentImage",
                     {
-                        image:`https://i.picsum.photos/id/${random}/200/300.jpg`,
+                        image:`https://i.picsum.photos/id/${random}/1024/512.jpg`,
                         download:download
                     })}}>
                     <Image 
-                    source={{uri:`https://i.picsum.photos/id/${random}/1020/1800.jpg`} } 
+                    source={{uri:`https://i.picsum.photos/id/${random}/1024/512.jpg`} } 
                     style={[Styles.containerImage, { height: i*10}]}
                     onPress={()=>{console.log(index)}}
                     />

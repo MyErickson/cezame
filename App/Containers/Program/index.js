@@ -1,5 +1,11 @@
 import React, { Component } from 'react';
-import { View, Text, Image, ScrollView, Dimensions, TouchableOpacity , Linking,Platform ,ActivityIndicator} from 'react-native';
+import { View, Text,
+     Image,
+    ScrollView,
+    Dimensions,
+    RefreshControl , 
+    TouchableOpacity , 
+    Linking,Platform ,ActivityIndicator} from 'react-native';
 import ContainerLayout from '../../Components/Layout/ContainerLayout';
 import { Button, Icon } from 'react-native-elements';
 import Images from '../../Themes/Images';
@@ -10,7 +16,7 @@ import NavigationService from '../../Services/NavigationService';
 const screen = Dimensions.get('window');
 import MapView, { Marker, Callout } from 'react-native-maps';
 import AlertDialog from '../AlertDialog/AlertDialog';
-
+var jwtDecode = require('jwt-decode');
 
 export default class Program extends Component {
 
@@ -21,23 +27,38 @@ export default class Program extends Component {
             alertVisible:undefined,
             messageAlert:undefined,
             style:undefined,
-            infoUser :undefined
+            infoUser :undefined,
+            errorServeur:undefined,
+            refreshing:false
         }
     }
 
     componentDidMount(){
-        const {tokenConnection } = this.props
         
+        this.getTrips()
     }
 
     static getDerivedStateFromProps(props,state){
-        if( props.trip_User ){
-            state.trip_User = props.trip_User 
-            state.infoUser = props.infoUser
+
+        const { trip_User ,infoUser } = props
+
+
+        if( trip_User && trip_User !== "error" ){
+
+            state.trip_User = trip_User 
+            state.infoUser = infoUser
+            state.errorServeur = false
+
+        }else if(trip_User === "error"){
+
+            state.errorServeur = true
+
         }else{
+
+            state.errorServeur = false
             return null
+            
         }
-     
     }
 
     openAlert=(text)=>{
@@ -54,31 +75,86 @@ export default class Program extends Component {
         
     }
     
+    getTrips=()=>{
+        const {tokenConnection ,callTrips} = this.props
+
+        var decode = jwtDecode(tokenConnection)
+            
+        const data = new FormData
+        data.token = tokenConnection
+        data.id = decode.id
+        data.idTrip=decode.trip_id
+
+        callTrips(data)
+    }
+
+   wait=(timeout)=> {
+        return new Promise(resolve => {
+          setTimeout(resolve, timeout);
+        });
+      }
+      
+    onRefresh =()=>{ 
+        const { refreshing} = this.state
+       
+        this.setState({
+            refreshing:true
+        });
+        this.getTrips()
+        setTimeout(()=>{ this.setState({
+            refreshing:false
+        })},1000)
+        // this.wait(6000).then(() =>  this.setState({
+        //     refreshing:false
+        // }))
+    
+      
+    }
+
 
     render() {
    
-            const { trip_User,
+        const { trip_User,
+            
                 alertVisible,
                 messageAlert,
                 infoUser ,
-                style} =this.state
-           
-            let  startDate,endDate,endMonth,startMonth = undefined
-         if(trip_User){
+                style,
+                errorServeur,
+            refreshing} =this.state
+
+                
+                console.log("TCL: Program -> render -> trip_User", trip_User)
+        let  startDate,endDate,endMonth,startMonth = undefined
+
+        if(trip_User){
             startDate = new Date(trip_User.startAt)
             startMonth =  startDate.getMonth()+1 < 10 ? "0"+(startDate.getMonth()+1) : startDate.getMonth()+1
             endDate =  new Date(trip_User.endAt)
             endMonth = endDate.getMonth()+1 <10 ? "0" + (endDate.getMonth()+1) : endDate.getMonth()+1
+        
          }
        
-        
+   
        const random1 = Math.floor(Math.random() * (100 - 1 +2)) + 1
        const random2 = Math.floor(Math.random() * (100 - 1 +2)) + 1
     
         return (
             <ContainerLayout title="Mon Programme" navigation={this.props.navigation}>
                 { trip_User ? 
-                <ScrollView>
+                <ScrollView 
+                bounces={true}
+                showsVerticalScrollIndicator = {false}
+                refreshControl={
+                    <RefreshControl 
+                    refreshing={refreshing} 
+                    onRefresh={()=>this.onRefresh()} 
+                    colors={["#0000ff"]}
+                    tintColor="#0000ff"
+                    titleColor="#0000ff"
+                    title="actualise"/>
+                  }
+                >
                     <View style={[AppStyles.style.pH35Flex, { paddingVertical: 10, alignItems: "center", justifyContent: "space-between" }]}>
                         <View style={{flex:3}}>
                             <Text style={{fontSize:16,fontWeight:"bold"}}>{trip_User && trip_User.location}</Text>
@@ -156,7 +232,9 @@ export default class Program extends Component {
                         <MapView style={{ backgroundColor: "grey", width: (screen.width/3)+15, height: (screen.width/3)+15, borderRadius: 5 ,marginTop:Platform.OS ==="ios"?5:10}}/>
                         <View style={{ width: (screen.width/2)+15 }}>
                             <TouchableOpacity onPress={()=>{ NavigationService.navigate('Places', { coord: {latitude: 40.415584, longitude: -3.707412, latitudeDelta: 0.0052, longitudeDelta: 0.0121, } }) }}>
-                                <Text style={[Font.style.h2, { flexShrink: 1,paddingLeft: 15}]}>Nom de l'hôtel</Text>
+                        <Text style={[Font.style.h2, { flexShrink: 1,paddingLeft: 15}]}>
+                            {trip_User && trip_User.hotel ? trip_User.hotel.title : 'Nom de l\'hôtel'}
+                        </Text>
                             </TouchableOpacity>
                             <View style={{ marginTop: 20, marginBottom: 5, flexDirection: "row" }}>
                                 <Icon
@@ -166,7 +244,9 @@ export default class Program extends Component {
                                     size={14}
                                     containerStyle={{ marginRight: 5 }}
                                 />
-                                <Text style={[Font.style.normal, { flexShrink: 1, color: Colors.primary }]}>latitude: 40.415584, longitude: -3.707412, latitudeDelta: 0.0052, longitudeDelta: 0.0121</Text>
+                                <Text style={[Font.style.normal, { flexShrink: 1, color: Colors.primary }]}>
+                                {trip_User && trip_User.hotel ? trip_User.hotel.address : ''}
+                                </Text>
                             </View>
                             <View style={{ marginTop: 5, marginBottom: 15, flexDirection: "row" }}>
                                 <Icon
@@ -176,7 +256,9 @@ export default class Program extends Component {
                                     size={14}
                                     containerStyle={{ marginRight: 5 }}
                                 />
-                                <Text style={[Font.style.normal, { flexShrink: 1, color: Colors.primary }]}>+34 913 60 80 00</Text>
+                                <Text style={[Font.style.normal, { flexShrink: 1, color: Colors.primary }]}>
+                                    {trip_User && trip_User.hotel ? trip_User.hotel.phone : ''}
+                                </Text>
                             </View>
                             <Button 
                                 buttonStyle={[{ backgroundColor: Colors.lightSecondary, borderRadius: 5 , },Platform.OS ==="ios" &&{marginTop:0}]} 
@@ -189,7 +271,9 @@ export default class Program extends Component {
                     </View>
                     <View style={[AppStyles.style.pV15, {paddingLeft: 23}]}>
                         <Text style={Font.style.h2}>Informations</Text>
-                         <Text style={{marginVertical:10}}>Bientot...</Text>
+                         <Text style={{marginVertical:10}}>
+                             {trip_User && trip_User.hotel ? trip_User.hotel.description.slice(0,100)+"..." : 'Bientôt...'}
+                        </Text>
                     </View>
                     
                 </ScrollView>
@@ -201,7 +285,10 @@ export default class Program extends Component {
         top: screen.height * 0.4
       }}>
          <ActivityIndicator  size="large" color="#0000ff"/>
-  <Text style={{   textAlign:'center'}}>Chargement ...</Text>
+         { errorServeur ? (<Text style={{   textAlign:'center'}}>Nous rencontons un problème de serveur avec le Programme.</Text>)
+         
+         : (<Text style={{   textAlign:'center'}}>Chargement ...</Text>)}
+        
      </View>}
                 <AlertDialog
                 alertVisible={alertVisible}

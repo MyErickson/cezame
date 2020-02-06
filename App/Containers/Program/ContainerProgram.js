@@ -11,6 +11,7 @@ import Program from './index'
 
 // Action Creators
 import {responseConnection} from '../../store/actionCreator/Login'
+import { callTrips } from '../../store/actionCreator/Program';
 
 const mapStateToProps = (state, ownProps) => ({
     tokenConnection:state.tokenConnection,
@@ -20,7 +21,10 @@ const mapStateToProps = (state, ownProps) => ({
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-
+  
+  callTrips:(data)=>{
+    dispatch(callTrips(data))
+  },
 
 });
 

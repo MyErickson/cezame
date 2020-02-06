@@ -130,6 +130,7 @@ export default class Contact extends Component {
                                 placeholder="Nom"
                                 containerStyle={{ marginTop: 10 }}
                                 onSubmitEditing={this.sendMessage}
+                                placeholderTextColor="#CCCCCC"
                                 onSubmitEditing={() => { this.inputFocus("prenom") }}
                                 blurOnSubmit={false}
                                 returnKeyType="next"
@@ -140,6 +141,7 @@ export default class Contact extends Component {
                                 placeholder="Prénom"
                                 containerStyle={{ marginTop: 10 }}
                                 onSubmitEditing={this.sendMessage}
+                                placeholderTextColor="#CCCCCC"
                                 onSubmitEditing={() => { this.inputFocus("email") }}
                                 blurOnSubmit={false}
                                 returnKeyType="next"
@@ -150,6 +152,7 @@ export default class Contact extends Component {
                                 name='email'
                                 placeholder="Email"
                                 labelStyle={Styles.labelStyle}
+                                placeholderTextColor="#CCCCCC"
                                 containerStyle={{ marginTop: 10 }}
                                 onSubmitEditing={this.sendMessage}
                                 onSubmitEditing={() => { this.inputFocus("tel") }}
@@ -161,6 +164,7 @@ export default class Contact extends Component {
                                 ref = { text=>this.input.tel = text}
                                 name='tel'
                                 placeholder="Portable"
+                                placeholderTextColor="#CCCCCC"
                                 containerStyle={{ marginTop: 15 }}
                                 onSubmitEditing={this.sendMessage}
                                 onSubmitEditing={() => { this.inputFocus("comments") }}

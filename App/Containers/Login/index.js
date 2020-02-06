@@ -308,7 +308,7 @@ export default class Login extends Component {
               <StatusBar translucent backgroundColor={Colors.rightColor} />
                 <ScrollView 
                 style={{ marginHorizontal: 0  }}
-                showsVerticalScrollIndicator = {false}
+          
              
                 >
                 <ImageBackground 
@@ -346,7 +346,7 @@ export default class Login extends Component {
                     onChange={this.UpdateInputToState}
                     placeholderTextColor="#CCCCCC"
                     labelStyle={{ fontSize: 15, margin: 0, color: Colors.dark, fontWeight: "normal" }}
-                    inputStyle={{ padding: 0, marginTop: 15, fontSize: 15 ,}}
+                    inputStyle={{ padding: 0,marginTop: 10,  fontSize: 15 ,}}
                     containerStyle={{ borderBottomWidth: 1, borderBottomColor: "#C6C6C6" }}
                     inputContainerStyle={{ borderBottomWidth: 0,height: 25, marginBottom: 10 }}
                     onSubmitEditing={() => { this.inputFocus("password") }}
@@ -365,8 +365,8 @@ export default class Login extends Component {
                     onChange={this.UpdateInputToState} 
                     rightIcon={eyeIcon}
                     placeholderTextColor="#CCCCCC"
-                    labelStyle={{ fontSize: 15, marginTop: 15, color: Colors.dark, fontWeight: "normal" }}
-                    inputStyle={{ padding: 0, marginTop: 15, fontSize: 15,  }}
+                    labelStyle={{ fontSize: 15, marginTop: 5, color: Colors.dark, fontWeight: "normal" }}
+                    inputStyle={{ padding: 0, marginTop: 10, fontSize: 15,  }}
                     containerStyle={{ borderBottomWidth: 1, borderBottomColor: "#C6C6C6" }}
                     inputContainerStyle={{ borderBottomWidth: 0,height: 25, marginBottom: 10 }}
                     onSubmitEditing={this.Login}
@@ -379,7 +379,7 @@ export default class Login extends Component {
                     title="Connexion" 
                   />
                   <Button  
-                    title="Mot de passe oublié ?" 
+                    title="Mot de passe oublié ?"
                     onPress={this.ToogleModal} 
                     type="clear"
                   />

@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import { View, Text ,Platform,StatusBar ,SafeAreaView ,Dimensions,Animated,Image} from 'react-native'
+import { View, Text ,Platform,StatusBar ,SafeAreaView ,Dimensions,Animated,Image } from 'react-native'
 import Colors from '../../../Themes/Colors';
 import { Icon,Header } from 'react-native-elements';
 import LinearGradient from 'react-native-linear-gradient';
@@ -24,7 +24,7 @@ class  CurrentImage extends Component{
                 <StatusBar translucent backgroundColor={Colors.rightColor} style={{zIndex:1}} />
          
                 <Header
-                    containerStyle={Platform.OS==="android"&&{height:50, marginTop:10}}
+                    containerStyle={Platform.OS==="android"&&{height:50}}
                     leftComponent={{ icon: 'close', color: '#fff', onPress: () => {navigation.goBack()} ,underlayColor:"none"}}
                     leftContainerStyle={{height:40}}
                     ViewComponent={LinearGradient}
@@ -36,10 +36,13 @@ class  CurrentImage extends Component{
                 />
                
         </View>
-   
-                    <Image source={{uri: navigation.state.params.image}}
-                     style={{flex:1}}
+                <View  style={{flex:1}}>
+                <Image source={{uri: navigation.state.params.image}}
+                    style={{flex:1}}
+                    resizeMode="cover"
                     />
+                </View>
+                  
 
        <SafeAreaView style={[{backgroundColor:Colors.lightSecondary},Platform.OS === "android" && {height:20}]}>
                 <View style={{height:45}}>
