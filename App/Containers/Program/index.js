@@ -88,11 +88,7 @@ export default class Program extends Component {
         callTrips(data)
     }
 
-   wait=(timeout)=> {
-        return new Promise(resolve => {
-          setTimeout(resolve, timeout);
-        });
-      }
+
       
     onRefresh =()=>{ 
         const { refreshing} = this.state
@@ -104,9 +100,7 @@ export default class Program extends Component {
         setTimeout(()=>{ this.setState({
             refreshing:false
         })},1000)
-        // this.wait(6000).then(() =>  this.setState({
-        //     refreshing:false
-        // }))
+
     
       
     }

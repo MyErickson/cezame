@@ -25,7 +25,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp
 } from "react-native-responsive-screen";
-// import { TouchableHighlight } from 'react-native-gesture-handler';
+
 
 const screen = Dimensions.get("screen");
 
@@ -333,7 +333,7 @@ export default class Login extends Component {
                
                 <ScrollView style={{ marginHorizontal: 50,marginTop:-20}}
                   keyboardDismissMode='on-drag'
-                  keyboardShouldPersistTaps='always'
+                  keyboardShouldPersistTaps='handled'
                   contentInsetAdjustmentBehavior="never"
                 >
                   <Input

@@ -24,7 +24,7 @@ class  CurrentImage extends Component{
                 <StatusBar translucent backgroundColor={Colors.rightColor} style={{zIndex:1}} />
          
                 <Header
-                    containerStyle={Platform.OS==="android"&&{height:50}}
+                    containerStyle={Platform.OS==="android"&&{height:50,marginTop:Platform.OS==="android"?15:0}}
                     leftComponent={{ icon: 'close', color: '#fff', onPress: () => {navigation.goBack()} ,underlayColor:"none"}}
                     leftContainerStyle={{height:40}}
                     ViewComponent={LinearGradient}

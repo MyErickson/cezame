@@ -1,5 +1,11 @@
 import React, { Component } from 'react';
-import { Text, View, KeyboardAvoidingView , Dimensions, FlatList, Platform } from 'react-native';
+import { Text, View, 
+    KeyboardAvoidingView , 
+    Dimensions, 
+    FlatList, 
+    Platform ,
+    Animated,
+    TouchableOpacity,SafeAreaView} from 'react-native';
 import Layout from '../../Components/Layout';
 import Colors from '../../Themes/Colors';
 import { Icon, Input } from 'react-native-elements';
@@ -8,8 +14,16 @@ import Font from '../../Themes/Font';
 import ImagePicker from 'react-native-image-picker';
 import Moment from 'moment';
 import NavigationService from '../../Services/NavigationService';
-const screen = Dimensions.get("window");
+import { Styles } from '../../Components/Layout/styleLayout';
+import { StylesChat } from './styleChat'
 
+import {
+    widthPercentageToDP as wp,
+    heightPercentageToDP as hp
+  } from "react-native-responsive-screen";
+
+const screen = Dimensions.get("window");
+console.log(screen)
 const optionsImagePicker = {
     title: 'Select Avatar',
     customButtons: [{ name: 'fb', title: 'Choose Photo from Facebook' }],
@@ -104,7 +118,7 @@ function Item({item}) {
     return(
         <View style={[AppStyles.style.flex, { marginHorizontal: 0, alignItems: "flex-end", marginVertical: 15 }]}>
             {item.author.id !== 1 && 
-                <View style={{ backgroundColor: Colors.primary, width: 35, height: 35, borderRadius: 35, marginLeft: 10 }}></View>
+                <View style={[StylesChat.avatar,{ backgroundColor: Colors.primary}]}></View>
             }
             <View style={{ 
                 backgroundColor: item.author.id == 1 ? "#DCEDD6" : "#FFEECB", 
@@ -119,17 +133,22 @@ function Item({item}) {
                 <Text style={{ marginTop: 5, fontSize: 12, color: "#A0A0A0" }}>{Moment(item.date).format("DD/MM -  H[h]mm")}</Text>
             </View>
             {item.author.id == 1 && 
-                <View style={{ backgroundColor: Colors.primary, width: 35, height: 35, borderRadius: 35, marginLeft: 10 }}></View>
+                <View style={[StylesChat.avatar,{ backgroundColor: Colors.primary}]}></View>
             }
         </View>
     )
 }
 
 export default class Chat extends Component {
-
-        state={
-            topBarModo:false
-        }
+  constructor(props){
+    super(props);
+      this.state={
+        avatarSource: undefined
+      }
+      this.viewAnimated = new Animated.Value(0);
+      this.startAnimated=false
+  }
+     
 
     _uploadImage = () => {
         ImagePicker.launchImageLibrary(optionsImagePicker, (response) => {
@@ -155,54 +174,119 @@ export default class Chat extends Component {
     }
     
     viewTopBarModo =()=>{
-        this.setState({
-            topBarModo:true
-        })
-        setTimeout(()=>{ this.setState({
-            topBarModo:false
-        })},2500)
+ 
+        
+
+
+
+            return (
+                <Animated.View
+                style={{
+                    ...this.props.style,
+                    opacity:this.viewAnimated
+                }}
+                onPress={() => NavigationService.navigate("Contact")}
+                >
+                    {this.topBarModo()}
+                </Animated.View>
+            )
+   
+       
+    }
+    
+    showTopBarModo =()=>{
+        
+        const { viewAnimated,startAnimated } = this
+        console.log("TCL: Chat -> showTopBarModo -> viewAnimated ", viewAnimated )
+
+        if(!startAnimated){
+            console.log("TCL: Chat -> showTopBarModo -> viewAnimated ", true)
+            this.startAnimated=true
+            Animated.timing(
+                viewAnimated ,
+                {
+                  toValue: 1,
+                  duration: 2000,
+                }
+              ).start(()=>{
+        
+                Animated.timing(
+                    viewAnimated ,
+                    
+                    {
+                      delay:1500,
+                      toValue: 0,
+                      duration: 1000,
+                    }
+                  ).start(()=>{
+                      setTimeout(()=>{
+                      
+                         
+                            this.startAnimated=false
+                        
+                      },2000)
+                   
+                  });
+              });
+        }
+
+        
+
     }
 
 
+    topBarModo=()=>{
+        console.log(NavigationService)
+                return (
+                    <View style={[AppStyles.style.flex, { width:"100%",alignItems: "center", backgroundColor: Colors.lightPrimary, paddingVertical: 15, paddingHorizontal: 25, justifyContent: "space-between",position:"absolute" }]}>
+                        <View style={[AppStyles.style.flex, { alignItems: "center" }]}>
+                            <View style={{ width: 35, height: 35, backgroundColor: Colors.primary, borderRadius: 35, marginRight: 15 }}></View>
+                            <View onPress={() => NavigationService.navigate("Contact")}>
+                                <Text style={Font.style.h2}>Nom Modérateur</Text>
+                                <Text style={{ color: Colors.white }}>Modérateur</Text>
+                            </View>
+                        </View>
+                        <TouchableOpacity onPress={() => NavigationService.navigate("Contact")}>
+                            <Icon 
+                                underlayColor="none"
+                                name="mail"
+                                color={Colors.white}
+                                size={25}
+                                
+                            />
+                        </TouchableOpacity>
+                </View>
+                )
+    }
+
     render() {
-        const { topBarModo } = this.state
+     
         
         return (
             
         <Layout noPaddingTop chat return title="Messagerie instantanée" navigation={this.props.navigation}>
-            {topBarModo && ( <View style={[AppStyles.style.flex, { alignItems: "center", backgroundColor: Colors.lightPrimary, paddingVertical: 15, paddingHorizontal: 25, justifyContent: "space-between", zIndex: 3, }]}>
-                <View style={[AppStyles.style.flex, { alignItems: "center" }]}>
-                    <View style={{ width: 35, height: 35, backgroundColor: Colors.primary, borderRadius: 35, marginRight: 15 }}></View>
-                    <View>
-                        <Text style={Font.style.h2}>Nom Modérateur</Text>
-                        <Text style={{ color: Colors.white }}>Modérateur</Text>
-                    </View>
-                </View>
-                <View>
-                    <Icon 
-                        name="mail"
-                        color={Colors.white}
-                        size={25}
-                        onPress={() => NavigationService.navigate("Contact")}
-                    />
-                </View>
-            </View>)}
+            {this.viewTopBarModo()}
            
             <FlatList 
                 ref={ref => (this.scrollView = ref)}
                 data={data}  
                 renderItem={({ item }) => <Item item={item} />}
-                keyboardShouldPersistTaps="always" style={{ height: screen.height-360 }} 
-                onScrollBeginDrag={()=>this.viewTopBarModo()}
+                keyboardShouldPersistTaps={Platform.OS==="android"?"handled":"always" }
+                keyboardDismissMode='on-drag'
+                style={{ height: screen.height-360 ,zIndex:-1}} 
+                showsVerticalScrollIndicator = {false}
+                onScrollEndDrag={()=>this.showTopBarModo()}
                 onContentSizeChange={() => {
                     this.scrollView.scrollToEnd({ animated: true, index: -1 }, 200);
                 }}
             />
-            <KeyboardAvoidingView  behavior={Platform.OS === "android"?'height':'position'} keyboardVerticalOffset={74} style={{flex: 1}}>  
-                <View style={[AppStyles.style.flex, {backgroundColor: Colors.white, paddingTop: 20,  alignItems: "center"}]}>
+   
+            <KeyboardAvoidingView  behavior={Platform.OS === "android"?'height':'position'} keyboardVerticalOffset={screen.height <= 820 ? hp("9%"): hp("6%")} style={[{height:hp("11%"),}]}>  
+            <SafeAreaView style={[{backgroundColor:"white"}]}>
+                <View style={[AppStyles.style.flex, {paddingTop: 10,  alignItems: "center",backgroundColor:"white"}]}>
                     <Input 
                         containerStyle={{ width: "80%" }}
-                        inputContainerStyle={{ backgroundColor: Colors.inputBg, borderRadius: 35,  paddingHorizontal: 18, borderBottomWidth: 0, height: 50,marginBottom:20 }}
+                        inputContainerStyle={StylesChat.input}
                         inputStyle={{ padding: 0 }}
                         placeholderTextColor="#9E9E9E"
                         placeholder='Tapez votre message'
@@ -225,8 +309,9 @@ export default class Chat extends Component {
                         />  
                     </View>
                 </View>
-                    
+                </SafeAreaView> 
             </KeyboardAvoidingView>
+   
         </Layout>
         )
     }

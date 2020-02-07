@@ -155,7 +155,7 @@ export default class Layout extends PureComponent {
                                 />
                                 </TouchableOpacity>
                                 <TouchableOpacity 
-                                onPress={() => NavigationService.navigate("")}
+                                onPress={() => NavigationService.navigate("Chat")}
                                 >
                                     <Icon 
                                         underlayColor="none"
