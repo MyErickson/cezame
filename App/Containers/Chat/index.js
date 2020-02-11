@@ -175,10 +175,6 @@ export default class Chat extends Component {
     
     viewTopBarModo =()=>{
  
-        
-
-
-
             return (
                 <Animated.View
                 style={{
@@ -190,17 +186,16 @@ export default class Chat extends Component {
                     {this.topBarModo()}
                 </Animated.View>
             )
-   
        
     }
     
     showTopBarModo =()=>{
         
         const { viewAnimated,startAnimated } = this
-        console.log("TCL: Chat -> showTopBarModo -> viewAnimated ", viewAnimated )
+      
 
         if(!startAnimated){
-            console.log("TCL: Chat -> showTopBarModo -> viewAnimated ", true)
+          
             this.startAnimated=true
             Animated.timing(
                 viewAnimated ,
