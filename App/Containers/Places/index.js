@@ -30,7 +30,7 @@ export default class Places extends Component {
                 {
                     id: 1, 
                     title: "Plaza Mayor",
-                    coord: [40.415584, -3.707412],
+                    coord: [38.2097987, -84.2529869],
                     description: 'Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna.',
                 },
                 {

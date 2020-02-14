@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import {Calendar, LocaleConfig} from 'react-native-calendars';
-import { Text, View, FlatList, TouchableWithoutFeedback ,Platform,SafeAreaView} from 'react-native';
+import { Text, View, FlatList, TouchableWithoutFeedback ,Platform,SafeAreaView , ScrollView , Dimensions} from 'react-native';
 import ContainerLayout from '../../Components/Layout/ContainerLayout';
 import style from './style';
 import { Icon } from 'react-native-elements';
@@ -8,8 +8,8 @@ import { Colors } from 'react-native/Libraries/NewAppScreen';
 // import { Colors} from '../../Themes/Colors'
 import AppStyles from '../../Themes/AppStyles';
 import LinearGradient from 'react-native-linear-gradient';
-
-
+import Moment from 'moment';
+const screen = Dimensions.get("window");
 
 
 
@@ -44,6 +44,7 @@ LocaleConfig.locales['fr'] = {
     
     render() {
         const item = this.props.item;
+        console.log("TCL: Item -> render -> tem ", item )
         return (
             <View style={style.dateContainer}>
                 <TouchableWithoutFeedback onPress={() => { this.toggle()}}>
@@ -65,7 +66,7 @@ LocaleConfig.locales['fr'] = {
                         </View>
                         <View style={{flexDirection: "row", justifyContent: "space-between"}}>
                             <View>
-                                <Text style={{ fontWeight: "bold", fontSize: 15 }}>Remise des cléf de la chambre</Text>
+                <Text style={{ fontWeight: "bold", fontSize: 15 }}>{item.title}</Text>
                                 <Text>Salle plénière Medineceli - RdC</Text>
                             </View>
                             <View>
@@ -81,8 +82,8 @@ LocaleConfig.locales['fr'] = {
                 </TouchableWithoutFeedback>
                 {this.state.expanded == true && (
                 <View style={style.dateContent}>
-                    <Text style={{ color: Colors.primary, fontWeight: "bold", fontSize: 16 }}>Salle pleniére Medinaceli - RdC</Text>
-                    <Text>Intervention de Jean-Philippe Adam, et de Jesus Castilp, Natixis ES-Ital</Text>
+                    <Text style={{ color: Colors.primary, fontWeight: "bold", fontSize: 16 }}>{item.title}</Text>
+                <Text>{item.description}</Text>
                 </View>
                 )}
             </View>
@@ -106,7 +107,16 @@ export default class Agenda extends Component {
 
     render() {
 
-        console.log("agenda agenda render", this.props.infoUser)
+        console.log("agenda agenda render", this.props.trip_User)
+          let data = this.props.trip_User && this.props.trip_User.daySteps.map((value,key)=>{
+            return {
+                key:key,
+                date: Moment(value.date).format("DD/MM/YYYY"),
+                hours:Moment(value.time).format("H[h]mm"),
+                title:value.title,
+                description:value.description,
+            }
+          })
         return (
             <ContainerLayout noPaddingTop allScreenHeader return title="Agenda" navigation={this.props.navigation}>
                 <View style={{flex:1}}>
@@ -187,22 +197,36 @@ export default class Agenda extends Component {
                     onPressArrowLeft={substractMonth => substractMonth()}
                     onPressArrowRight={addMonth => addMonth()}
                     markedDates={{
-                        '2020-01-17': {selected: true, startingDay: true, color: 'white', textColor: '#1991EB'},
-                        '2020-01-18': {selected: true,  color: 'white', textColor: '#1991EB'},
-                        '2020-01-19': {selected: true,  color: 'white', textColor: '#1991EB'},
-                        '2020-01-20': {selected: true,  color: 'white', textColor: '#1991EB'},
-                        '2020-01-21': {selected: true,  color: 'white', textColor: '#1991EB', endingDay: true,},
+                        '2020-02-17': {selected: true, startingDay: true, color: 'white', textColor: '#1991EB'},
+                        
+                        // '2020-02-18': {selected: true,  color: 'white', textColor: '#1991EB'},
+                        // '2020-02-19': {selected: true,  color: 'white', textColor: '#1991EB'},
+                        // '2020-02-20': {selected: true,  color: 'white', textColor: '#1991EB'},
+                        '2020-02-21': {selected: true,  color: 'white', textColor: '#1991EB', endingDay: true,},
                     }}
-                    markingType={'period'}
+                    markingType={' multi-points '}
                     />
+                      <ScrollView
+                        style={{ flex:1}} 
+                        showsVerticalScrollIndicator = {false}
+                        >
                     <SafeAreaView>
-                        <FlatList data={this.state.date} keyExtractor={item => item.id}
+                      
+                        <FlatList 
+                     
+                            data={data} 
+                            
+                            keyExtractor={item => item.id}
+                            showsVerticalScrollIndicator = {false}
                             renderItem={({ item, index }) => {
                             return(
                                     <Item item={item} />
                             )}} 
+                          
                         />
+                     
                     </SafeAreaView>
+                    </ScrollView>
                     </LinearGradient>
                 </View>
                 

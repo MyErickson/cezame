@@ -5,7 +5,7 @@ import { View, Text,
     Dimensions,
     RefreshControl , 
     TouchableOpacity , 
-    Linking,Platform ,ActivityIndicator} from 'react-native';
+    Linking,Platform ,ActivityIndicator , Animated} from 'react-native';
 import ContainerLayout from '../../Components/Layout/ContainerLayout';
 import { Button, Icon } from 'react-native-elements';
 import Images from '../../Themes/Images';
@@ -18,6 +18,8 @@ import MapView, { Marker, Callout } from 'react-native-maps';
 import AlertDialog from '../AlertDialog/AlertDialog';
 var jwtDecode = require('jwt-decode');
 
+
+
 export default class Program extends Component {
 
     constructor(props){
@@ -29,7 +31,10 @@ export default class Program extends Component {
             style:undefined,
             infoUser :undefined,
             errorServeur:undefined,
-            refreshing:false
+            refreshing:false,
+            index: -1, // id des lieux récupéré (-1 => aucun récupéré),
+            rightModal : new Animated.Value(-screen.width), // position initial des modals des lieux
+            leftModal: new Animated.Value(screen.width-(screen.width-(85/2))), // position initial de la modal initiale
         }
     }
 
@@ -105,6 +110,35 @@ export default class Program extends Component {
       
     }
 
+    _modalPlace = (index) => {
+        this.setState({ index })
+        Animated.timing(this.state.rightModal, {
+            toValue: screen.width-(screen.width-(85/2)), 
+            duration: 400
+        }).start();
+        Animated.timing(this.state.leftModal, {
+            toValue: -screen.width, 
+            duration: 400
+        }).start();
+    }
+
+    _mapDidUpdate() {
+        if (this.props.navigation.state.params != undefined) {
+            this.map.animateToRegion({
+                latitude: this.props.navigation.state.params.coord.latitude,
+                longitude: this.props.navigation.state.params.coord.longitude,
+                latitudeDelta: 0.0052,
+                longitudeDelta: 0.0121,
+            }, 1000) 
+            this.setState({ 
+                index: 0,
+                rightModal : new Animated.Value(screen.width-(screen.width-(85/2))), // position initial des modals des lieux
+                leftModal: new Animated.Value(-screen.width), // position initial de la modal initiale 
+            });
+        }
+        else {
+        }
+    }
 
     render() {
    
@@ -223,7 +257,33 @@ export default class Program extends Component {
                         <Text  style={Font.style.h2}>Votre hôtel</Text>
                     </View>
                     <View  style={[AppStyles.style.flex, {justifyContent: "space-evenly",marginTop:5,}]}>
-                        <MapView style={{ backgroundColor: "grey", width: (screen.width/3)+15, height: (screen.width/3)+15, borderRadius: 5 ,marginTop:Platform.OS ==="ios"?5:10}}/>
+                        <MapView 
+                           initialRegion = { {
+                            latitude: trip_User.hotel.latitude && trip_User.hotel.latitude,
+                            longitude:  trip_User.hotel.longitude && trip_User.hotel.longitude,
+                        
+                        }}
+                        onMapReady={ (e) => {this._mapDidUpdate(e)} }
+                        ref={ref => { this.map = ref; }}
+                        style={{ backgroundColor: "grey", width: (screen.width/3)+15, height: (screen.width/3)+15, borderRadius: 5 ,marginTop:Platform.OS ==="ios"?5:10}}>
+                        <Marker
+                                coordinate={{
+                                    latitude: trip_User.hotel.latitude && trip_User.hotel.latitude,
+                                    longitude: trip_User.hotel.longitude && trip_User.hotel.longitude
+                                }}
+                                 title={trip_User.hotel.title && trip_User.hotel.title}
+                                onPress = {() => {
+                                    this.map.animateToRegion({
+                                    latitude: trip_User.hotel.latitude,
+                                    longitude: trip_User.hotel.longitude,
+                                    latitudeDelta: 0.00122,
+                                    longitudeDelta: 0.0001,
+                                }, 1000), this._modalPlace() }}
+                                flat={true}
+                            >
+                                <Image source={require('../../Assets/Images/marker.png')} style={{ width: 25, height: 34 }} />
+                            </Marker>
+                        </MapView>
                         <View style={{ width: (screen.width/2)+15 }}>
                             <TouchableOpacity onPress={()=>{ NavigationService.navigate('Places', { coord: {latitude: 40.415584, longitude: -3.707412, latitudeDelta: 0.0052, longitudeDelta: 0.0121, } }) }}>
                         <Text style={[Font.style.h2, { flexShrink: 1,paddingLeft: 15}]}>

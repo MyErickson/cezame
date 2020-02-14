@@ -7,30 +7,35 @@ import { connect } from 'react-redux';
  * Local import
  */
 
-import Agenda from './index'
+import Places from './index'
 
 // Action Creators
-
+import {responseConnection} from '../../store/actionCreator/Login'
+import { callTrips } from '../../store/actionCreator/Program';
 
 const mapStateToProps = (state, ownProps) => ({
     tokenConnection:state.tokenConnection,
-    infoUser:state.info_User,
     trip_User:state.trip_User,
+    infoUser:state.info_User,
+   
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-
+  
+  callTrips:(data)=>{
+    dispatch(callTrips(data))
+  },
 
 });
 
- const ContainerAgenda = connect(
+ const ContainerPlaces = connect(
   mapStateToProps,
   mapDispatchToProps,
-)(Agenda);
+)(Places );
 
 
 
 /**
  * Export
  */
-export default ContainerAgenda   ;
+export default ContainerPlaces  ;
