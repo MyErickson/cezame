@@ -176,11 +176,12 @@ export default class Login extends Component {
             responseConnection(token)
             this.StoreToken('jwt_auth', token);
             var decode = jwtDecode(token)
+
             console.log("TCL: Login -> Login -> decode", decode)
             decode_Token(decode)
             
             if(decode.roles[0] !== "ROLE_USER"){
-              console.log("TCL: Login -> Login -> decode", decode)
+        
               this.ToogleLoader();
               this.setState({
                 alertVisible:true,
@@ -206,7 +207,7 @@ export default class Login extends Component {
               NavigationService.navigate('Program')
             });
           
-
+            
 
           })
           .catch((error) => {
@@ -272,19 +273,24 @@ export default class Login extends Component {
     }
 
 
-    inputFocus=(id)=>{  
+  inputFocus=(id)=>{  
        this.input[id].focus()
   }
 
   closeAlert=()=>{
-    this.setState({alertVisible:!this.state.alertVisible})
-}
+      this.setState({alertVisible:!this.state.alertVisible})
+  }
+
+
+
 
     render(){
 
         // loader
         const { messageAlert, style , alertVisible } = this.state
         let loaderConnexion;
+     
+    
         if (this.state.loaderConnexion){
           loaderConnexion =  <ActivityIndicator size="large" color="#0000ff" />;
         }
@@ -300,6 +306,8 @@ export default class Login extends Component {
           eyeIcon = <Icon name='eye' type="font-awesome" size={18} color='#969696' onPress={this.TooglePasswordVisibility}/>;
         }
         const keybord = Platform.OS === "ios" ? hp("-5%") : hp("-55%")
+
+     
 
         return(
        

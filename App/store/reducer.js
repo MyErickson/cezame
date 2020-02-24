@@ -8,6 +8,7 @@ const initialState = {
   trip_User:undefined,
   info_Token:undefined,
   info_hotel:undefined,
+  day_steps:undefined
 };
 
 /**
@@ -21,7 +22,9 @@ export const GET_USERS = 'GET_USERS';
 export const INFO_USER ='INFO_USER';
 export const DECODE_TOKEN = 'DECODE_TOKEN';
 export const GET_INFO_HOTEL = 'GET_INFO_HOTEL';
-export const INFO_HOTEL = 'INFO_HOTEL '
+export const INFO_HOTEL = 'INFO_HOTEL ';
+export const CALL_DAY_STEPS = 'CALL_DAY_STEPS';
+export const DAY_STEPS ='DAY_STEPS';
 /**
  * Traitements
  */
@@ -57,7 +60,7 @@ const reducer = (state = initialState, action = {}) => {
      
      };
 
-     case  DECODE_TOKEN:
+    case  DECODE_TOKEN:
 
       return {
         ...state,
@@ -66,11 +69,18 @@ const reducer = (state = initialState, action = {}) => {
       
       };
  
-      case INFO_HOTEL:
+    case INFO_HOTEL:
         return { 
           ...state,
           info_hotel:action.data
         }
+
+    case DAY_STEPS:
+
+      return {
+        ...state,
+        day_steps:action.data
+      }
 
     case INITITALIZE_STATE:
     
@@ -81,6 +91,8 @@ const reducer = (state = initialState, action = {}) => {
         info_Token:undefined,
         info_hotel:undefined
       };
+
+
 
 
     default:

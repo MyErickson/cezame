@@ -1,9 +1,9 @@
 import axios from 'axios';
 
- import {  CALL_TRIPS,GET_USERS, GET_INFO_HOTEL } from './reducer'
+ import {  CALL_TRIPS,GET_USERS, GET_INFO_HOTEL ,CALL_DAY_STEPS} from './reducer'
 
 import {requestParam} from './request/Parameters'
-import {requestCallProgram} from './request/Program'
+import {requestCallProgram , requestDaySteps } from './request/Program'
 import {requestHotel} from './request/Hotel'
 
  const  ajaxMiddleware = store => next => async action => {
@@ -31,15 +31,15 @@ import {requestHotel} from './request/Hotel'
      
             
       case  CALL_TRIPS:
-          next(action)
+        next(action)
+    
+        let valueTrips = new FormData
+        valueTrips.action = action
+        valueTrips.store = store
       
-          let valueTrips = new FormData
-          valueTrips.action = action
-          valueTrips.store = store
-       
-          requestCallProgram(valueTrips)
-       
-           break;
+        requestCallProgram(valueTrips)
+      
+          break;
       
       case  GET_INFO_HOTEL:
         next(action)
@@ -51,6 +51,17 @@ import {requestHotel} from './request/Hotel'
         requestHotel(valueHotel) 
      
          break;
+      
+      case  CALL_DAY_STEPS:
+      next(action)
+
+      let valueDaySteps = new FormData
+      valueDaySteps.action = action
+      valueDaySteps.store = store
+      
+      requestDaySteps(valueDaySteps) 
+    
+        break;
 
 
 

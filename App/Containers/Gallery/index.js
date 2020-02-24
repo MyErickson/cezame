@@ -11,7 +11,7 @@ import AppStyles from '../../Themes/AppStyles';
 import {PermissionsAndroid} from 'react-native';
 import { Styles } from './styleGallery'
 import ViewGallery from './ViewGallery/ViewGallery'
-
+import axios from 'axios';
 
 
 const screen = Dimensions.get("window");
@@ -55,11 +55,15 @@ export default class Gallery extends Component {
     constructor(props){
         super(props);
         this.state = {
-            isDone: new Animated.Value(0),
+            allPictures:undefined
           
             
         };
         this.indexImage=0
+    }
+    componentDidMount(){
+      this.callGallery()
+      Platform.OS ==="android" && requestCameraPermission();
     }
 
     _createFolder = () => {
@@ -73,43 +77,33 @@ export default class Gallery extends Component {
         })
     }
 
-    _download=(imageUrl)=>{
-       console.log("TCL: Gallery -> _download -> imageUrl", imageUrl)
 
-        Platform.OS ==="android" && requestCameraPermission();
-        var path = RNFS.ExternalStorageDirectoryPath +'/Cézame/'+((Math.random() * 1000) | 0)+'.jpeg';
+    callGallery=()=>{
+       const { tokenConnection , info_Token } =this.props
+      const id= info_Token.trip_id
+  
 
+       axios.defaults.headers['Authorization']= "Bearer "+tokenConnection ;
+      axios.get(`https://cezame-dev.digitalcube.fr/api/trips/${id}/photos`,{
 
-        var download = RNFS.downloadFile({
-            fromUrl: imageUrl ,
-            toFile: path,
-          }).promise.then((r) => {
-            Animated.timing(this.state.isDone, {
-                toValue: 1, 
-                duration: 4000
-            }).start(() => {
-                Animated.timing(this.state.isDone, {
-                    toValue: 0, 
-                    duration: 1000
-                }).start()
-            });
-        });
-
-        RNFS.writeFile(path, 'Lorem ipsum dolor sit amet', 'utf8')
-        .then((success) => {
-            download;
+      }).then( res =>{
+      console.log("TCL: Gallery -> callGallery -> res ", res )
+        this.setState({
+          allPictures:res.data["hydra:member"]
         })
-        .catch((err) => {
-            console.log(err.message);
-        });
+
+      }).catch( err=>{
+      console.log("TCL: Gallery -> callGallery -> err", err)
+
+      })
+        
 
     }
 
-
-
     render() {
         this._createFolder();
-      
+        const{ allPictures } = this.state
+        console.log("TCL: render ->  info_Token",  this.props.info_Token)
         return (
             <ContainerLayout noPaddingTop allScreenHeader gallery return title="Galerie Photos" navigation={this.props.navigation}>
                     <LinearGradient 
@@ -118,7 +112,7 @@ export default class Gallery extends Component {
                 end={ {x: 1, y: 0 }}
                 style={{flex:1}}
                 >
-                    <ViewGallery download={this._download} navigate={this.props.navigation}/>
+                    <ViewGallery allPictures={allPictures} navigate={this.props.navigation}/>
 
             </LinearGradient>
             </ContainerLayout>

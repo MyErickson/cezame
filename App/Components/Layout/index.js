@@ -6,7 +6,7 @@ import Colors from '../../Themes/Colors';
 import NavigationService from '../../Services/NavigationService';
 import AppStyles from '../../Themes/AppStyles';
 import Images from '../../Themes/Images';
-import UploadImage from '../../Containers/Gallery/UploadImage';
+ import ContainerUplaoadImage from '../../Containers/Gallery/UploadImage/ContainerUplaoadImage';
 import { Styles } from './styleLayout'
 const screen = Dimensions.get("window");
 
@@ -139,14 +139,14 @@ export default class Layout extends PureComponent {
                     {!this.props.chat && (
                         <View style={[Styles.containerMenu]}>
                             {this.props.gallery && (
-                                <UploadImage />
+                                <ContainerUplaoadImage  />
                             )}
                             <View style={AppStyles.style.flex}>
                             <TouchableOpacity 
                               onPress={() => NavigationService.navigate("Program")}
                             >
                                 <Icon 
-                                    underlayColor="none"
+                                   
                                     name="home"
                                     color="white"
                                     type="font-awesome"
@@ -158,7 +158,7 @@ export default class Layout extends PureComponent {
                                 onPress={() => NavigationService.navigate("Chat")}
                                 >
                                     <Icon 
-                                        underlayColor="none"
+                                       
                                         name="comments"
                                         color="white"
                                         type="font-awesome"
@@ -170,7 +170,7 @@ export default class Layout extends PureComponent {
                              onPress={ () => { this.props.navigation.toggleDrawer() } }
                             >
                                 <Icon
-                                underlayColor="none"
+                               
                                     name="menu"
                                     color="white"  
                                    

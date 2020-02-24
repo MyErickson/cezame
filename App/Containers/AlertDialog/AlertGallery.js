@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { View,  Platform} from 'react-native'
 import Dialog from "react-native-dialog";
 import { Style } from './styleAlertDialog';
@@ -8,7 +8,7 @@ import {
 } from "react-native-responsive-screen";
 
 
-const AlertAdmin =({
+const AlertGallery =({
     alertVisible,
     closeAlert,
     messageAlert,
@@ -30,7 +30,8 @@ const AlertAdmin =({
           </Dialog.Description>
 
           
-        <Dialog.Button  label="ok, j'ai compris" onPress={closeAlert}/> 
+        <Dialog.Button  label="ok, j'ai compris" onPress={()=>closeAlert()}/> 
+          
     
         </Dialog.Container>
      
@@ -39,4 +40,4 @@ const AlertAdmin =({
 
  
 
-export default AlertAdmin
+export default AlertGallery 

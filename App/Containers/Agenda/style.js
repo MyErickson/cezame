@@ -32,6 +32,8 @@ export default StyleSheet.create({
         elevation: 8,
     },
     dateContent: {
-        paddingHorizontal: 18, paddingVertical: 20,
+        paddingHorizontal: 18,
+        paddingVertical: 20,
+        marginBottom:10
     }
 });

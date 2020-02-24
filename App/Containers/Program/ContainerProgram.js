@@ -10,13 +10,14 @@ import { connect } from 'react-redux';
 import Program from './index'
 
 // Action Creators
-import {responseConnection} from '../../store/actionCreator/Login'
-import { callTrips } from '../../store/actionCreator/Program';
+
+import { callTrips ,callDaySteps} from '../../store/actionCreator/Program';
 
 const mapStateToProps = (state, ownProps) => ({
     tokenConnection:state.tokenConnection,
     trip_User:state.trip_User,
     infoUser:state.info_User,
+    info_Token:state.info_Token
    
 });
 
@@ -25,6 +26,9 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   callTrips:(data)=>{
     dispatch(callTrips(data))
   },
+  callDaySteps :(data)=>{
+    dispatch(callDaySteps(data) )
+  }
 
 });
 

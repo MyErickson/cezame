@@ -39,8 +39,9 @@ export default class Program extends Component {
     }
 
     componentDidMount(){
-        
+       
         this.getTrips()
+
     }
 
     static getDerivedStateFromProps(props,state){
@@ -81,7 +82,7 @@ export default class Program extends Component {
     }
     
     getTrips=()=>{
-        const {tokenConnection ,callTrips} = this.props
+        const {tokenConnection ,callTrips , callDaySteps} = this.props
 
         var decode = jwtDecode(tokenConnection)
             
@@ -91,10 +92,10 @@ export default class Program extends Component {
         data.idTrip=decode.trip_id
 
         callTrips(data)
+        callDaySteps(data)
     }
 
 
-      
     onRefresh =()=>{ 
         const { refreshing} = this.state
        
@@ -123,10 +124,12 @@ export default class Program extends Component {
     }
 
     _mapDidUpdate() {
+    console.log(this.props)
+    const { trip_User }  =this.props
         if (this.props.navigation.state.params != undefined) {
             this.map.animateToRegion({
-                latitude: this.props.navigation.state.params.coord.latitude,
-                longitude: this.props.navigation.state.params.coord.longitude,
+                latitude: trip_User.hotel.latitude && parseFloat(trip_User.hotel.latitude),
+                longitude: trip_User.hotel.longitude && parseFloat(trip_User.hotel.longitude),
                 latitudeDelta: 0.0052,
                 longitudeDelta: 0.0121,
             }, 1000) 
@@ -140,6 +143,8 @@ export default class Program extends Component {
         }
     }
 
+
+
     render() {
    
         const { trip_User,
@@ -151,8 +156,9 @@ export default class Program extends Component {
                 errorServeur,
             refreshing} =this.state
 
-                
-                console.log("TCL: Program -> render -> trip_User", trip_User)
+            
+            console.log("TCL: render -> trip_User.hotel.latitude", this.props.info_Token)
+        
         let  startDate,endDate,endMonth,startMonth = undefined
 
         if(trip_User){
@@ -163,7 +169,8 @@ export default class Program extends Component {
         
          }
        
-   
+       
+        
        const random1 = Math.floor(Math.random() * (100 - 1 +2)) + 1
        const random2 = Math.floor(Math.random() * (100 - 1 +2)) + 1
     
@@ -253,14 +260,16 @@ export default class Program extends Component {
                             titleStyle={{ marginLeft: 5, fontSize: 16, fontWeight: "normal" }}
                         />
                     </View>
-                    <View style={[AppStyles.style.pV15, {marginTop:5, marginLeft:10}]}>
+                    <View style={[AppStyles.style.pV15, {marginTop:5, marginLeft:23}]}>
                         <Text  style={Font.style.h2}>Votre hôtel</Text>
                     </View>
                     <View  style={[AppStyles.style.flex, {justifyContent: "space-evenly",marginTop:5,}]}>
                         <MapView 
                            initialRegion = { {
-                            latitude: trip_User.hotel.latitude && trip_User.hotel.latitude,
-                            longitude:  trip_User.hotel.longitude && trip_User.hotel.longitude,
+                            latitude: trip_User.hotel.latitude && parseFloat(trip_User.hotel.latitude),
+                            longitude:  trip_User.hotel.longitude && parseFloat(trip_User.hotel.longitude) ,
+                            latitudeDelta: 0.0052,
+                            longitudeDelta: 0.0121,
                         
                         }}
                         onMapReady={ (e) => {this._mapDidUpdate(e)} }
@@ -268,14 +277,14 @@ export default class Program extends Component {
                         style={{ backgroundColor: "grey", width: (screen.width/3)+15, height: (screen.width/3)+15, borderRadius: 5 ,marginTop:Platform.OS ==="ios"?5:10}}>
                         <Marker
                                 coordinate={{
-                                    latitude: trip_User.hotel.latitude && trip_User.hotel.latitude,
-                                    longitude: trip_User.hotel.longitude && trip_User.hotel.longitude
+                                    latitude: trip_User.hotel.latitude && parseFloat(trip_User.hotel.latitude),
+                                    longitude: trip_User.hotel.longitude && parseFloat(trip_User.hotel.longitude)
                                 }}
                                  title={trip_User.hotel.title && trip_User.hotel.title}
                                 onPress = {() => {
                                     this.map.animateToRegion({
-                                    latitude: trip_User.hotel.latitude,
-                                    longitude: trip_User.hotel.longitude,
+                                    latitude: trip_User.hotel.latitude && parseFloat(trip_User.hotel.latitude),
+                                    longitude: trip_User.hotel.longitude && parseFloat(trip_User.hotel.longitude),
                                     latitudeDelta: 0.00122,
                                     longitudeDelta: 0.0001,
                                 }, 1000), this._modalPlace() }}

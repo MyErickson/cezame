@@ -1,10 +1,19 @@
 import React, { Component, useRef, Fragment } from 'react';
-import { Text, View, Dimensions, KeyboardAvoidingView,ScrollView,StatusBar,SafeAreaView   } from 'react-native';
+import { Text,
+    View, 
+    Dimensions, 
+    FlatList, 
+    KeyboardAvoidingView,
+    ScrollView,
+    StatusBar,
+    SafeAreaView  ,
+    TouchableOpacity, 
+    Linking  } from 'react-native';
 import ContainerLayout from '../../Components/Layout/ContainerLayout';
 import Colors from '../../Themes/Colors';
 import { Icon, Input, Button, CheckBox } from 'react-native-elements';
 import AppStyles from '../../Themes/AppStyles';
-import { FlatList } from 'react-native-gesture-handler';
+import Communications from 'react-native-communications';
 import Modal from "react-native-modal";
 const screen = Dimensions.get("window");
 import { Styles } from './styleContact'
@@ -15,13 +24,13 @@ import {
 const data = [
     {
         id: 0,
-        name: "Sandrice LOUYER (BPCE)",
-        tel: "00 33 6 20 93 81 95"
+        name: "Digitalcube",
+        tel: "+33 1 34 48 75 63"
     },
     {
         id: 1,
-        name: "Sandrice LOUYER (BPCE)",
-        tel: "00 33 6 20 93 81 95"
+        name: "Matthieu Delavallade",
+        tel: "+33 1 58 17 01 01"
     },
     {
         id: 3,
@@ -32,16 +41,20 @@ const data = [
 
 function Item({item}) {
     return(
-        <View style={Styles.containerItem}>
-            <View>
+        <TouchableOpacity  onPress={()=> Communications.phonecall(item.tel, true)} >
+        <View style={Styles.containerItem}  >
+            <View >
                 <Text style={{ fontSize: 15, fontWeight: "bold" }}>{item.name}</Text>
-                <View style={[AppStyles.style.flex, {alignItems: "center", marginTop: 2}]}>
-                    <Icon name="phone-square" type="font-awesome" color={Colors.primary} size={14} containerStyle={{ marginRight: 5 }} />
+                <View  style={[AppStyles.style.flex, {alignItems: "center", marginTop: 2}]}
+                
+                >
+                    <Icon  name="phone-square" type="font-awesome" color={Colors.primary} size={14} containerStyle={{ marginRight: 5 }} />
                     <Text style={{ color: "#A0A0A0" }}>{item.tel}</Text>
                 </View>
             </View>
             <Icon name="phone-square" type="font-awesome" color={Colors.secondary} size={28} />
         </View>
+        </TouchableOpacity>
     )
 }
 

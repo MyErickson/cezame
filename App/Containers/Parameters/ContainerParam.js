@@ -11,7 +11,7 @@ import Parameters from './index'
 
 // Action Creators
 
-import { initialize_State,info_user} from '../../store/actionCreator/Parameters'
+import { initialize_State,info_user,getUsers} from '../../store/actionCreator/Parameters'
 
 const mapStateToProps = (state, ownProps) => ({
     infoUser:state.info_User,
@@ -27,7 +27,10 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
       },
       info_user:(data)=>{
           dispatch(info_user(data))
-      }
+      },
+      getUsers:(data)=>{
+        dispatch(getUsers(data))
+      },
 });
 
 const ContainerParameters   = connect(

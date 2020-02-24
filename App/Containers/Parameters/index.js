@@ -12,6 +12,10 @@ import { Styles } from './styleParam'
 import axios from 'axios';
 import RNFetchBlob from 'rn-fetch-blob';
 
+
+
+
+
 export default class Parameters extends PureComponent {
 
     constructor(props){
@@ -137,7 +141,6 @@ export default class Parameters extends PureComponent {
 
     }
 
-    console.log("TCL: Parameters -> goToRegister -> data", data)
     axios.defaults.headers['Authorization']= "Bearer "+data.token;
     axios.put(`https://cezame-dev.digitalcube.fr/api/users/${data.id}`,{
         
@@ -147,10 +150,10 @@ export default class Parameters extends PureComponent {
             password:data.password,
             phone:data.phone,
             imageRights:checked,
-            avatar:data.avatar
+            // avatar:data.avatar
            
         }).then((response)=>{
-        console.log("TCL: Parameters -> goToRegister -> response", response)
+
 
     
             this.setState({
@@ -191,14 +194,16 @@ export default class Parameters extends PureComponent {
    updateImage=()=>{
        const { avatarSource } =this.state
        console.log("TCL: updateImage -> avatarSource", avatarSource.uri)
-       const { tokenConnection } = this.props
-   
+       const { tokenConnection ,getUsers ,infoUser} = this.props
+       
+
+        
        if(avatarSource){
 
         const uri = Platform.OS ==='android'? avatarSource.path.slice(1) :avatarSource.uri.replace("file://","")
 
 
-    RNFetchBlob.fetch("post",`https://cezame-dev.digitalcube.fr/api/media_objects`,{
+    RNFetchBlob.fetch("post",`https://cezame-dev.digitalcube.fr/api/media_objects/user_avatar`,{
       Authorization : "Bearer "+tokenConnection,
       headers: JSON.stringify({ 'content-type': 'multipart/form-data' }),
       },[
@@ -213,13 +218,21 @@ export default class Parameters extends PureComponent {
         // data it's the path
         data:RNFetchBlob.wrap(uri)
         },
+        {
+
+        // name est la clé attendu pour le backend
+        name:'user',
+        data:infoUser.id
+        }
      
       ]).then((res) => {
+      console.log("TCL: updateImage -> res", res)
+        const data = new FormData
+        data.token = tokenConnection
+        data.id = infoUser.id
 
-        this.setState({
-            avatar:res.json()["@id"]
-    
-           })
+         getUsers(data)
+
 
       })
       .catch((err) => {
@@ -293,10 +306,9 @@ export default class Parameters extends PureComponent {
             style,
             infoUser,
             avatarSource,
-            avatar
             }= this.state
 
-
+    
 
         let eyeIcon;
 

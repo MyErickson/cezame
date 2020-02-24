@@ -6,18 +6,32 @@ import Colors from '../../Themes/Colors';
 import { Button } from 'react-native-elements';
 import Images from '../../Themes/Images';
 import { dataLanding } from '../../Configs/General'
-
-
+var jwtDecode = require('jwt-decode');
+import AsyncStorage from '@react-native-community/async-storage';
 
 export default class LandingScreen extends Component {
   
 
 
-    goToScreen=(value )=>{
+    goToScreen=async(value )=>{
         const { title , navigateName , dataNavigate } = value
-        const {tokenConnection,navigation} = this.props;
+        const {responseConnection,navigation,getUsers,decode_Token} = this.props;
+        const token = await AsyncStorage.getItem("jwt_auth")
   
-        if(tokenConnection && title === "Accès client"){
+        if(token && title === "Accès client"){
+            let decode = jwtDecode(token)
+            //decotoken for redux
+            decode_Token(decode)
+            let data = new FormData
+
+            data.token = token
+            data.id = decode.id
+            data.idTrip=decode.trip_id
+
+
+            //request ask info Users
+            responseConnection(token)
+            getUsers(data)
             navigation.navigate("Program")
         }else{
             navigation.navigate(navigateName, dataNavigate && dataNavigate)

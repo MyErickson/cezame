@@ -68,6 +68,8 @@ export default class News extends Component {
         console.log("TCL: render -> newsArticles ", newsArticles )
         
         const random1 = Math.floor(Math.random() * (100 - 1 +2)) + 1
+
+        
         return (
             <LayoutContent title="Actualités" navigation={this.props.navigation}>
                 { loading ? ( <ScrollView
@@ -84,9 +86,8 @@ export default class News extends Component {
                     title="actualise"/>
                   }
                 >
-                    {  newsArticles.length !== 0 ? newsArticles.map((news) => {
-                        const { image , content , title , link , updatedAt } = news
-                        const date = new Date(updatedAt)
+                    {  newsArticles.length  ? newsArticles.map((news) => {
+                        const { image , content , title , link , createdAt} = news
                        
 
                             return(
@@ -104,7 +105,7 @@ export default class News extends Component {
                                             En savoir plus... 
                                         </Text>
                                     </TouchableOpacity>
-                                    <Text style={{marginBottom:25,fontSize:11}}> publié le : {  Moment(date).format("DD/MM/YYYY")}</Text>
+                                    <Text style={{marginBottom:25,fontSize:11}}> publié le : {  Moment(createdAt).format("DD/MM/YYYY")}</Text>
                                 </View>
                             )
                     }) :  <Text style={{fontSize:16, fontWeight:'bold'}}> Les actualitèes seront bientôt ajoutés</Text>}

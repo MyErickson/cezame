@@ -20,7 +20,7 @@ import ContainerParam from '../Containers/Parameters/ContainerParam';
 import ContainerHotel from '../Containers/Hotel/ContainerHotel'
 import ContainerContact from '../Containers/Contact/ContainerContact';
 import CurrentImage from '../Containers/Gallery/CurrentImage/CurrentImage'
-import Gallery from '../Containers/Gallery';
+import ContainerGallery from '../Containers/Gallery/ContainerGallery';
 
 const screen = Dimensions.get("window");
 
@@ -38,7 +38,7 @@ const MainNavigator = createStackNavigator(
     Places :  Places, 
     Parameters :  ContainerParam, 
     Contact :  ContainerContact,
-    Gallery :  Gallery,
+    Gallery :  ContainerGallery,
     Hotel: ContainerHotel,
     CurrentImage:CurrentImage
 
