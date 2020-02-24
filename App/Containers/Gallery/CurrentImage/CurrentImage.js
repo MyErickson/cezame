@@ -120,20 +120,21 @@ _createFolder = () => {
 
        <SafeAreaView style={[{backgroundColor:Colors.lightSecondary},Platform.OS === "android" && {height:20}]}>
                 <View style={{height:45}}>
-                    <View style={[{width: screen.width, height:0,zIndex:1},Platform.OS==="android"? {top:-45} : {top:-28} ]}>
-                        <TouchableOpacity  style={Styles.footerIconDownload}
+                    <View style={[{width: screen.width, height:0,},Platform.OS==="android"? {top:-45} : {top:-28} ]}>
+                        <TouchableOpacity  style={[Styles.footerIconDownload,{flex:1,position:'absolute'}]}
+                        onPress={() => {this._createFolder()} }
                 
                         >
-                            <View onPress={() => this._createFolder() }>
+                        
                             <Icon
                                
                                 name="download"
                                 color="white"
                                 type="font-awesome"
-                                onPress={() => this._createFolder() }
+                              
                                 
                             />
-                            </View>
+                       
                         </TouchableOpacity >
                     
                         <Animated.View style={[Styles.animetedFooter,{opacity: this.state.isDone, }]}>
