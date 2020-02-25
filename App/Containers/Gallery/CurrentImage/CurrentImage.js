@@ -1,95 +1,92 @@
 import React, {Component} from 'react'
-import { View, Text ,Platform,StatusBar ,SafeAreaView ,Dimensions,Animated,Image,TouchableOpacity  } from 'react-native'
+import { View, Text ,Platform,StatusBar ,SafeAreaView ,Dimensions,Animated,Image,TouchableOpacity   } from 'react-native'
 import Colors from '../../../Themes/Colors';
 import { Icon,Header } from 'react-native-elements';
 import LinearGradient from 'react-native-linear-gradient';
 import { Styles } from '../styleGallery'
 import AppStyles from '../../../Themes/AppStyles';
 const screen = Dimensions.get("window");
-import RNFS from "react-native-fs";
 import RNFetchBlob from 'rn-fetch-blob';
+import AlertDownload from '../../AlertDialog/AlertDownload';
+// import Share from 'react-native-share';
+var RNFS = require('react-native-fs');
+
 
 class  CurrentImage extends Component{
   state={
-    isDone: new Animated.Value(0),
+
+    alertVisible:false,
+    messageAlert:"",
+    style:true
   }
 
-//   sendPicture =()=>{
-//     const { tokenConnection ,getUsers ,info_Token} = this.props
-//     const id = info_Token.tripId
-//     RNFetchBlob.fetch("post",`https://cezame-dev.digitalcube.fr/api/media_objects/user_avatar`,{
-//         Authorization : "Bearer "+tokenConnection,
-//         headers: JSON.stringify({ 'content-type': 'multipart/form-data' }),
-//         },[
-//           {
-  
-//          // name est la clé attendu pour le backend
-//           name:'file',
-//           // filename est le nom ddonné au fichier
-//           filename : avatarSource.fileName,
-//           // use custom MIME type
-//           type :'image/jpg',
-//           // data it's the path
-//           data:RNFetchBlob.wrap(uri)
-//           },
-//           {
-  
-//           // name est la clé attendu pour le backend
-//           name:'trip',
-//           data:id
-//           }
-       
-//         ]).then((res) => {
-//         console.log("TCL: updateImage -> res", res)
-//           const data = new FormData
-//           data.token = tokenConnection
-//           data.id = infoUser.id
-  
-//            getUsers(data)
-  
-  
-//         })
-//         .catch((err) => {
-//         console.log("TCL: MyQuestions -> onStopRecord -> err", err)
-//         })
-//   }
+
+componentDidMount(){
+    let dirs = RNFetchBlob.fs.dirs.DocumentDir +'/cezame'
+    console.log("TCL: CurrentImage -> componentDidMount -> res", RNFS.DocumentDirectoryPath )
+    // RNFetchBlob.fs.mkdir(dirs)
+    // .then((res) => { 
+      
+    // })
+    
+    // .catch((err) => { 
+    // console.log("TCL: CurrentImage -> componentDidMount -> err", err)
+        
+    // })
+}
 
 _createFolder = () => {
     const { navigation} = this.props
-    let dirs = RNFetchBlob.fs.dirs
-    console.log("TCL: CurrentImage -> _createFolder -> dirs", dirs)
+    console.log("TCL: CurrentImage -> render -> this.props",  navigation)
+    let dirs = RNFetchBlob.fs.dirs.DocumentDir
+
+    console.log("TCL: CurrentImage -> _createFolder -> dirs",dirs)
+    let name = `/${Date.now()}.heic`
     RNFetchBlob.config({
-        path : dirs.DownloadDir + '/cézame.jpg',
+       
         // android only options, these options be a no-op on IOS
+
+        path : "/var/mobile/Containers/Data/Application/6350711B-8E4C-4083-B0C6-25A8457173F4/Documents/"+ name,
         addAndroidDownloads : {
           // Show notification when response data transmitted
           notification : true,
           // Title of download notification
-          title : 'Great ! Download Success ! :O ',
+          title : `Download Success ! ...${name} `,
           // File description (not notification description)
           description : 'An image file.',
-          mime : 'image/png',
           // Make the file scannable  by media scanner
           mediaScannable : true,
+        
         }
       })
-      .fetch('GET', 'https://cezame-dev.digitalcube.fr/uploads/lisbonne-insolite-lieux-1-5e3976ba9407a180291385.jpg')
+      .fetch('GET', navigation.state.params.image)
       .then((res) => {
         // the temp file path
         console.log('The file saved to ', res.path())
+        this.setState({
+            alertVisible:true,
+            messageAlert:"Telechargement terminé"
+        })
+        
       }).catch(err=>{
       console.log("TCL: CurrentImage -> _createFolder -> err", err)
   
       })
     
-}
+    }
 
+    closeAlert=()=>{
+        this.setState({
+        alertVisible:false,
+        })
+    
+    }
 
     render ( ){
-        this._createFolder()
+        // this._createFolder()
         
         const { navigation} = this.props
-        console.log("TCL: CurrentImage -> render -> this.props", this.props)
+        const { messageAlert ,style ,alertVisible } =this.state
         return (
             
         <View style={{flex:1}}>
@@ -110,7 +107,7 @@ _createFolder = () => {
                 />
                
         </View>
-                <View  style={{flex:1}}>
+                <View  style={{flex:1,backgroundColor:'rgba(0,0,0,0.8)'}}>
                 <Image source={{uri: navigation.state.params.image}}
                     style={{flex:1}}
                     resizeMode="cover"
@@ -120,9 +117,10 @@ _createFolder = () => {
 
        <SafeAreaView style={[{backgroundColor:Colors.lightSecondary},Platform.OS === "android" && {height:20}]}>
                 <View style={{height:45}}>
-                    <View style={[{width: screen.width, height:0,},Platform.OS==="android"? {top:-45} : {top:-28} ]}>
-                        <TouchableOpacity  style={[Styles.footerIconDownload,{flex:1,position:'absolute'}]}
-                        onPress={() => {this._createFolder()} }
+                    <View style={[{width: screen.width, height:0},Platform.OS==="android"? {bottom:26} : {bottom:28} ]}>
+                        <TouchableOpacity  
+                        style={[Styles.footerIconDownload,]}
+                        onPress={this._createFolder }
                 
                         >
                         
@@ -131,15 +129,13 @@ _createFolder = () => {
                                 name="download"
                                 color="white"
                                 type="font-awesome"
-                              
+                                
                                 
                             />
                        
                         </TouchableOpacity >
                     
-                        <Animated.View style={[Styles.animetedFooter,{opacity: this.state.isDone, }]}>
-                            <Text style={{ textAlign: "center" }}>Téléchargement terminé.</Text>
-                        </Animated.View>
+                      
                     </View>
                     <View style={Styles.footerContainer}>
                         <View style={AppStyles.style.flex}>
@@ -168,6 +164,13 @@ _createFolder = () => {
                     </View>
                 </View>
                 </SafeAreaView>
+                <AlertDownload
+                alertVisible={alertVisible}
+                closeAlert={this.closeAlert}
+                messageAlert={messageAlert}
+                style={style}
+                />
+
             </View>
 
         )

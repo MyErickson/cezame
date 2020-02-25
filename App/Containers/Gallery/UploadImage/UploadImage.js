@@ -7,10 +7,12 @@ import RNFetchBlob from 'rn-fetch-blob';
 import AlertGallery  from '../../AlertDialog/AlertGallery'
 const optionsImagePicker = {
     title: 'Select Avatar',
+    quality:0.5,
     customButtons: [{ name: 'fb', title: 'Choose Photo from Facebook' }],
     storageOptions: {
       skipBackup: true,
       path: 'images',
+     
     },
   };
 
@@ -50,14 +52,15 @@ export default class UploadImage extends Component {
     }
 
     sendPicture =(value)=>{
+        console.log("TCL: UploadImage -> sendPicture -> value", value)
         const { tokenConnection ,getUsers ,info_Token} = this.props
-        console.log("TCL: UploadImage -> sendPicture -> info_Token 7", info_Token , tokenConnection)
+        console.log("TCL: UploadImage -> sendPicture -> info_Token 7", info_Token.trip_id , tokenConnection)
         const id = info_Token.trip_id
 
         const uri = Platform.OS ==='android'? value.path.slice(1) : value.uri.replace("file://","")
 
 
-        RNFetchBlob.fetch("post",`https://cezame-dev.digitalcube.fr/api/media_objects/user_avatar`,{
+        RNFetchBlob.fetch("post",`https://cezame-dev.digitalcube.fr/api/media_objects/trip_photo`,{
             Authorization : "Bearer "+tokenConnection,
             headers: JSON.stringify({ 'content-type': 'multipart/form-data' }),
             },[
@@ -75,11 +78,11 @@ export default class UploadImage extends Component {
               {      
               // name est la clé attendu pour le backend
               name:'trip',
-              data:id
+              data:id.toString()
               }
            
             ]).then((res) => {
-            console.log("TCL: updateImage -> res", res)
+            console.log("TCL: la requete a bien etait envoyé ", res.json())
                 
             this.setState({
                 alertVisible:true,
@@ -92,9 +95,9 @@ export default class UploadImage extends Component {
             .catch((err) => {
             console.log("TCL: MyQuestions -> onStopRecord -> err", err)
             this.setState({
-                alertVisible:false,
+                alertVisible:true,
                 style:false,
-                messageAlert:" Votre photo a bien été envoyé. Une verification sera faite."
+                messageAlert:"Une erreur est survenue, veuillez verifiez votre reseau"
             })
             })
       }

@@ -1,6 +1,9 @@
 import React, { PureComponent , Fragment } from 'react';
 import LinearGradient from 'react-native-linear-gradient';
-import { View, Text, Dimensions, BackHandler, Image, StatusBar, TouchableOpacity ,ScrollView,SafeAreaView } from 'react-native';
+import { View,
+    Text,
+    Dimensions, 
+    BackHandler, Image, StatusBar, TouchableOpacity ,SafeAreaView } from 'react-native';
 import { Icon,Header } from 'react-native-elements';
 import Colors from '../../Themes/Colors';
 import NavigationService from '../../Services/NavigationService';

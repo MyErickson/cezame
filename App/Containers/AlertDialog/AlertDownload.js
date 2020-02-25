@@ -8,7 +8,7 @@ import {
 } from "react-native-responsive-screen";
 
 
-const AlertAdmin =({
+const AlertDownload =({
     alertVisible,
     closeAlert,
     messageAlert,
@@ -30,7 +30,7 @@ const AlertAdmin =({
           </Dialog.Description>
 
           
-        <Dialog.Button  label="ok, j'ai compris" onPress={closeAlert}/> 
+        <Dialog.Button  label="ok, merci" onPress={closeAlert}/> 
     
         </Dialog.Container>
      
@@ -39,4 +39,4 @@ const AlertAdmin =({
 
  
 
-export default AlertAdmin
+export default AlertDownload

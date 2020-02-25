@@ -2,11 +2,11 @@ import { StyleSheet , Platform } from 'react-native'
 import Colors from '../../Themes/Colors';
 export const Styles = StyleSheet.create({
     footerIconDownload:{ 
-        zIndex: 1, 
+    
         backgroundColor: "rgba(0,0,0,.5)", 
         borderRadius: 25, 
-        width: 45, 
-        height: 45, 
+        width: 43, 
+        height: 43, 
         alignSelf: "center", 
         justifyContent: "center", 
         alignContent: "center" },
