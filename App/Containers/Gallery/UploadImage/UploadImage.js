@@ -30,7 +30,22 @@ export default class UploadImage extends Component {
     }
 
     _uploadImage = () => {
-        ImagePicker.launchImageLibrary(optionsImagePicker, (response) => {
+        const options = {
+            title: 'Ajouter une photo',
+            tintColor:'#337FF9',
+            quality:0.4,
+            
+            takePhotoButtonTitle:null,
+            chooseFromLibraryButtonTitle:"Bibliothèque...",
+            cancelButtonTitle:"Annuler",
+            storageOptions: {
+              skipBackup: true,
+              path: 'images',
+              cameraRoll:true
+            },
+          };
+          
+        ImagePicker.showImagePicker(options, (response) => {
             
 
             if (response.didCancel) {

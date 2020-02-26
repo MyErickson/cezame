@@ -62,9 +62,10 @@ export default class Program extends Component {
         }else{
 
             state.errorServeur = false
-            return null
+       
             
         }
+        return null
     }
 
     openAlert=(text)=>{
@@ -148,16 +149,15 @@ export default class Program extends Component {
     render() {
    
         const { trip_User,
-            
-                alertVisible,
-                messageAlert,
-                infoUser ,
-                style,
-                errorServeur,
+            alertVisible,
+            messageAlert,
+            infoUser ,
+            style,
+            errorServeur,
             refreshing} =this.state
 
             
-            console.log("TCL: render -> trip_User.hotel.latitude", this.props.info_Token)
+        
         
         let  startDate,endDate,endMonth,startMonth = undefined
 

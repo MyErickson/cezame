@@ -14,13 +14,14 @@ const ViewGallery = ({
 
 
     const { isDivisibleBy } = validator
-    console.log('allPictures',allPictures)
+
     return (
      
        <ScrollView style = {{ flexDirection:"column",marginBottom:20}}>
             <View style = {{ flexDirection:"row",flex:1}}>
                 <View style={{width:"50%",height:"100%"}}>
                 {allPictures && allPictures.map((value,index)=>{
+       
                     const { contentUrl } = value
                     if( isDivisibleBy(index.toString(),2)){
 
@@ -29,6 +30,7 @@ const ViewGallery = ({
 
 
                         return <TouchableHighlight underlayColor="none" 
+                        key={value["@id"]}
                         onPress={()=>{navigate.navigate("CurrentImage",
                         {
                             image:contentUrl ,
@@ -56,6 +58,7 @@ const ViewGallery = ({
 
 
                         return  <TouchableHighlight underlayColor="none" 
+                        key={value["@id"]}
                         onPress={()=>{navigate.navigate("CurrentImage",
                         {
                             image:contentUrl ,

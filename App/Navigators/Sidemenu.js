@@ -9,6 +9,9 @@ import Font from '../Themes/Font';
 import NavigationService from '../Services/NavigationService';
 const screen = Dimensions.get('window');
 import { sideMenuApropos  } from "../Configs/General"
+
+
+
 class SideMenu extends Component {
     constructor(props){
         super(props);
@@ -17,7 +20,7 @@ class SideMenu extends Component {
               ["Mon programme", "Program"], 
               ["Points d'intérêts       (bientôt)", 'Places'], 
               ["Agenda", 'Agenda'], //Agenda
-              ["Galerie photos       (bientôt)", 'Gallery'], //Gallery
+              ["Galerie photos", 'Gallery'], //Gallery
               ["Messagerie     (bientôt)", 'Chat'], //Chat
               ["Paramètres", 'Parameters'],
               ["Contact", 'Contact']
@@ -56,7 +59,8 @@ class SideMenu extends Component {
 
   render () {
  
-      const { infoUser } = this.props
+    const { infoUser } = this.props
+
     return (
     <LinearGradient  start={{x: 0, y: 0}} end={{x: 1, y: 0}} colors={['#fff','#E9ECF5']}>
         <ImageBackground source={Images.bgSidemenu} style={{width: '100%', height: '100%',}} resizeMode={"cover"}>

@@ -66,20 +66,9 @@ export default class Gallery extends Component {
       Platform.OS ==="android" && requestCameraPermission();
     }
 
-    _createFolder = () => {
-        const absolutePath = RNFS.ExternalStorageDirectoryPath +'/Cézame'; 
-        RNFS.mkdir(absolutePath)
-        .then((result) => {
-            console.log('result', result)
-        })
-        .catch((err) => {
-            console.warn('err', err)
-        })
-    }
-
 
     callGallery=()=>{
-       const { tokenConnection , info_Token } =this.props
+      const { tokenConnection , info_Token } =this.props
       const id= info_Token.trip_id
   
 
@@ -87,7 +76,7 @@ export default class Gallery extends Component {
       axios.get(`https://cezame-dev.digitalcube.fr/api/trips/${id}/photos`,{
 
       }).then( res =>{
-      console.log("TCL: Gallery -> callGallery -> res ", res )
+  
         this.setState({
           allPictures:res.data["hydra:member"]
         })
@@ -101,9 +90,9 @@ export default class Gallery extends Component {
     }
 
     render() {
-        this._createFolder();
+     
         const{ allPictures } = this.state
-        console.log("TCL: render ->  info_Token",  this.props.info_Token)
+
         return (
             <ContainerLayout noPaddingTop allScreenHeader gallery return title="Galerie Photos" navigation={this.props.navigation}>
                     <LinearGradient 

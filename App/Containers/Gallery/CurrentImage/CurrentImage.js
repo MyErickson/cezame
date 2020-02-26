@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import { View, Text ,Platform,StatusBar ,SafeAreaView ,Dimensions,Animated,Image,TouchableOpacity   } from 'react-native'
+import { View, Text ,Platform,StatusBar ,SafeAreaView ,Dimensions,Image,TouchableOpacity  ,Linking } from 'react-native'
 import Colors from '../../../Themes/Colors';
 import { Icon,Header } from 'react-native-elements';
 import LinearGradient from 'react-native-linear-gradient';
@@ -8,8 +8,9 @@ import AppStyles from '../../../Themes/AppStyles';
 const screen = Dimensions.get("window");
 import RNFetchBlob from 'rn-fetch-blob';
 import AlertDownload from '../../AlertDialog/AlertDownload';
-// import Share from 'react-native-share';
-var RNFS = require('react-native-fs');
+import CameraRoll from "@react-native-community/cameraroll";
+import {check, PERMISSIONS, RESULTS} from 'react-native-permissions';
+import AndroidOpenSettings from 'react-native-android-open-settings'
 
 
 class  CurrentImage extends Component{
@@ -17,69 +18,95 @@ class  CurrentImage extends Component{
 
     alertVisible:false,
     messageAlert:"",
-    style:true
+    style:true,
+    askPermission:false
   }
 
 
-componentDidMount(){
-    let dirs = RNFetchBlob.fs.dirs.DocumentDir +'/cezame'
-    console.log("TCL: CurrentImage -> componentDidMount -> res", RNFS.DocumentDirectoryPath )
-    // RNFetchBlob.fs.mkdir(dirs)
-    // .then((res) => { 
-      
-    // })
+    componentDidMount (){
     
-    // .catch((err) => { 
-    // console.log("TCL: CurrentImage -> componentDidMount -> err", err)
-        
-    // })
-}
+    this.checkPermission()
 
-_createFolder = () => {
+    }
+
+    checkPermission= ()=>{
+        let permissionOs = Platform.OS === "ios" ? PERMISSIONS.IOS.PHOTO_LIBRARY : PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE
+        const res =  check(permissionOs)
+        .then((permissionResult) => {
+            console.log("TCL: CurrentImage -> componentDidMount -> permissionResult", permissionResult)
+            if(permissionResult !== "granted"){
+                
+                this.setState({
+                    alertVisible:true,
+                    messageAlert:"Vous devez accepter l'autorisation  pour enregistrer une photo sur votre appareil. Vous allez être redirigé.",
+                    askPermission:true
+                })
+                return false
+            }else{
+                return true
+            }
+        } )
+        return res
+    }
+
+_createFolder = async () => {
     const { navigation} = this.props
-    console.log("TCL: CurrentImage -> render -> this.props",  navigation)
-    let dirs = RNFetchBlob.fs.dirs.DocumentDir
 
-    console.log("TCL: CurrentImage -> _createFolder -> dirs",dirs)
-    let name = `/${Date.now()}.heic`
-    RNFetchBlob.config({
+
+    let dirs = Platform.OS === "ios" ?  RNFetchBlob.fs.dirs.DocumentDir : RNFetchBlob.fs.dirs.DownloadDir
+    
+    const permission = await this.checkPermission()
+    
+
+    let name = `/${Date.now()}.png`
+    if(permission){
+        RNFetchBlob.config({
        
-        // android only options, these options be a no-op on IOS
-
-        path : "/var/mobile/Containers/Data/Application/6350711B-8E4C-4083-B0C6-25A8457173F4/Documents/"+ name,
-        addAndroidDownloads : {
-          // Show notification when response data transmitted
-          notification : true,
-          // Title of download notification
-          title : `Download Success ! ...${name} `,
-          // File description (not notification description)
-          description : 'An image file.',
-          // Make the file scannable  by media scanner
-          mediaScannable : true,
+            // android only options, these options be a no-op on IOS
+            path : dirs + name,
+            // appendExt : 'jpeg',
+            addAndroidDownloads : {
+              // Show notification when response data transmitted
+              notification : true,
+              // Title of download notification
+              title : `Download Success ! ...${name} `,
+              // File description (not notification description)
+              description : 'An image file.',
+              // Make the file scannable  by media scanner
+              mediaScannable : false,
+            
+            }
+          })
+          .fetch('GET', navigation.state.params.image)
+          .then((res) => {
+    
+           Platform.OS === "ios" && CameraRoll.saveToCameraRoll(res.path(),'photo')
+            
+            this.setState({
+                alertVisible:true,
+                messageAlert:"Telechargement terminé"
+            })
+            
+          }).catch(err=>{
+          console.log("TCL: CurrentImage ->not permission-> err", err)
+          
+          })
         
-        }
-      })
-      .fetch('GET', navigation.state.params.image)
-      .then((res) => {
-        // the temp file path
-        console.log('The file saved to ', res.path())
-        this.setState({
-            alertVisible:true,
-            messageAlert:"Telechargement terminé"
-        })
-        
-      }).catch(err=>{
-      console.log("TCL: CurrentImage -> _createFolder -> err", err)
-  
-      })
+    }
     
     }
 
     closeAlert=()=>{
+        const { askPermission } =this.state
+      
+        if(askPermission){
+            Platform.OS === "ios" ? Linking.openURL('app-settings:') : AndroidOpenSettings.appDetailsSettings()
+        }
         this.setState({
-        alertVisible:false,
+            alertVisible:false,
+            askPermission:false
         })
-    
+       
     }
 
     render ( ){

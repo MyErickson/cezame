@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View,  Platform} from 'react-native'
+import { View,  Platform,} from 'react-native'
 import Dialog from "react-native-dialog";
 import { Style } from './styleAlertDialog';
 import {

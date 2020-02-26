@@ -25,6 +25,7 @@
 		41AFDBB01CEB44B4BE6F6F8B /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0E91EB7CEE5549598EA612DC /* Entypo.ttf */; };
 		518EF3C8A5274B71B5659865 /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7C51635C93E843D79FD9EFAA /* Foundation.ttf */; };
 		66EEAF4C58BE4523AA81B5EF /* Fontisto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1BCA9DE4DF554F8989C4A2B6 /* Fontisto.ttf */; };
+		687B14A424067D0200990780 /* libreact-native-cameraroll.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 687B14A324067D0200990780 /* libreact-native-cameraroll.a */; };
 		6D0F19FB7BED4DC6AB3C8A0A /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B80FAE629CBE4A1CAF896795 /* SimpleLineIcons.ttf */; };
 		7CDF081D56A74E138F0D0BC1 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C0600167E4CA44A79C07E9EC /* Zocial.ttf */; };
 		7F64E51D50A44E3B899243E7 /* FontAwesome5_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 063726DA649F403997EDA38C /* FontAwesome5_Regular.ttf */; };
@@ -80,6 +81,7 @@
 		3512A0ACB56D843608632D04 /* Pods-Cezame.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Cezame.debug.xcconfig"; path = "Target Support Files/Pods-Cezame/Pods-Cezame.debug.xcconfig"; sourceTree = "<group>"; };
 		57F683430F1B5FB11EC32723 /* libPods-CezameTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CezameTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		596F465AF07F441A872F1F66 /* AntDesign.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = AntDesign.ttf; path = "../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf"; sourceTree = "<group>"; };
+		687B14A324067D0200990780 /* libreact-native-cameraroll.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libreact-native-cameraroll.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6E4DB464534246FBA9448C19 /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
 		7C51635C93E843D79FD9EFAA /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
 		853C65AF93CE4D7ABEFC848C /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Solid.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Solid.ttf"; sourceTree = "<group>"; };
@@ -114,6 +116,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				687B14A424067D0200990780 /* libreact-native-cameraroll.a in Frameworks */,
 				123A77193931216CE065321C /* libPods-Cezame.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -171,6 +174,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				687B14A324067D0200990780 /* libreact-native-cameraroll.a */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
 				BF5BF6E6BFB79693E486A51E /* libPods-Cezame.a */,

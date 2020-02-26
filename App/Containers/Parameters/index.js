@@ -87,7 +87,7 @@ export default class Parameters extends PureComponent {
       
     
       ImagePicker.showImagePicker(options, (response) => {
-        console.log('Response = ', response);
+   
       
         if (response.didCancel) {
           console.log('User cancelled image picker');
@@ -116,7 +116,7 @@ export default class Parameters extends PureComponent {
    goToRegister=()=>{
      const { email , firstName , lastName , checked , phone , password,avatarSource, avatar} = this.state
      const { infoUser ,tokenConnection } = this.props
-     console.log("TCL: Parameters -> goToRegister -> info_User ", avatar )
+  
 
 
 
@@ -193,7 +193,7 @@ export default class Parameters extends PureComponent {
 
    updateImage=()=>{
        const { avatarSource } =this.state
-       console.log("TCL: updateImage -> avatarSource", avatarSource.uri)
+    
        const { tokenConnection ,getUsers ,infoUser} = this.props
        
 
@@ -222,11 +222,11 @@ export default class Parameters extends PureComponent {
 
         // name est la clé attendu pour le backend
         name:'user',
-        data:infoUser.id
+        data:infoUser.id.toString()
         }
      
       ]).then((res) => {
-      console.log("TCL: updateImage -> res", res)
+      
         const data = new FormData
         data.token = tokenConnection
         data.id = infoUser.id
