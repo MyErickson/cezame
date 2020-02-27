@@ -101,7 +101,11 @@ export default class Gallery extends Component {
                 end={ {x: 1, y: 0 }}
                 style={{flex:1}}
                 >
-                    <ViewGallery allPictures={allPictures} navigate={this.props.navigation}/>
+                    <ViewGallery 
+                      allPictures={allPictures} 
+                      navigate={this.props.navigation}
+                      callGallery={this.callGallery}
+                    />
 
             </LinearGradient>
             </ContainerLayout>

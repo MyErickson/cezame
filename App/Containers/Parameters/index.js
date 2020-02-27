@@ -75,7 +75,7 @@ export default class Parameters extends PureComponent {
     const options = {
         title: 'Changer votre Avatar',
         tintColor:'#337FF9',
-        quality:0.5,
+        quality:0.4,
         takePhotoButtonTitle:null,
         chooseFromLibraryButtonTitle:"Bibliothèque...",
         cancelButtonTitle:"Annuler",

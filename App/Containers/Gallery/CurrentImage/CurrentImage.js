@@ -152,12 +152,10 @@ _createFolder = async () => {
                         >
                         
                             <Icon
-                               
                                 name="download"
                                 color="white"
                                 type="font-awesome"
-                                
-                                
+
                             />
                        
                         </TouchableOpacity >

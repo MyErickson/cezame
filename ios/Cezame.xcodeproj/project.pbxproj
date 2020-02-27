@@ -754,7 +754,7 @@
 			baseConfigurationReference = 3512A0ACB56D843608632D04 /* Pods-Cezame.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CURRENT_PROJECT_VERSION = 21;
+				CURRENT_PROJECT_VERSION = 23;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = BF8458RVX6;
 				INFOPLIST_FILE = Cezame/Info.plist;
@@ -776,7 +776,7 @@
 			baseConfigurationReference = 91F3267B724877ABB968444B /* Pods-Cezame.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CURRENT_PROJECT_VERSION = 21;
+				CURRENT_PROJECT_VERSION = 23;
 				DEVELOPMENT_TEAM = BF8458RVX6;
 				INFOPLIST_FILE = Cezame/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

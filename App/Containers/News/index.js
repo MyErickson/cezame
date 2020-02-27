@@ -48,7 +48,7 @@ export default class News extends Component {
 
 
     onRefresh =()=>{ 
-        const { refreshing} = this.state
+ 
        
         this.setState({
             refreshing:true

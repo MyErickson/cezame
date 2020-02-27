@@ -243,7 +243,7 @@ export default class Login extends Component {
             email:email
           })
           .then((res) => {
-            console.log(res);
+
             this.ToogleModal();
           })
           .catch((err) => {

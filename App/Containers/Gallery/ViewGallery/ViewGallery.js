@@ -1,84 +1,128 @@
-import React from 'react'
-import { View, Text , Image ,ScrollView ,TouchableHighlight} from 'react-native'
+import React, {Component} from 'react'
+import { View, Text , Image ,ScrollView ,TouchableHighlight , RefreshControl } from 'react-native'
 import validator from 'validator';
 import {Styles  } from "../styleGallery"
 
 
 
 
-const ViewGallery = ({
- navigate,
- download,
- allPictures
-}) => {
+ class ViewGallery extends Component{
 
 
-    const { isDivisibleBy } = validator
+    state={
+        refreshing:false
+    }
 
-    return (
-     
-       <ScrollView style = {{ flexDirection:"column",marginBottom:20}}>
-            <View style = {{ flexDirection:"row",flex:1}}>
-                <View style={{width:"50%",height:"100%"}}>
-                {allPictures && allPictures.map((value,index)=>{
+    onRefresh =()=>{ 
+        const { callGallery} = this.props
        
-                    const { contentUrl } = value
-                    if( isDivisibleBy(index.toString(),2)){
+        this.setState({
+            refreshing:true
+        });
+        
+        callGallery()
+        setTimeout(()=>{ this.setState({
+            refreshing:false
+        })},1000)
 
-                        const randomHeight = Math.floor(Math.random() * (30 - 10 +1)) + 10
-                      
-
-
-                        return <TouchableHighlight underlayColor="none" 
-                        key={value["@id"]}
-                        onPress={()=>{navigate.navigate("CurrentImage",
-                        {
-                            image:contentUrl ,
-                            download:download
-                        })}}>
-                            <Image 
-                            resizeMethod='scale'
-                            resizeMode='cover'
-                            source={{uri:contentUrl} } 
-                            style={[Styles.containerImage, { height: randomHeight *10}]}
-                    
-                        />
-                        </TouchableHighlight >
-                    }
-                
-                })}
-                </View>
-                <View style={{width:"50%",height:"100%"}}>
-                {allPictures && allPictures.map((value,index)=>{
-                    const { contentUrl } = value
-                    if( !isDivisibleBy(index.toString(),2)){
-
-                        const i = Math.floor(Math.random() * (30 - 10 +1)) + 10
-                       
+      
+    }
 
 
-                        return  <TouchableHighlight underlayColor="none" 
-                        key={value["@id"]}
-                        onPress={()=>{navigate.navigate("CurrentImage",
-                        {
-                            image:contentUrl ,
-                            download:download
-                        })}}>
-                        <Image 
-                         resizeMethod='scale'
-                         resizeMode='cover'
-                        source={{uri:contentUrl} } 
-                        style={[Styles.containerImage, { height: i*10 }]}
-                        
-                        />
-                        </TouchableHighlight>
-                    }
-                
-                })}
-                </View>
-            </View>
-        </ScrollView>
-    )
-}
+
+    render(){
+
+        const {
+            navigate,
+            download,
+            allPictures
+           } =this.props
+
+        const {refreshing} = this.state
+
+        const { isDivisibleBy } = validator
+
+
+        return (
+     
+            <ScrollView 
+             style = {{ flexDirection:"column",marginBottom:20}}
+             refreshControl={
+                 <RefreshControl 
+                 showsVerticalScrollIndicator = {false}
+                 refreshing={refreshing} 
+                 onRefresh={()=>this.onRefresh()} 
+                 colors={["#0000ff"]}
+                 tintColor="white"
+                 titleColor="white"
+                 title="actualise"/>
+               }
+            
+            >
+                 <View style = {{ flexDirection:"row",flex:1}}>
+                     <View style={{width:"50%",height:"100%"}}>
+                     {allPictures && allPictures.map((value,index)=>{
+            
+                         const { contentUrl } = value
+                         if( isDivisibleBy(index.toString(),2)){
+     
+                             const randomHeight = Math.floor(Math.random() * (30 - 10 +1)) + 10
+                           
+     
+     
+                             return <TouchableHighlight underlayColor="none" 
+                             key={value["@id"]}
+                             onPress={()=>{navigate.navigate("CurrentImage",
+                             {
+                                 image:contentUrl ,
+                                 download:download
+                             })}}>
+                                 <Image 
+                                 resizeMethod='scale'
+                                 resizeMode='cover'
+                                 source={{uri:contentUrl} } 
+                                 style={[Styles.containerImage, { height: randomHeight *10}]}
+                         
+                             />
+                             </TouchableHighlight >
+                         }
+                     
+                     })}
+                     </View>
+                     <View style={{width:"50%",height:"100%"}}>
+                     {allPictures && allPictures.map((value,index)=>{
+                         const { contentUrl } = value
+                         if( !isDivisibleBy(index.toString(),2)){
+     
+                             const i = Math.floor(Math.random() * (30 - 10 +1)) + 10
+                            
+     
+     
+                             return  <TouchableHighlight underlayColor="none" 
+                             key={value["@id"]}
+                             onPress={()=>{navigate.navigate("CurrentImage",
+                             {
+                                 image:contentUrl ,
+                                 download:download
+                             })}}>
+                             <Image 
+                              resizeMethod='scale'
+                              resizeMode='cover'
+                             source={{uri:contentUrl} } 
+                             style={[Styles.containerImage, { height: i*10 }]}
+                             
+                             />
+                             </TouchableHighlight>
+                         }
+                     
+                     })}
+                     </View>
+                 </View>
+             </ScrollView>
+         )
+    }
+
+} 
+
 
 export default ViewGallery
