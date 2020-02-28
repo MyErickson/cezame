@@ -35,18 +35,13 @@ You should be ready to run the app when you see this.
     Loading dependency graph, done.
 ```
 
-### Run on Android
+### CHANGE NODE_MODULE
+  ## react-native-imagepicker
+     with props quality, crash app when to choose a video
+     ```
+     ISSUE:  https://github.com/react-native-community/react-native-image-picker/pull/1266/commits/03c3d11746da5bed2c268c495071912b04fcb797 
+     ```
 
-
-```
-    react-native run-android
-```
-
-### Run on IOS
-
-```
-    react-native run-ios
-```
 
 ## JSON SERVER (FAKE API)
 

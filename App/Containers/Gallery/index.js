@@ -78,7 +78,7 @@ export default class Gallery extends Component {
       }).then( res =>{
   
         this.setState({
-          allPictures:res.data["hydra:member"]
+          allPictures:res.data["hydra:member"].reverse()
         })
 
       }).catch( err=>{

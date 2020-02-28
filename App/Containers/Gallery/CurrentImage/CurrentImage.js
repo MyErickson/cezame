@@ -122,7 +122,7 @@ _createFolder = async () => {
                 <StatusBar translucent backgroundColor={Colors.rightColor} style={{zIndex:1}} />
          
                 <Header
-                    containerStyle={Platform.OS==="android"&&{height:50,marginTop:Platform.OS==="android"?15:0}}
+                    containerStyle={Platform.OS==="android"&&{height:50,marginTop:15,marginBottom:-1}}
                     leftComponent={{ icon: 'close', color: '#fff', onPress: () => {navigation.goBack()} ,underlayColor:"none"}}
                     leftContainerStyle={{height:40}}
                     ViewComponent={LinearGradient}
@@ -134,10 +134,10 @@ _createFolder = async () => {
                 />
                
         </View>
-                <View  style={{flex:1,backgroundColor:'rgba(0,0,0,0.8)'}}>
+                <View  style={{flex:1,backgroundColor:'rgba(0,0,0,0.9)'}}>
                 <Image source={{uri: navigation.state.params.image}}
                     style={{flex:1}}
-                    resizeMode="cover"
+                    resizeMode="contain"
                     />
                 </View>
                   

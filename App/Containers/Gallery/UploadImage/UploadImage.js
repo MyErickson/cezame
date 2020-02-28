@@ -33,36 +33,43 @@ export default class UploadImage extends Component {
         const options = {
             title: 'Ajouter une photo',
             tintColor:'#337FF9',
+            mediaType:"photo",
             quality:0.4,
-            
             takePhotoButtonTitle:null,
-            chooseFromLibraryButtonTitle:"Bibliothèque...",
+            chooseFromLibraryButtonTitle:"Choisir une photo...",
             cancelButtonTitle:"Annuler",
             storageOptions: {
               skipBackup: true,
               path: 'images',
               cameraRoll:true
             },
+           
           };
           
         ImagePicker.showImagePicker(options, (response) => {
+        console.log("TCL: UploadImage -> _uploadImage -> response", response)
             
-
-            if (response.didCancel) {
-                console.log('User cancelled image picker');
-            } else if (response.error) {
-                console.log('ImagePicker Error: ', response.error);
-            } else if (response.customButton) {
-                console.log('User tapped custom button: ', response.customButton);
-            } else {
-                const source = { uri: response.uri };
-            
-                // You can also display the image using data:
-                // const source = { uri: 'data:image/jpeg;base64,' + response.data };
-                console.log('Response = ', response);
-                this.sendPicture(response )
+            try{
+                if (response.didCancel) {
+                    console.log('User cancelled image picker');
+                } else if (response.error) {
+                    console.log('ImagePicker Error: ', response.error);
+                } else if (response.customButton) {
+                    console.log('User tapped custom button: ', response.customButton);
+                } else {
+                    const source = { uri: response.uri };
                 
+                    // You can also display the image using data:
+                    // const source = { uri: 'data:image/jpeg;base64,' + response.data };
+                    console.log('Response = ', response);
+                    this.sendPicture(response )
+                    
+                }
+            }catch(e){
+            console.log("TCL: UploadImage -> _uploadImage -> e", e)
+
             }
+        
         });
     }
 
