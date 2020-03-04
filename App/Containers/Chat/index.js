@@ -16,6 +16,8 @@ import Moment from 'moment';
 import NavigationService from '../../Services/NavigationService';
 import { Styles } from '../../Components/Layout/styleLayout';
 import { StylesChat } from './styleChat'
+import axios from "axios"
+import Item from "./Item"
 
 import {
     widthPercentageToDP as wp,
@@ -23,7 +25,7 @@ import {
   } from "react-native-responsive-screen";
 
 const screen = Dimensions.get("window");
-console.log(screen)
+
 const optionsImagePicker = {
     title: 'Select Avatar',
     customButtons: [{ name: 'fb', title: 'Choose Photo from Facebook' }],
@@ -114,41 +116,46 @@ const data = [
     },
 ]
 
-function Item({item}) {
-    return(
-        <View style={[AppStyles.style.flex, { marginHorizontal: 0, alignItems: "flex-end", marginVertical: 15 }]}>
-            {item.author.id !== 1 && 
-                <View style={[StylesChat.avatar,{ backgroundColor: Colors.primary}]}></View>
-            }
-            <View style={{ 
-                backgroundColor: item.author.id == 1 ? "#DCEDD6" : "#FFEECB", 
-                borderRadius: 15,
-                borderBottomRightRadius: item.author.id == 1 ? 0 : 15, 
-                borderBottomLeftRadius: item.author.id == 1 ? 15 : 0, 
-                paddingVertical: 10, paddingHorizontal: 25,
-                marginLeft:  item.author.id == 1 ? 25 : 10, 
-                width: '80%'
-            }}>
-                <Text style={[Font.style.normal, {flexShrink: 1, color: item.author.id == 1 ? "#181D37" : "#4D3A15"}]}>{item.message}</Text>
-                <Text style={{ marginTop: 5, fontSize: 12, color: "#A0A0A0" }}>{Moment(item.date).format("DD/MM -  H[h]mm")}</Text>
-            </View>
-            {item.author.id == 1 && 
-                <View style={[StylesChat.avatar,{ backgroundColor: Colors.primary}]}></View>
-            }
-        </View>
-    )
-}
+
 
 export default class Chat extends Component {
   constructor(props){
     super(props);
       this.state={
-        avatarSource: undefined
+        avatarSource: undefined,
+        messages:undefined,
+        idUser:undefined
       }
       this.viewAnimated = new Animated.Value(0);
       this.startAnimated=false
   }
-     
+
+
+    componentDidMount(){
+    console.log("Chat -> componentDidMount -> componentDidMount")
+        this.getMessage()
+    } 
+
+
+    getMessage=()=>{
+        const { infoToken,tokenConnection} =this.props
+        console.log("Chat -> getMessage -> tokenConnection", tokenConnection)
+        console.log("Chat -> getMessage -> infoToken", infoToken)
+        let id = infoToken && infoToken.trip_id
+        axios.get(`https://cezame-dev.digitalcube.fr/api/trips/${id}/messages`,{
+            headers:{
+                'Authorization':"Bearer "+tokenConnection
+        }}).then(res=>{
+        console.log("Chat -> getMessage -> es", res.data["hydra:member"])
+            this.setState({
+                messages:res.data["hydra:member"],
+                idUser:infoToken.id
+            })
+        }).catch(err=>{
+            
+        })
+    }
+
 
     _uploadImage = () => {
         ImagePicker.launchImageLibrary(optionsImagePicker, (response) => {
@@ -181,13 +188,19 @@ export default class Chat extends Component {
                     ...this.props.style,
                     opacity:this.viewAnimated
                 }}
-                onPress={() => NavigationService.navigate("Contact")}
+                // onPress={() => NavigationService.navigate("Contact")}
                 >
                     {this.topBarModo()}
                 </Animated.View>
             )
        
     }
+   
+    componentWillUnmount(){
+    console.log("Chat -> componentWillMount -> componentWillMount")
+
+    }
+
     
     showTopBarModo =()=>{
         
@@ -231,7 +244,7 @@ export default class Chat extends Component {
 
 
     topBarModo=()=>{
-        console.log(NavigationService)
+       
                 return (
                     <View style={[AppStyles.style.flex, { width:"100%",alignItems: "center", backgroundColor: Colors.lightPrimary, paddingVertical: 15, paddingHorizontal: 25, justifyContent: "space-between",position:"absolute" }]}>
                         <View style={[AppStyles.style.flex, { alignItems: "center" }]}>
@@ -256,7 +269,8 @@ export default class Chat extends Component {
 
     render() {
      
-        
+        const { messages ,idUser} = this.state
+        console.log("Chat -> render -> messages", messages)
         return (
             
         <Layout noPaddingTop chat return title="Messagerie instantanée" navigation={this.props.navigation}>
@@ -264,8 +278,8 @@ export default class Chat extends Component {
            
             <FlatList 
                 ref={ref => (this.scrollView = ref)}
-                data={data}  
-                renderItem={({ item }) => <Item item={item} />}
+                data={messages}  
+                renderItem={({ item }) => <Item item={item} idUser={idUser} />}
                 keyboardShouldPersistTaps={Platform.OS==="android"?"handled":"always" }
                 keyboardDismissMode='on-drag'
                 style={{ height: screen.height-360 ,zIndex:-1}} 

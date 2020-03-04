@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import { ScrollView, View, Text, Dimensions, StatusBar } from 'react-native';
 import { Icon } from 'react-native-elements';
-import SocialNetwork from '../SocialNetworkButtons';
+import ContainerSocialNetwork  from '../SocialNetworkButtons/containerSocial';
 import Colors from '../../Themes/Colors';
 const screen = Dimensions.get("window");
 import { Styles } from './styleLayoutContent'
@@ -39,7 +39,7 @@ export default class LayoutContent extends Component {
                     {this.props.children}
                 </View>
                 <View style={{ width: "100%", backgroundColor: Colors.lightSecondary }}>
-                    <SocialNetwork white />
+                    <ContainerSocialNetwork  white />
                 </View>
             </View>
         )

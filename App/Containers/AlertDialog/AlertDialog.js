@@ -25,17 +25,13 @@ class AlertDialog extends Component{
         alertVisible,
         messageAlert,
         style,
-        sendPrecision,
         yesConfirm,
         askPrecision,
         alertConfirm =false,
         logOutOrRegister,
-        noTextClose=true} = this.props
+        } = this.props
       
-      const {
-        textValue
-      }= this.state
-  
+
         return (
       
          
@@ -50,16 +46,7 @@ class AlertDialog extends Component{
                 
               </Dialog.Description>
             
-             { askPrecision &&
-             
-               <Dialog.Input
-               
-               maxLength={255}
-               value={textValue}
-               onChangeText={this.textPrecision}
-               wrapperStyle={{margin:10,borderColor:"black",borderStyle:"solid",borderWidth:1,borderRadius:5}}
-               />
-             }
+
                {alertConfirm ? 
               (<View style={Platform.OS === "ios" ? Style.containerButtonIos :Style.containerButtonAndroid}>
                   <Dialog.Button 
@@ -67,7 +54,7 @@ class AlertDialog extends Component{
                   style={Platform.OS === "ios"? Style.buttonIos:[Style.buttonAndroid,{backgroundColor:"#0B6ACA"}]} 
                   color="white"
                   label= { askPrecision ? "Envoyer" : "Oui"}
-                  onPress={()=> askPrecision ? yesConfirm(textValue) :sendPrecision ? sendPrecision(): yesConfirm(logOutOrRegister) } />
+                  onPress={()=> yesConfirm(logOutOrRegister) } />
                 
                   <Dialog.Button 
                   bold={true}  
@@ -79,7 +66,7 @@ class AlertDialog extends Component{
               
               :
               
-              noTextClose ?<Dialog.Button  label="ok, j'ai compris" onPress={closeAlert}/> : <Dialog.Button label=""/> 
+             <Dialog.Button  label="ok, j'ai compris" onPress={()=>closeAlert('alertVisible')}/> 
               
                }
         

@@ -3,7 +3,7 @@ import {Text, View, Dimensions, Image, ImageBackground, Animated, BackHandler, F
 import { Icon, Button } from 'react-native-elements';
 import Images from '../Themes/Images';
 import LinearGradient from 'react-native-linear-gradient';
-import SocialNetwork from '../Components/SocialNetworkButtons';
+import ContainerSocialNetwork  from '../Components/SocialNetworkButtons/containerSocial';
 import Colors from '../Themes/Colors';
 import Font from '../Themes/Font';
 import NavigationService from '../Services/NavigationService';
@@ -151,7 +151,7 @@ class SideMenu extends Component {
            
                         </View>
                     </Animated.View>
-                    <SocialNetwork />
+                    <ContainerSocialNetwork  />
                 </View>
             </ScrollView>
         </ImageBackground>

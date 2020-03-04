@@ -17,6 +17,12 @@ import Communications from 'react-native-communications';
 import Modal from "react-native-modal";
 const screen = Dimensions.get("window");
 import { Styles } from './styleContact'
+import RNFetchBlob from 'rn-fetch-blob';
+
+
+
+
+
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp
@@ -63,11 +69,12 @@ export default class Contact extends Component {
     constructor(props){
         super(props);
         this.state = {
-            name: "John Doe", 
-            email: "email@address.com", 
-            tel: "06478754852", 
-            password: "mot de passe",
-            checked: false,
+            name: "",
+            prenom:"", 
+            email: "", 
+            tel: "", 
+            comments:"",
+            password: "",
             visibleModal: false
         };
         this.input ={};
@@ -80,9 +87,59 @@ export default class Contact extends Component {
     }
 
     sendMessage = () => {
-        this.setState({ visibleModal: true })
+        // this.setState({ visibleModal: true })
+        const { name , email , tel ,comments,prenom } = this.state
+    RNFetchBlob.fetch("post",`https://cezame-dev.digitalcube.fr/api/contact-mail`,{
+      headers: JSON.stringify({ 'content-type': 'multipart/form-data' }),
+      },[
+        {
+        name:'lastname',
+        data: name
+        },
+        {
+        name:'firstname',
+        data:prenom
+        },
+        {
+        name:'email',
+        data:email
+        }
+        ,
+        {
+        name:'content',
+        data:comments
+        }
+        ,
+        // {
+        // name:'phone',
+        // data:tel
+        // }
+     
+      ]).then((res) => {
+      console.log("Contact -> sendMessage -> res", res)
+    
+            this.setState({
+                visibleModal:true
+            })
+      })
+      .catch((err) => {
+      console.log("TCL: MyQuestions -> onStopRecord -> err", err)
+      })
+    
     }
     
+    closeModal=()=>{
+        this.setState({ 
+            visibleModal: false ,
+            name: "",
+            prenom:"", 
+            email: "", 
+            tel: "", 
+            comments:"",
+        }) 
+    }
+
+
     inputFocus=(id)=>{  
         this.input[id].focus()
    }
@@ -99,7 +156,9 @@ export default class Contact extends Component {
                     style={{ marginHorizontal: 0 ,marginBottom:0,}}
                     containerStyle={{justifyContent:"space-between",}}
                     showsVerticalScrollIndicator = {false}
-                    contentInsetAdjustmentBehavior="automatic"
+                    // keyboardDismissMode='on-drag'
+                    keyboardShouldPersistTaps='handled'
+                    contentInsetAdjustmentBehavior="always"
                 >
                 
                     <View >
@@ -141,8 +200,9 @@ export default class Contact extends Component {
                         <>
                               <Input 
                                 placeholder="Nom"
+                                name='name'
                                 containerStyle={{ marginTop: 10 }}
-                                onSubmitEditing={this.sendMessage}
+                                onChange={(e)=>this.UpdateInputToState(e) }
                                 placeholderTextColor="#CCCCCC"
                                 onSubmitEditing={() => { this.inputFocus("prenom") }}
                                 blurOnSubmit={false}
@@ -153,7 +213,7 @@ export default class Contact extends Component {
                                 name='prenom'
                                 placeholder="Prénom"
                                 containerStyle={{ marginTop: 10 }}
-                                onSubmitEditing={this.sendMessage}
+                                onChange={(e)=>this.UpdateInputToState(e) }
                                 placeholderTextColor="#CCCCCC"
                                 onSubmitEditing={() => { this.inputFocus("email") }}
                                 blurOnSubmit={false}
@@ -167,7 +227,7 @@ export default class Contact extends Component {
                                 labelStyle={Styles.labelStyle}
                                 placeholderTextColor="#CCCCCC"
                                 containerStyle={{ marginTop: 10 }}
-                                onSubmitEditing={this.sendMessage}
+                                onChange={(e)=>this.UpdateInputToState(e) }
                                 onSubmitEditing={() => { this.inputFocus("tel") }}
                                 blurOnSubmit={false}
                                 returnKeyType="next"
@@ -178,8 +238,8 @@ export default class Contact extends Component {
                                 name='tel'
                                 placeholder="Portable"
                                 placeholderTextColor="#CCCCCC"
-                                containerStyle={{ marginTop: 15 }}
-                                onSubmitEditing={this.sendMessage}
+                                containerStyle={{ marginTop: 10 }}
+                                onChange={(e)=>this.UpdateInputToState(e) }
                                 onSubmitEditing={() => { this.inputFocus("comments") }}
                                 blurOnSubmit={false}
                                 returnKeyType="next"
@@ -193,6 +253,7 @@ export default class Contact extends Component {
                                 numberOfLines={6}
                                 label="Commentaire"
                                 textAlignVertical="top"
+                                onChange={(e)=>this.UpdateInputToState(e) }
                                 labelStyle={Styles.labelStyle}
                                 inputStyle={Styles.inputStyle}
                                 inputContainerStyle={{ borderBottomWidth: 0 }}
@@ -200,6 +261,7 @@ export default class Contact extends Component {
                                 />
                             <Button 
                                 title="Envoyer" 
+                                
                                 onPress={() => { this.sendMessage() }}
                                 buttonStyle={Styles.buttonStyle} 
                             />
@@ -211,11 +273,11 @@ export default class Contact extends Component {
                 </KeyboardAvoidingView>
                 <Modal isVisible={this.state.visibleModal}>
                     <View style={Styles.viewModal}>
-                        <Text style={{ textAlign: "center", fontSize: 18 }}>Cette fonctionnalité sera bientot disponible.</Text>
+                        <Text style={{ textAlign: "center", fontSize: 18 }}>Votre commentaire a bien été envoyé.</Text>
                         <Button 
-                            title="OK"
+                            title="OK, merci "
                             buttonStyle={Styles.buttonStyle}
-                            onPress={() => { this.setState({ visibleModal: false }) }}
+                            onPress={() => { this.closeModal()}}
                         />
                     </View>
                 </Modal>

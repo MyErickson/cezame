@@ -34,7 +34,8 @@ export default class Parameters extends PureComponent {
             logOutOrRegister:undefined, // string logout or register
             alertConfirm:undefined, //  confirm alert by yes or cancel button
             avatarSource:undefined,
-            infoUser:undefined
+            infoUser:undefined,
+           
         };
         this.input= {}
     }
@@ -45,7 +46,7 @@ export default class Parameters extends PureComponent {
                 checked:infoUser.imageRights
             })
         }
-        console.log("je suis ici ")
+       
     }
     static getDerivedStateFromProps(props,state){
         if( props.infoUser){
@@ -121,10 +122,7 @@ export default class Parameters extends PureComponent {
 
 
      var data = new Object ;
-    
 
-     data.id= infoUser.id ;
-     data.token=tokenConnection;
      data.firstName = firstName.trim() ?  firstName : infoUser.firstName  
      data.lastName = lastName.trim() ?  lastName : infoUser.lastName  
      data.email = email.trim() ?  email : infoUser.email 
@@ -141,8 +139,8 @@ export default class Parameters extends PureComponent {
 
     }
 
-    axios.defaults.headers['Authorization']= "Bearer "+data.token;
-    axios.put(`https://cezame-dev.digitalcube.fr/api/users/${data.id}`,{
+    axios.defaults.headers['Authorization']= "Bearer "+tokenConnection;
+    axios.put(`https://cezame-dev.digitalcube.fr/api/users/${infoUser.id}`,{
         
             email:data.email,
             firstName:data.firstName,
@@ -306,6 +304,7 @@ export default class Parameters extends PureComponent {
             style,
             infoUser,
             avatarSource,
+         
             }= this.state
 
     
@@ -476,6 +475,7 @@ export default class Parameters extends PureComponent {
                     alertConfirm={alertConfirm }
                     yesConfirm={this.yesConfirm}
                  />
+               
                 
             </ContainerLayout>
         )

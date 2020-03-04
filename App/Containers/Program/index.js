@@ -16,8 +16,9 @@ import NavigationService from '../../Services/NavigationService';
 const screen = Dimensions.get('window');
 import MapView, { Marker, Callout } from 'react-native-maps';
 import AlertDialog from '../AlertDialog/AlertDialog';
+import AlertImageRight from '../AlertDialog/AlertImageRight'
 var jwtDecode = require('jwt-decode');
-
+import axios from 'axios';
 
 
 export default class Program extends Component {
@@ -32,6 +33,10 @@ export default class Program extends Component {
             infoUser :undefined,
             errorServeur:undefined,
             refreshing:false,
+            alertVisibleImage:undefined,
+            messageAlertImage:undefined,
+            styleImage:true,
+            close:false,
             index: -1, // id des lieux récupéré (-1 => aucun récupéré),
             rightModal : new Animated.Value(-screen.width), // position initial des modals des lieux
             leftModal: new Animated.Value(screen.width-(screen.width-(85/2))), // position initial de la modal initiale
@@ -41,6 +46,8 @@ export default class Program extends Component {
     componentDidMount(){
        
         this.getTrips()
+        setTimeout(()=>this.getImageright(),3000)
+
 
     }
 
@@ -77,8 +84,10 @@ export default class Program extends Component {
         })
     }
 
-    closeAlert=()=>{
-        this.setState({alertVisible:false})
+    closeAlert=(close)=>{
+    console.log("Program -> closeAlert -> close", close)
+
+        this.setState({[close]:false})
         
     }
     
@@ -144,6 +153,50 @@ export default class Program extends Component {
         }
     }
 
+    getImageright =()=>{
+        const { infoUser } =this.state
+        if(infoUser && infoUser.imageRights === null){
+            this.setState({
+                alertVisibleImage:true,
+                messageAlertImage:"Bienvenu sur notre application. Sans votre accord, votre visage n'apparaitra pas sur les images du séminaire. Acceptez vous d'être pris en photo ?",
+                style:true,
+                close:false
+            })
+        }
+    }
+
+    sendImageRight=(res)=>{
+            const {tokenConnection , infoUser , info_user} = this.props
+            axios.defaults.headers['Authorization']= "Bearer "+tokenConnection;
+            axios.put(`https://cezame-dev.digitalcube.fr/api/users/${infoUser.id }`,{
+   
+                    imageRights:res,
+                   
+                }).then((response)=>{
+                console.log("Program -> sendImageRight -> response", response)
+
+                    if(res){ 
+                        this.setState({
+                            messageAlertImage:"Vous avez accepté d'apparaître sur les photos du séminaire",
+                            close:true
+                        })
+                     }else{
+                        this.setState({
+                            messageAlertImage:"Vous n'apparaîterez pas sur les photos du séminaire",
+                            close:true
+                        })
+                    }
+              
+                info_user(response.data)
+               
+            
+                }).catch((err)=>{
+                console.log("TCL: Parameters -> goToRegister -> err", err.response)
+                
+                } )
+
+       
+    }
 
 
     render() {
@@ -154,7 +207,11 @@ export default class Program extends Component {
             infoUser ,
             style,
             errorServeur,
-            refreshing} =this.state
+            refreshing,
+            alertVisibleImage,
+            messageAlertImage,
+            close,
+            styleImage} =this.state
 
             
         
@@ -169,7 +226,7 @@ export default class Program extends Component {
         
          }
        
-       
+     
         
        const random1 = Math.floor(Math.random() * (100 - 1 +2)) + 1
        const random2 = Math.floor(Math.random() * (100 - 1 +2)) + 1
@@ -358,6 +415,14 @@ export default class Program extends Component {
                 closeAlert={this.closeAlert}
                 messageAlert={messageAlert}
                 style={style}
+                />
+                <AlertImageRight
+                alertVisible={alertVisibleImage}
+                messageAlert={messageAlertImage}
+                closeAlert={this.closeAlert}
+                imageRight={this.sendImageRight}
+                style={styleImage}
+                close={close}
                 />
             </ContainerLayout>
         )

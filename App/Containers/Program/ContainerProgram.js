@@ -12,6 +12,7 @@ import Program from './index'
 // Action Creators
 
 import { callTrips ,callDaySteps} from '../../store/actionCreator/Program';
+import { info_user} from '../../store/actionCreator/Parameters'
 
 const mapStateToProps = (state, ownProps) => ({
     tokenConnection:state.tokenConnection,
@@ -28,6 +29,9 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   },
   callDaySteps :(data)=>{
     dispatch(callDaySteps(data) )
+  },
+  info_user:(data)=>{
+    dispatch(info_user(data))
   }
 
 });

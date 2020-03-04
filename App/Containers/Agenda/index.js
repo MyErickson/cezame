@@ -268,7 +268,7 @@ export default class Agenda extends Component {
                         theme={{  
                             foregroundColor : "transparent", 
                             backgroundColor: "transparent",
-                            calendarBackground: "transparent",
+                            calendarBackground: "tra    nsparent",
                             dayTextColor: "white",
                             monthTextColor: "white",
                             textMonthFontSize: 16,

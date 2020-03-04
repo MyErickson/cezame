@@ -180,16 +180,16 @@ export default class Login extends Component {
             console.log("TCL: Login -> Login -> decode", decode)
             decode_Token(decode)
             
-            if(decode.roles[0] !== "ROLE_USER"){
+            // if(decode.roles[0] !== "ROLE_USER"){
         
-              this.ToogleLoader();
-              this.setState({
-                alertVisible:true,
-                messageAlert:"En tant que V.I.P, vous avez le privilège de vous connecter sur le Web",
-              })
+            //   this.ToogleLoader();
+            //   this.setState({
+            //     alertVisible:true,
+            //     messageAlert:"En tant que V.I.P, vous avez le privilège de vous connecter sur le Web",
+            //   })
               
-              return
-            }
+            //   return
+            // }
             const data = new FormData
             data.token = token
             data.id = decode.id
