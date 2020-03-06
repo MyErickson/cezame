@@ -11,7 +11,7 @@ import AlertDialog from '../AlertDialog/AlertDialog'
 import { Styles } from './styleParam'
 import axios from 'axios';
 import RNFetchBlob from 'rn-fetch-blob';
-
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 
 
@@ -331,6 +331,9 @@ export default class Parameters extends PureComponent {
                 keyboardDismissMode='on-drag'
                 keyboardShouldPersistTaps="handled"
                 contentInsetAdjustmentBehavior="never">
+                <KeyboardAwareScrollView
+                extraScrollHeight={30}
+                >
                 <LinearGradient 
                 colors={[Colors.leftColor, Colors.rightColor]}    
                 start={ {x: Platform.OS=== "ios"?0.3:0.2, y: Platform.OS=== "ios"? -1.5 : -1.1}} end ={{x:Platform.OS=== "ios"? 1 : 1, y: 0 }} 
@@ -465,6 +468,7 @@ export default class Parameters extends PureComponent {
                             onPress={()=>this.register("logout","Êtes-vous sûre de vouloir quitter l'application ? ")}
                         /> 
                     </View>
+                    </KeyboardAwareScrollView>
                 </ScrollView>
                 <AlertDialog 
                     alertVisible={alertVisible}

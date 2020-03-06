@@ -7,10 +7,9 @@ export const StylesChat = StyleSheet.create({
         paddingHorizontal: 18, 
         borderBottomWidth: 0, 
         height: 50,
-        marginBottom:10
+        marginBottom:10,
 },
     avatar:{ 
-        backgroundColor: Colors.primary,
         width: 35, 
         height: 35, 
         borderRadius: 35, 

@@ -83,17 +83,17 @@ export const sideMenuApropos =[
     {
         title:"Actualités",
         iconName:"newspaper-o",
-        navigate:"news"
+        navigate:"News"
     },
     {
         title:"Qui sommes-nous ?",
         iconName:"globe",
-        navigate:"program"
+        navigate:"AboutUs"
     },
     {
         title:"Mentions légales",
         iconName:"file-text",
-        navigate:"program"
+        navigate:"LegalNotice"
     },
     {
         title:"Confidentialité",

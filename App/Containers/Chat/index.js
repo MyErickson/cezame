@@ -5,10 +5,11 @@ import { Text, View,
     FlatList, 
     Platform ,
     Animated,
-    TouchableOpacity,SafeAreaView} from 'react-native';
+    TouchableOpacity,
+    SafeAreaView} from 'react-native';
 import Layout from '../../Components/Layout';
 import Colors from '../../Themes/Colors';
-import { Icon, Input } from 'react-native-elements';
+import { Icon, Input ,Avatar } from 'react-native-elements';
 import AppStyles from '../../Themes/AppStyles';
 import Font from '../../Themes/Font';
 import ImagePicker from 'react-native-image-picker';
@@ -18,7 +19,7 @@ import { Styles } from '../../Components/Layout/styleLayout';
 import { StylesChat } from './styleChat'
 import axios from "axios"
 import Item from "./Item"
-
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp
@@ -36,95 +37,16 @@ const optionsImagePicker = {
   };
 
 
-const data = [
-    {
-        id: 1, 
-        message: 'Lorem ipsum dolor sit amet conse ctetur adipiscing elit sed do eiusmod tempor incididunt',
-        date: new Date(),
-        author: {
-            id: 1, 
-            lastName: "Nom 1",
-            name: "Prénom 1",
-            avatar: ""
-        }
-    },
-    {
-        id: 2, 
-        message: 'Lorem ipsum dolor sit amet conse ctetur adipiscing elit sed do eiusmod tempor incididunt',
-        date: new Date(),
-        author: {
-            id: 2, 
-            lastName: "Nom 2",
-            name: "Prénom 2",
-            avatar: ""
-        }
-    },
-    {
-        id: 3, 
-        message: 'Lorem ipsum dolor sit amet conse ctetur adipiscing elit sed do eiusmod tempor incididunt',
-        date: new Date(),
-        author: {
-            id: 1, 
-            lastName: "Nom 1",
-            name: "Prénom 1",
-            avatar: ""
-        }
-    },
-    {
-        id: 4, 
-        message: 'Lorem ipsum dolor sit amet conse ctetur adipiscing elit sed do eiusmod tempor incididunt elit sed do eiusmod tempor incididunt Lorem ipsum dolor sit amet conse ctetur adipiscing ',
-        date: new Date(),
-        author: {
-            id: 2, 
-            lastName: "Nom 2",
-            name: "Prénom 2",
-            avatar: ""
-        }
-    },
-    {
-        id: 5, 
-        message: 'Lorem ipsum dolor sit amet conse ctetur adipiscing elit sed do eiusmod tempor incididunt',
-        date: new Date(),
-        author: {
-            id: 1, 
-            lastName: "Nom 1",
-            name: "Prénom 1",
-            avatar: ""
-        }
-    },
-    {
-        id: 6, 
-        message: 'Lorem ipsum dolor sit',
-        date: new Date(),
-        author: {
-            id: 1, 
-            lastName: "Nom 1",
-            name: "Prénom 1",
-            avatar: ""
-        }
-    },
-    {
-        id: 7, 
-        message: 'Lorem ipsum dolor si t elit sed do eiusmod tempor incididunt elit sed do eiusmod tempor incididunt Lorem ipsum dolor sit amet conse ctetur adipiscin ',
-        date: new Date(),
-        author: {
-            id: 2, 
-            lastName: "Nom 1",
-            name: "Prénom 1",
-            avatar: ""
-        }
-    },
-]
-
-
+var chat
 
 export default class Chat extends Component {
   constructor(props){
     super(props);
       this.state={
         avatarSource: undefined,
-        messages:undefined,
-        idUser:undefined
+        messages:[],
+        idUser:undefined, 
+        message:null
       }
       this.viewAnimated = new Animated.Value(0);
       this.startAnimated=false
@@ -132,15 +54,22 @@ export default class Chat extends Component {
 
 
     componentDidMount(){
-    console.log("Chat -> componentDidMount -> componentDidMount")
         this.getMessage()
-    } 
+       chat= setInterval(()=>{
+            this.getMessage()
+        },3000)
+        
 
+    } 
+  
+    componentWillUnmount(){
+        console.log("Chat -> componentWillMount -> componentWillMount")
+        clearInterval(chat);
+    }
 
     getMessage=()=>{
         const { infoToken,tokenConnection} =this.props
-        console.log("Chat -> getMessage -> tokenConnection", tokenConnection)
-        console.log("Chat -> getMessage -> infoToken", infoToken)
+ 
         let id = infoToken && infoToken.trip_id
         axios.get(`https://cezame-dev.digitalcube.fr/api/trips/${id}/messages`,{
             headers:{
@@ -195,11 +124,7 @@ export default class Chat extends Component {
             )
        
     }
-   
-    componentWillUnmount(){
-    console.log("Chat -> componentWillMount -> componentWillMount")
-
-    }
+ 
 
     
     showTopBarModo =()=>{
@@ -244,14 +169,20 @@ export default class Chat extends Component {
 
 
     topBarModo=()=>{
+  
        
                 return (
                     <View style={[AppStyles.style.flex, { width:"100%",alignItems: "center", backgroundColor: Colors.lightPrimary, paddingVertical: 15, paddingHorizontal: 25, justifyContent: "space-between",position:"absolute" }]}>
                         <View style={[AppStyles.style.flex, { alignItems: "center" }]}>
-                            <View style={{ width: 35, height: 35, backgroundColor: Colors.primary, borderRadius: 35, marginRight: 15 }}></View>
+                            <Avatar 
+                            style={{width: 35, height: 35, backgroundColor: Colors.primary, borderRadius: 35, marginRight: 15 }}
+                            rounded 
+                            title="M"
+                            />
+
                             <View onPress={() => NavigationService.navigate("Contact")}>
-                                <Text style={Font.style.h2}>Nom Modérateur</Text>
-                                <Text style={{ color: Colors.white }}>Modérateur</Text>
+                                <Text style={Font.style.h2}>Contact</Text>
+                                <Text style={{ color: Colors.white }}>Les Moderateurs/admins</Text>
                             </View>
                         </View>
                         <TouchableOpacity onPress={() => NavigationService.navigate("Contact")}>
@@ -259,6 +190,7 @@ export default class Chat extends Component {
                                 underlayColor="none"
                                 name="mail"
                                 color={Colors.white}
+                                
                                 size={25}
                                 
                             />
@@ -267,22 +199,71 @@ export default class Chat extends Component {
                 )
     }
 
+    inputMesssage=(msg)=>{
+
+        if( msg.trim()){
+            this.setState({
+                message:msg
+            })
+        }else{
+            this.setState({
+                message:null
+            })
+        }
+    }
+
+    sendMessage = ()=>{
+        const { message } =this.state
+        const { tokenConnection } = this.props
+
+        axios.defaults.headers['Authorization']= "Bearer "+tokenConnection;
+        axios.post(`https://cezame-dev.digitalcube.fr/api/messages`,{
+            content:message
+        })
+        .then(res=>{
+        console.log("Chat -> getMessage -> es", res)
+        this.setState({
+            message:undefined
+        })
+        this.getMessage()
+         
+        }).catch(err=>{
+        console.log("Chat -> sendMessage -> err", err)
+            
+        })
+    }
+
     render() {
      
-        const { messages ,idUser} = this.state
-        console.log("Chat -> render -> messages", messages)
+        const { messages ,idUser,message} = this.state
+       
         return (
             
         <Layout noPaddingTop chat return title="Messagerie instantanée" navigation={this.props.navigation}>
+             <KeyboardAwareScrollView 
+             keyboardOpeningTime={50}
+             extraScrollHeight={30}
+             keyboardDismissMode='on-drag'
+             scrollEnabled={false}
+             enableAutomaticScroll={true}
+             keyboardShouldPersistTaps="always"
+             showsVerticalScrollIndicator = {false}
+             style={{marginBottom:5}}
+         
+             >
+                
             {this.viewTopBarModo()}
-           
+         
             <FlatList 
                 ref={ref => (this.scrollView = ref)}
-                data={messages}  
+                data={ messages}  
+                keyExtractor={item => item && item["@id"]}
                 renderItem={({ item }) => <Item item={item} idUser={idUser} />}
-                keyboardShouldPersistTaps={Platform.OS==="android"?"handled":"always" }
+                // contentInsetAdjustmentBehavior="never"
+                // keyboardShouldPersistTaps={Platform.OS==="android"?"handled":"always" }
                 keyboardDismissMode='on-drag'
-                style={{ height: screen.height-360 ,zIndex:-1}} 
+              
+                style={{ height: Platform.OS==="ios"?screen.height-180 :screen.height-165,zIndex:-1}} 
                 showsVerticalScrollIndicator = {false}
                 onScrollEndDrag={()=>this.showTopBarModo()}
                 onContentSizeChange={() => {
@@ -290,37 +271,32 @@ export default class Chat extends Component {
                 }}
             />
    
-            <KeyboardAvoidingView  behavior={Platform.OS === "android"?'height':'position'} keyboardVerticalOffset={screen.height <= 820 ? hp("9%"): hp("6%")} style={[{height:hp("11%"),}]}>  
-            <SafeAreaView style={[{backgroundColor:"white"}]}>
+         
+
                 <View style={[AppStyles.style.flex, {paddingTop: 10,  alignItems: "center",backgroundColor:"white"}]}>
+                   
                     <Input 
-                        containerStyle={{ width: "80%" }}
+                        containerStyle={{ width: "100%"}}
+                        value={message}
                         inputContainerStyle={StylesChat.input}
-                        inputStyle={{ padding: 0 }}
+                        inputStyle={{ padding: 0 , }}
+                        multiline={true}
                         placeholderTextColor="#9E9E9E"
                         placeholder='Tapez votre message'
-                        rightIcon={{ 
+                        onChangeText={(e)=> this.inputMesssage(e)}
+                        rightIcon={message&&{ 
                             type: 'font-awesome',
-                            name: 'send', 
+                            name: 'send',
                             size: 18, 
-                            color: "#4C4C4C",
-                            onPress:()=>console.log('test') ,
+                            onPress:()=> this.sendMessage() ,
                             underlayColor:"none" }}
                     />
-                    <View style={AppStyles.style.flex}>
-                        <Icon name="smile-o"  type='font-awesome' color="#B6B6B6" size={34} containerStyle={{ marginRight: 8 }} />
-                        <Icon 
-                            name="file-picture-o" 
-                            type='font-awesome' 
-                            color="#B6B6B6" 
-                            size={30} 
-                            onPress={() => this._uploadImage()}
-                        />  
-                    </View>
+                  
                 </View>
-                </SafeAreaView> 
-            </KeyboardAvoidingView>
-   
+    
+          
+        
+            </KeyboardAwareScrollView>
         </Layout>
         )
     }

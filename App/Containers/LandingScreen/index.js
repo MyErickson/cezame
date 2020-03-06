@@ -76,10 +76,11 @@ export default class LandingScreen extends Component {
                </View>
                </ScrollView>
                <ImageBackground source={Images.bgImage} style={Styles.backgroundLanding}>
-                    <View style={{ position : "absolute", bottom : 20, left : 0, right : 0,zIndex: 0}}>
+                 
+                </ImageBackground> 
+                <View style={{  bottom: 15, left : 0, right : 0}}>
                         <SocialNetworkButtons />
                     </View>
-                </ImageBackground> 
              
           </View>
         )

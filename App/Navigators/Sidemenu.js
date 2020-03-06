@@ -21,7 +21,7 @@ class SideMenu extends Component {
               ["Points d'intérêts       (bientôt)", 'Places'], 
               ["Agenda", 'Agenda'], //Agenda
               ["Galerie photos", 'Gallery'], //Gallery
-              ["Messagerie     (bientôt)", 'Chat'], //Chat
+              ["Messagerie", 'Chat'], //Chat
               ["Paramètres", 'Parameters'],
               ["Contact", 'Contact']
             ],
@@ -58,7 +58,7 @@ class SideMenu extends Component {
     }
 
   render () {
- 
+
     const { infoUser } = this.props
 
     return (
@@ -143,7 +143,7 @@ class SideMenu extends Component {
                                             color="white"
                                         />
                                     }
-                                    onPress={() => {  this.goBack(), this.props.navigation.toggleDrawer(), NavigationService.navigate(value.navigate) } }
+                                    onPress={() => {    NavigationService.navigate(value.navigate) } }
                                 />
                                 )
                             })}
@@ -151,9 +151,13 @@ class SideMenu extends Component {
            
                         </View>
                     </Animated.View>
-                    <ContainerSocialNetwork  />
+                  
                 </View>
+             
             </ScrollView>
+            <View style={{  bottom: 15}}>
+                    <ContainerSocialNetwork  />
+            </View>
         </ImageBackground>
       </LinearGradient>
     );

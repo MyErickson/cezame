@@ -15,7 +15,8 @@ import Chat from './index'
 const mapStateToProps = (state, ownProps) => ({
 
     tokenConnection:state.tokenConnection,
-    infoToken:state.info_Token
+    infoToken:state.info_Token,
+    trip_User:state.trip_User
   
 });
 

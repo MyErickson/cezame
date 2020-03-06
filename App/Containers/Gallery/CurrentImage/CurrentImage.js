@@ -9,7 +9,7 @@ const screen = Dimensions.get("window");
 import RNFetchBlob from 'rn-fetch-blob';
 import AlertDownload from '../../AlertDialog/AlertDownload';
 import CameraRoll from "@react-native-community/cameraroll";
-import {check, PERMISSIONS, RESULTS} from 'react-native-permissions';
+import {check, PERMISSIONS, RESULTS,request} from 'react-native-permissions';
 import AndroidOpenSettings from 'react-native-android-open-settings'
 
 
@@ -24,9 +24,12 @@ class  CurrentImage extends Component{
 
 
     componentDidMount (){
-    
-    this.checkPermission()
+        request(PERMISSIONS.IOS.PHOTO_LIBRARY ).then(result => {
+        // console.log("CurrentImage -> componentDidMount -> result", result)
+        
+          });
 
+    
     }
 
     checkPermission= ()=>{
@@ -34,6 +37,7 @@ class  CurrentImage extends Component{
         const res =  check(permissionOs)
         .then((permissionResult) => {
             console.log("TCL: CurrentImage -> componentDidMount -> permissionResult", permissionResult)
+
             if(permissionResult !== "granted"){
                 
                 this.setState({
@@ -49,13 +53,14 @@ class  CurrentImage extends Component{
         return res
     }
 
+
 _createFolder = async () => {
     const { navigation} = this.props
 
 
     let dirs = Platform.OS === "ios" ?  RNFetchBlob.fs.dirs.DocumentDir : RNFetchBlob.fs.dirs.DownloadDir
     
-    const permission = await this.checkPermission()
+     const permission = await this.checkPermission()
     
 
     let name = `/${Date.now()}.png`
@@ -110,7 +115,7 @@ _createFolder = async () => {
     }
 
     render ( ){
-        // this._createFolder()
+
         
         const { navigation} = this.props
         const { messageAlert ,style ,alertVisible } =this.state

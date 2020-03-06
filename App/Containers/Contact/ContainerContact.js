@@ -15,6 +15,7 @@ import Contact from './index'
 const mapStateToProps = (state, ownProps) => ({
 
     tokenConnection:state.tokenConnection,
+    trip_User:state.trip_User
   
 });
 

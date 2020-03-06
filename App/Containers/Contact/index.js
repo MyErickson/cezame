@@ -12,14 +12,12 @@ import { Text,
 import ContainerLayout from '../../Components/Layout/ContainerLayout';
 import Colors from '../../Themes/Colors';
 import { Icon, Input, Button, CheckBox } from 'react-native-elements';
-import AppStyles from '../../Themes/AppStyles';
-import Communications from 'react-native-communications';
 import Modal from "react-native-modal";
 const screen = Dimensions.get("window");
 import { Styles } from './styleContact'
 import RNFetchBlob from 'rn-fetch-blob';
-
-
+import Item from "./Item/Item"
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 
 
@@ -45,24 +43,6 @@ const data = [
     },
 ]
 
-function Item({item}) {
-    return(
-        <TouchableOpacity  onPress={()=> Communications.phonecall(item.tel, true)} >
-        <View style={Styles.containerItem}  >
-            <View >
-                <Text style={{ fontSize: 15, fontWeight: "bold" }}>{item.name}</Text>
-                <View  style={[AppStyles.style.flex, {alignItems: "center", marginTop: 2}]}
-                
-                >
-                    <Icon  name="phone-square" type="font-awesome" color={Colors.primary} size={14} containerStyle={{ marginRight: 5 }} />
-                    <Text style={{ color: "#A0A0A0" }}>{item.tel}</Text>
-                </View>
-            </View>
-            <Icon name="phone-square" type="font-awesome" color={Colors.secondary} size={28} />
-        </View>
-        </TouchableOpacity>
-    )
-}
 
 export default class Contact extends Component {
 
@@ -75,57 +55,119 @@ export default class Contact extends Component {
             tel: "", 
             comments:"",
             password: "",
+            trip_User:[],
+            textModal:"",
             visibleModal: false
         };
         this.input ={};
     }
 
+    componentDidMount(){
+        const { trip_User } =this.props
+
+        this.setState({
+            trip_User:trip_User && trip_User.users
+        })
+    }
     
     UpdateInputToState = (event) => {
         const name = event._targetInst.pendingProps.name;
         this.setState({ [name] :  event.nativeEvent.text})
     }
 
-    sendMessage = () => {
-        // this.setState({ visibleModal: true })
-        const { name , email , tel ,comments,prenom } = this.state
-    RNFetchBlob.fetch("post",`https://cezame-dev.digitalcube.fr/api/contact-mail`,{
-      headers: JSON.stringify({ 'content-type': 'multipart/form-data' }),
-      },[
-        {
-        name:'lastname',
-        data: name
-        },
-        {
-        name:'firstname',
-        data:prenom
-        },
-        {
-        name:'email',
-        data:email
+    sendMessage = (login) => {
+        if(login){
+            this.requestForUser()
+        }else{
+            this.requestUserLogin ()
         }
-        ,
-        {
-        name:'content',
-        data:comments
-        }
-        ,
-        // {
-        // name:'phone',
-        // data:tel
-        // }
-     
-      ]).then((res) => {
-      console.log("Contact -> sendMessage -> res", res)
-    
+
+    }
+    requestUserLogin = ()=>{
+        const { tokenConnection } = this.props
+        const { comments } =this.state
+        console.log("Contact -> requestUserLogin -> comments", comments.trim())
+        if(comments.trim()){
+            RNFetchBlob.fetch("post",`https://cezame-dev.digitalcube.fr/api/send-comment`,{
+                Authorization : "Bearer "+tokenConnection,
+                headers: JSON.stringify({ 'content-type': 'multipart/form-data' }),
+                },[
+                  {
+                  name:'comment',
+                  data: comments
+                  },
+           
+                ]).then((res) => {
+                console.log("Contact -> sendMessage -> res", res)
+              
+                      this.setState({
+                          visibleModal:true,
+                          textModal:"Votre commentaire a bien été envoyé."
+                      })
+                })
+                .catch((err) => {
+                console.log("TCL: MyQuestions -> onStopRecord -> err", err)
+                })
+              
+        }else{
             this.setState({
-                visibleModal:true
+                visibleModal:true,
+                textModal:"Le message n'a pas etait envoyer, un commentaire est requis."
             })
-      })
-      .catch((err) => {
-      console.log("TCL: MyQuestions -> onStopRecord -> err", err)
-      })
-    
+        }
+       
+    }
+
+    requestForUser=()=>{
+        const { name , email , tel ,comments,prenom } = this.state
+        if(name.trim() && email.trim() && tel.trim() && comments.trim() && prenom.trim()){
+            RNFetchBlob.fetch("post",`https://cezame-dev.digitalcube.fr/api/contact-mail`,{
+          headers: JSON.stringify({ 'content-type': 'multipart/form-data' }),
+          },[
+            {
+            name:'lastname',
+            data: name
+            },
+            {
+            name:'firstname',
+            data:prenom
+            },
+            {
+            name:'email',
+            data:email
+            }
+            ,
+            {
+            name:'content',
+            data:comments
+            }
+            ,
+            {
+            name:'phone',
+            data:tel
+            }
+         
+          ]).then((res) => {
+          console.log("Contact -> sendMessage -> res", res)
+        
+                this.setState({
+                    visibleModal:true,
+                    textModal:"Votre commentaire a bien été envoyé."
+
+                })
+          })
+          .catch((err) => {
+          console.log("TCL: MyQuestions -> onStopRecord -> err", err)
+          })
+        }else{
+            this.setState({
+                visibleModal:true,
+                textModal:"Le message n'a pas etait envoyer. Les champs doivent être remplis."
+            })
+        
+        }
+        
+        
     }
     
     closeModal=()=>{
@@ -144,27 +186,32 @@ export default class Contact extends Component {
         this.input[id].focus()
    }
     render() {
+        const { trip_User , user,name , prenom , email , tel , comments ,textModal} =this.state
+        const { tokenConnection } =this.props
         const keybord = Platform.OS === "ios" ? hp("5%") : hp("-65%")
         const behavior = Platform.OS === "ios" ? "padding":""
+
         return (
             <ContainerLayout return title="Contact" style={{flex:1, }} navigation={this.props.navigation}>
           
                  <StatusBar translucent backgroundColor={Colors.rightColor} />
 
-                 <KeyboardAvoidingView  behavior="height" enabled  keyboardVerticalOffset={keybord} style={{flex:1}} >  
+                 {/* <KeyboardAvoidingView  behavior="height" enabled  keyboardVerticalOffset={keybord} style={{flex:1}} >   */}
                 <ScrollView    
                     style={{ marginHorizontal: 0 ,marginBottom:0,}}
                     containerStyle={{justifyContent:"space-between",}}
                     showsVerticalScrollIndicator = {false}
-                    // keyboardDismissMode='on-drag'
+                    keyboardDismissMode='on-drag'
                     keyboardShouldPersistTaps='handled'
                     contentInsetAdjustmentBehavior="always"
                 >
-                
+                <KeyboardAwareScrollView
+                extraScrollHeight={30}
+                >
                     <View >
                     <View style={{ width: screen.width-50, alignSelf: "center" ,marginTop:15,marginBottom:10}}>
                             <Text style={Styles.textTitle}>Une question ? Besoin d'information ?</Text>
-                    { this.props.tokenConnection ?
+                    { tokenConnection ?
 
                      
                      <Text style={Styles.text}> 
@@ -183,12 +230,12 @@ export default class Contact extends Component {
                     }  
 
                     </View>
-                    { this.props.tokenConnection && 
+                    { tokenConnection && 
                 
                      
                         <SafeAreaView style={{flex: 1}}>
                             <Text style={Styles.textContact}>Contacts utiles</Text>
-                            <FlatList data={data} keyExtractor={item => item.id} renderItem={({ item }) => 
+                            <FlatList data={trip_User} keyExtractor={item => item.id} renderItem={({ item }) => 
                           
                                  <Item  item={item} />
                             } />
@@ -196,11 +243,12 @@ export default class Contact extends Component {
                         </SafeAreaView>
                         }
                         <View style={{ width: screen.width-75, alignSelf: "center" ,marginVertical:20}}>
-                        { !this.props.tokenConnection && 
+                        { !tokenConnection && 
                         <>
                               <Input 
                                 placeholder="Nom"
                                 name='name'
+                                value={name}
                                 containerStyle={{ marginTop: 10 }}
                                 onChange={(e)=>this.UpdateInputToState(e) }
                                 placeholderTextColor="#CCCCCC"
@@ -211,6 +259,7 @@ export default class Contact extends Component {
                             <Input 
                                 ref = { text=>this.input.prenom = text}
                                 name='prenom'
+                                value={prenom}
                                 placeholder="Prénom"
                                 containerStyle={{ marginTop: 10 }}
                                 onChange={(e)=>this.UpdateInputToState(e) }
@@ -224,6 +273,7 @@ export default class Contact extends Component {
                                 ref = { text=>this.input.email = text}
                                 name='email'
                                 placeholder="Email"
+                                value={email}
                                 labelStyle={Styles.labelStyle}
                                 placeholderTextColor="#CCCCCC"
                                 containerStyle={{ marginTop: 10 }}
@@ -236,6 +286,7 @@ export default class Contact extends Component {
                             <Input 
                                 ref = { text=>this.input.tel = text}
                                 name='tel'
+                                value={tel}
                                 placeholder="Portable"
                                 placeholderTextColor="#CCCCCC"
                                 containerStyle={{ marginTop: 10 }}
@@ -250,6 +301,7 @@ export default class Contact extends Component {
                                 ref = { text=>this.input.comments = text}
                                 name='comments'
                                 multiline
+                                value={comments}
                                 numberOfLines={6}
                                 label="Commentaire"
                                 textAlignVertical="top"
@@ -262,20 +314,20 @@ export default class Contact extends Component {
                             <Button 
                                 title="Envoyer" 
                                 
-                                onPress={() => { this.sendMessage() }}
+                                onPress={() => {!tokenConnection ? this.sendMessage(true) : this.sendMessage(false)}}
                                 buttonStyle={Styles.buttonStyle} 
                             />
                         </View>
                     </View>
             
-             
+                    </KeyboardAwareScrollView>
                 </ScrollView>
-                </KeyboardAvoidingView>
+                {/* </KeyboardAvoidingView> */}
                 <Modal isVisible={this.state.visibleModal}>
                     <View style={Styles.viewModal}>
-                        <Text style={{ textAlign: "center", fontSize: 18 }}>Votre commentaire a bien été envoyé.</Text>
+                    <Text style={{ textAlign: "center", fontSize: 18 }}>{textModal}</Text>
                         <Button 
-                            title="OK, merci "
+                            title="Ok, merci "
                             buttonStyle={Styles.buttonStyle}
                             onPress={() => { this.closeModal()}}
                         />
