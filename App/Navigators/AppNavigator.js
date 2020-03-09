@@ -15,7 +15,7 @@ import { Dimensions } from 'react-native';
 import ContainerSideMenu from './ContainerSideMenu ';
 import Notifications from '../Containers/Notifications';
 import ContainerChat  from '../Containers/Chat/ContainerChat';
-import Places from '../Containers/Places';
+import ContainerPlaces from '../Containers/Places/ContainerPlaces';
 import ContainerParam from '../Containers/Parameters/ContainerParam';
 import ContainerHotel from '../Containers/Hotel/ContainerHotel'
 import ContainerContact from '../Containers/Contact/ContainerContact';
@@ -35,7 +35,7 @@ const MainNavigator = createStackNavigator(
     Program :  Program,
     Notifications :  Notifications,
     Chat :  ContainerChat ,
-    Places :  Places, 
+    Places :  ContainerPlaces, 
     Parameters :  ContainerParam, 
     Contact :  ContainerContact,
     Gallery :  ContainerGallery,

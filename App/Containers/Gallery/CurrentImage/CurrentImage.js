@@ -24,7 +24,7 @@ class  CurrentImage extends Component{
 
 
     componentDidMount (){
-        request(PERMISSIONS.IOS.PHOTO_LIBRARY ).then(result => {
+       Platform.OS === "ios" && request(PERMISSIONS.IOS.PHOTO_LIBRARY ).then(result => {
         // console.log("CurrentImage -> componentDidMount -> result", result)
         
           });

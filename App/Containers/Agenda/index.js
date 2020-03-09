@@ -63,12 +63,22 @@ LocaleConfig.locales['fr'] = {
                                 borderBottomRightRadius:  this.state.expanded == true ? 0 : 15, 
                             }]
                         }>
-                            <View >
-                                <Text style={{ fontSize: 12, color: '#A0A0A0', marginLeft: 3 }}>{item.date}</Text>
+                            <View style={{flexDirection:"row"}}>
+                                <Text style={{ fontSize: 12, color: '#A0A0A0', marginLeft: 3 ,marginTop:4}}>{item.date}</Text>
+                                <View style={{ flexDirection: "row", alignItems: "center",  marginLeft:35 }}>
+                                    <Icon 
+                                            name="access-time"
+                                            size={13}
+                                            color="#F9C660"
+                                            />
+                                            
+                                    <Text style={{  fontWeight: "bold", fontSize: 12 }}>{item.hours}</Text>
+                                </View>
+                                
                             </View>
                             <View style={{flexDirection: "row", justifyContent: "space-between"}}>
                                 <View>
-                                    <Text style={{ fontWeight: "bold", fontSize: 18 ,color:Colors.primary}}>{item.title}</Text>
+                                    <Text style={{ fontWeight: "bold", fontSize: 15 ,color:Colors.primary}}>{item.title}</Text>
                                     <Text>Salle plénière Medineceli - RdC</Text>
                                 </View>
                                 <View>
@@ -84,16 +94,7 @@ LocaleConfig.locales['fr'] = {
                      </TouchableWithoutFeedback>
                         {this.state.expanded == true && (
                             <View style={style.dateContent}>
-                                <View style={{ flexDirection: "row", alignItems: "center",  marginBottom:10 }}>
-                                    <Icon 
-                                            name="access-time"
-                                            size={13}
-                                            color="#F9C660"
-                                            />
-                                            
-                                    <Text style={{  fontWeight: "bold", fontSize: 16 }}>{item.hours}</Text>
-                                </View>
-                                
+                    
                                 <Text>{item.description}</Text>
                             </View>
                             )}
@@ -177,7 +178,7 @@ export default class Agenda extends Component {
                 description:value.description,
             }
           })
-          return data 
+          return data
 
      }
 
@@ -289,6 +290,7 @@ export default class Agenda extends Component {
                                     borderRadius: 25
                                 },
                                 fillers: {
+                                
                                     position: 'absolute',
                                     flexDirection: 'row',
                                     left: 0,
@@ -337,7 +339,7 @@ export default class Agenda extends Component {
                         markingType={'multi-period'}
                         />
                         <ScrollView
-                            style={{ flex:1, marginBottom:10}} 
+                            style={{ flex:1, marginBottom:10,marginTop:10}} 
                             showsVerticalScrollIndicator = {false}
                        
                             refreshControl={

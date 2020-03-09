@@ -4,7 +4,7 @@ import { Icon } from  'react-native-elements';
 import  Styles  from './style';
 import  Colors  from '../../Themes/Colors'
 import axios from 'axios'
-
+import RNFetchBlob from 'rn-fetch-blob';
 
 export default class SocialNetwork extends Component {
 
@@ -23,6 +23,7 @@ export default class SocialNetwork extends Component {
     getSocials =()=>{
         const { tokenConnection, infoUser} = this.props
         console.log("SocialNetwork -> getSocials -> infoUser", infoUser)
+     
 
         axios.get(`https://cezame-dev.digitalcube.fr/api/socials`)
         .then( res =>{
@@ -32,7 +33,7 @@ export default class SocialNetwork extends Component {
         })
 
         }).catch( err =>{
-        console.log("SocialNetwork -> getSocials -> err", err.response)
+        console.log("SocialNetwork -> getSocials -> err", err)
 
         })
 
@@ -40,7 +41,7 @@ export default class SocialNetwork extends Component {
 
     render() {
        const { socialNetwork} = this.state
-       console.log("SocialNetwork -> render -> socialNetwork", socialNetwork)
+    //    console.log("SocialNetwork -> render -> socialNetwork", socialNetwork)
         return (
             <View style={Styles.container}>
                 {socialNetwork && socialNetwork.map((value)=>{

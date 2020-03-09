@@ -30,10 +30,11 @@ export default StyleSheet.create({
         shadowRadius: 4.65,
 
         elevation: 8,
+        
     },
     dateContent: {
         paddingHorizontal: 18,
         paddingVertical: 20,
-        marginBottom:10
+        marginBottom:10,
     }
 });

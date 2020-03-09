@@ -18,34 +18,7 @@ export default class Places extends Component {
         super(props);
         this.state = {
             // Coordonnée de la ville
-            initialRegion: 
-            {
-                latitude: 40.424068,
-                longitude:  -3.704908,
-                latitudeDelta: 0.0822,
-                longitudeDelta: 0.0521,
-            },
-            // Coordonnée des différents lieux
-            adress: [
-                {
-                    id: 1, 
-                    title: "Plaza Mayor",
-                    coord: [38.2097987, -84.2529869],
-                    description: 'Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna.',
-                },
-                {
-                    id: 2, 
-                    title: "Musée du Prado",
-                    coord: [40.413839, -3.692106],
-                    description: 'Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna.',
-                },
-                {
-                    id: 3, 
-                    title: "Restaurant Casa de Vélazquez",
-                    coord: [40.441431, -3.730483],
-                    description: 'Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna.',
-                },
-            ],
+           
             index: -1, // id des lieux récupéré (-1 => aucun récupéré)
             rightModal : new Animated.Value(-screen.width), // position initial des modals des lieux
             leftModal: new Animated.Value(screen.width-(screen.width-(85/2))), // position initial de la modal initiale
@@ -69,6 +42,8 @@ export default class Places extends Component {
 
     // Lorsqu'un le bouton retour est sélectionné, on remet les valeurs initiales
     _return = () => {
+        const { pointsOfInterest } = this.props.trip_User
+
         Animated.timing(this.state.rightModal, {
             toValue: -screen.width, 
             duration: 400
@@ -78,10 +53,10 @@ export default class Places extends Component {
             duration: 400
         }).start(() => this.setState({ index: -1 }));
         this.map.animateToRegion({
-            latitude: this.state.initialRegion.latitude,
-            longitude:  this.state.initialRegion.longitude,
-            latitudeDelta: this.state.initialRegion.latitudeDelta,
-            longitudeDelta: this.state.initialRegion.longitudeDelta,
+            latitude: pointsOfInterest && pointsOfInterest.latitude,
+            longitude:  pointsOfInterest &&pointsOfInterest.longitude,
+            latitudeDelta: 0.0052,
+            longitudeDelta: 0.0121,
         }, 1000)
     }
 
@@ -104,27 +79,34 @@ export default class Places extends Component {
     }
 
     render() {
+        const { adress , initialRegion ,leftModal } = this.state
+        const { trip_User ,navigation } = this.props
+        console.log("Places -> render -> trip_User ", trip_User.pointsOfInterest)
         return (
-            <Layout noPaddingTop title="Points d'intérêts" navigation={this.props.navigation}>
+            <Layout noPaddingTop title="Points d'intérêts" navigation={navigation}>
                 <MapView
                     style={{ position: "absolute", top: 0, bottom: 0, left: 0, right: 0 }}
-                    initialRegion={this.state.initialRegion}
+                    initialRegion={   {
+                        latitude: trip_User.pointsOfInterest && trip_User.pointsOfInterest[0].latitude,
+                        longitude:  trip_User.pointsOfInterest && trip_User.pointsOfInterest[0].longitude,
+                        latitudeDelta: 0.0822,
+                        longitudeDelta: 0.0521,
+                    }}
                     ref={ref => { this.map = ref; }}
                     onMapReady={ (e) => {this._mapDidUpdate(e)} }
                 >
 
                     {/* Boucle pour les marqueurs */}
-                    {this.state.adress.map( (marker, index) => {
-                        const marker_lat = marker.coord[0];
-                        const marker_long = marker.coord[1]
+                    {trip_User.pointsOfInterest && trip_User.pointsOfInterest.map( (marker, index) => {
+                 
                         return(
                             <Marker
-                                coordinate={{latitude: marker_lat,longitude: marker_long}}
+                                coordinate={{latitude: marker.latitude,longitude: marker.longitude}}
                                 title={marker.title}
                                 onPress = {() => {
                                     this.map.animateToRegion({
-                                    latitude: marker_lat,
-                                    longitude: marker_long,
+                                    latitude: marker.latitude,
+                                    longitude: marker.longitude,
                                     latitudeDelta: 0.0052,
                                     longitudeDelta: 0.0121,
                                 }, 1000), this._modalPlace(index) }}
@@ -136,7 +118,8 @@ export default class Places extends Component {
                 </MapView>
 
                 {/* Boucle pour les modals lieux */}
-                {this.state.adress.map( (item, index) => {
+                {trip_User.pointsOfInterest && trip_User.pointsOfInterest.map( (item, index) => {
+  
                     return(
                         <Animated.View style={{ position: "absolute",bottom: 75, right: this.state.index == index ? this.state.rightModal : -screen.width }}>
                             <ModalPlace title={item.title} description={item.description} onBack={this._return} />
@@ -150,22 +133,22 @@ export default class Places extends Component {
                         backgroundColor: '#F6F6F6', borderRadius: 15, 
                         width: screen.width-85, alignSelf: "center", 
                         bottom: 35, position: "absolute",
-                        left: this.state.leftModal 
+                        left: leftModal 
                     }}
                 >
                     <Text style={[Font.style.h3, { paddingLeft: 50, paddingVertical: 15 }]}>Adresses utiles</Text>
                     <View style={{ paddingLeft: 50, backgroundColor: "white", paddingTop: 15, paddingBottom: 25,borderBottomEndRadius: 15, borderBottomStartRadius: 15 }}>
                         
                         {/* Boucle pour la liste des lieux */}
-                        <FlatList data={this.state.adress} keyExtractor={item => item.id}
+                        <FlatList data={trip_User.pointsOfInterest && trip_User.pointsOfInterest} keyExtractor={item => item.id}
                             renderItem={({ item, index }) => {
                             return(
                                 <View>
                                     <TouchableOpacity 
                                         onPress = {() => {
                                             this.map.animateToRegion({
-                                            latitude: item.coord[0],
-                                            longitude: item.coord[1],
+                                            latitude: item.latitude,
+                                            longitude: item.longitude,
                                             latitudeDelta: 0.0052,
                                             longitudeDelta: 0.0121,
                                         }, 1000), this._modalPlace(index)
