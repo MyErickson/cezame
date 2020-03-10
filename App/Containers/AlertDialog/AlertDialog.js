@@ -66,7 +66,7 @@ class AlertDialog extends Component{
               
               :
               
-             <Dialog.Button  label="ok, j'ai compris" onPress={()=>closeAlert('alertVisible')}/> 
+             <Dialog.Button  label="ok" onPress={()=>closeAlert('alertVisible')}/> 
               
                }
         

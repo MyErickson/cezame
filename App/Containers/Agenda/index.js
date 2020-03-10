@@ -95,7 +95,7 @@ LocaleConfig.locales['fr'] = {
                         {this.state.expanded == true && (
                             <View style={style.dateContent}>
                     
-                                <Text>{item.description}</Text>
+                                <Text>{item.description ? item.description : "bientôt une description..."}</Text>
                             </View>
                             )}
                 
@@ -137,9 +137,9 @@ export default class Agenda extends Component {
                      dataDaySteps  = day_steps.map((value,key)=>{
                         return {
                             key:key,
-                            date: Moment(value.date).format("DD/MM/YYYY"),
-                            dateSort: Moment(value.date).format("YYYY-MM-DD"),
-                            hours:Moment(value.time).format("H[h]mm"),
+                            date: Moment(value.fullDate).format("DD/MM/YYYY"),
+                            dateSort: Moment(value.fullDate).format("YYYY-MM-DD"),
+                            hours:Moment(value.fullDate).format("H[h]mm"),
                             title:value.title,
                             description:value.description,
                         }
@@ -172,8 +172,8 @@ export default class Agenda extends Component {
         let data = day_steps && day_steps.map((value,key)=>{
             return {
                 key:key,
-                date: Moment(value.date).format("DD/MM/YYYY"),
-                hours:Moment(value.time).format("H[h]mm"),
+                date: Moment(value.fullDate).format("DD/MM/YYYY"),
+                hours:Moment(value.fullDate).format("H[h]mm"),
                 title:value.title,
                 description:value.description,
             }

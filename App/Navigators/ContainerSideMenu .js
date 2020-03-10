@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
  */
 
 import SideMenu from './Sidemenu'
-
+import { callTrips } from '../store/actionCreator/Program';
 // Action Creators
 
 
@@ -19,7 +19,9 @@ const mapStateToProps = (state, ownProps) => ({
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-
+  callTrips:(data)=>{
+    dispatch(callTrips(data))
+    },
 
 });
 

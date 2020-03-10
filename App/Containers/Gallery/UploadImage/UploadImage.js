@@ -109,7 +109,7 @@ export default class UploadImage extends Component {
             this.setState({
                 alertVisible:true,
                 style:true,
-                messageAlert:" Votre photo a bien été envoyé. Une verification sera faite."
+                messageAlert:"Votre image a bien été transmis à notre équipe. Elle sera visible aprees validation."
             })
       
       

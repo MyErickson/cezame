@@ -60,7 +60,7 @@ import {Styles  } from "../styleGallery"
             
             >
                  <View style = {{ flexDirection:"row",flex:1}}>
-                     <View style={{width:"50%",height:"100%"}}>
+                     <View style={{width:"50%",height:"100%",borderRadius:10,}}>
                      {allPictures && allPictures.map((value,index)=>{
             
                          const { contentUrl } = value
@@ -71,6 +71,7 @@ import {Styles  } from "../styleGallery"
      
      
                              return <TouchableHighlight underlayColor="none" 
+                             style={{borderRadius:10,backgroundColor:"#222222", margin:5,}}
                              key={value["@id"]}
                              onPress={()=>{navigate.navigate("CurrentImage",
                              {
@@ -79,9 +80,9 @@ import {Styles  } from "../styleGallery"
                              })}}>
                                  <Image 
                                  resizeMethod='scale'
-                                 resizeMode='cover'
+                                 resizeMode='center'
                                  source={{uri:contentUrl} } 
-                                 style={[Styles.containerImage, { height: randomHeight *10}]}
+                                 style={[Styles.containerImage, { height: 220}]}
                          
                              />
                              </TouchableHighlight >
@@ -99,17 +100,19 @@ import {Styles  } from "../styleGallery"
      
      
                              return  <TouchableHighlight underlayColor="none" 
+                             style={{borderRadius:10,backgroundColor:"#222222",  margin:5,}}
                              key={value["@id"]}
                              onPress={()=>{navigate.navigate("CurrentImage",
                              {
                                  image:contentUrl ,
                                  download:download
                              })}}>
+                            
                              <Image 
                               resizeMethod='scale'
-                              resizeMode='cover'
+                              resizeMode='center'
                              source={{uri:contentUrl} } 
-                             style={[Styles.containerImage, { height: i*10 }]}
+                             style={[Styles.containerImage, { height: 220 }]}
                              
                              />
                              </TouchableHighlight>

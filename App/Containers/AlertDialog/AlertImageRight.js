@@ -31,7 +31,7 @@ const AlertImageRight=({
             
           </Dialog.Description>
 
-          {close ?  <Dialog.Button  label="ok, j'ai compris" onPress={()=>closeAlert('alertVisibleImage')}/>  :
+          {close ?  <Dialog.Button  label="ok" onPress={()=>closeAlert('alertVisibleImage')}/>  :
           <View style={Platform.OS === "ios" ? Style.containerButtonIos :Style.containerButtonAndroid}>
                   <Dialog.Button 
                   bold={true} 

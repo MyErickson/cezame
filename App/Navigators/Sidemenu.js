@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, View, Dimensions, Image, ImageBackground, Animated, BackHandler, FlatList, ScrollView, TouchableOpacity} from 'react-native';
+import {Text, View, Dimensions, Image, RefreshControl ,ImageBackground, Animated, BackHandler, FlatList, ScrollView, TouchableOpacity} from 'react-native';
 import { Icon, Button } from 'react-native-elements';
 import Images from '../Themes/Images';
 import LinearGradient from 'react-native-linear-gradient';
@@ -29,7 +29,8 @@ class SideMenu extends Component {
           iconBack: "clear",
           return: () => {  this.props.navigation.toggleDrawer() },
           titleMenu: "",
-          trip_User:undefined
+          trip_User:undefined,
+          refreshing:false
         }
     }
 
@@ -56,15 +57,42 @@ class SideMenu extends Component {
           return true;
         });
     }
-
+    onRefresh =async ()=>{ 
+ 
+        const { callTrips } =this.props
+     
+         this.setState({
+             refreshing:true
+         });
+         
+         callTrips()
+ 
+         setTimeout(()=>{ this.setState({
+             refreshing:false
+         })},1000)
+ 
+       
+     }
   render () {
 
     const { infoUser } = this.props
+    const { refreshing } = this.state
 
     return (
     <LinearGradient  start={{x: 0, y: 0}} end={{x: 1, y: 0}} colors={['#fff','#E9ECF5']}>
         <ImageBackground source={Images.bgSidemenu} style={{width: '100%', height: '100%',}} resizeMode={"cover"}>
-            <ScrollView style={{ flex:1}}>
+            <ScrollView style={{ flex:1}}
+             refreshControl={
+                <RefreshControl 
+                refreshing={refreshing} 
+                progressViewOffset={20}
+                onRefresh={()=>this.onRefresh()} 
+                colors={["#0000ff"]}
+                tintColor="#0000ff"
+                titleColor="#0000ff"
+                title="actualise"/>
+              }
+            >
                 <View style={{ flexDirection: "row", justifyContent: "space-between", marginHorizontal: 25, marginBottom: 0, marginTop: Platform.OS==='ios'?55:30 }}>
                     <Icon 
                         name={this.state.iconBack} 

@@ -28,6 +28,7 @@ export default class Places extends Component {
 
     // Lorqu'un lieux est sélectionné, on change l'index par l'id du lieux, on bouge les modals
     _modalPlace = (index) => {
+        console.log("Places -> _modalPlace -> index)", index)
         this.setState({ index })
         Animated.timing(this.state.rightModal, {
             toValue: screen.width-(screen.width-(85/2)), 
@@ -48,35 +49,40 @@ export default class Places extends Component {
             toValue: -screen.width, 
             duration: 400
         }).start();
+
+        
         Animated.timing(this.state.leftModal, {
             toValue: screen.width-(screen.width-(85/2)),
             duration: 400
         }).start(() => this.setState({ index: -1 }));
         this.map.animateToRegion({
-            latitude: pointsOfInterest && pointsOfInterest.latitude,
-            longitude:  pointsOfInterest &&pointsOfInterest.longitude,
-            latitudeDelta: 0.0052,
-            longitudeDelta: 0.0121,
+            latitude: pointsOfInterest && parseFloat(pointsOfInterest[0].latitude),
+            longitude:  pointsOfInterest && parseFloat(pointsOfInterest[0].longitude),
+            latitudeDelta: 0.082,
+            longitudeDelta: 0.0521,
         }, 1000)
-    }
 
-    _mapDidUpdate() {
-        if (this.props.navigation.state.params != undefined) {
-            this.map.animateToRegion({
-                latitude: this.props.navigation.state.params.coord.latitude,
-                longitude: this.props.navigation.state.params.coord.longitude,
-                latitudeDelta: 0.0052,
-                longitudeDelta: 0.0121,
-            }, 1000) 
-            this.setState({ 
-                index: 0,
-                rightModal : new Animated.Value(screen.width-(screen.width-(85/2))), // position initial des modals des lieux
-                leftModal: new Animated.Value(-screen.width), // position initial de la modal initiale 
-            });
-        }
-        else {
-        }
-    }
+}
+
+    // _mapDidUpdate() {
+    //     console.log("Places -> _mapDidUpdate -> this.props.navigation.state.params ", this.props.navigation.state.params )
+    //     if (this.props.navigation.state.params != undefined) {
+            
+    //         this.map.animateToRegion({
+    //             latitude: this.props.navigation.state.params.coord.latitude,
+    //             longitude: this.props.navigation.state.params.coord.longitude,
+    //             latitudeDelta: 0.0052,
+    //             longitudeDelta: 0.0121,
+    //         }, 1000) 
+    //         this.setState({ 
+    //             index: 0,
+    //             rightModal : new Animated.Value(screen.width-(screen.width-(85/2))), // position initial des modals des lieux
+    //             leftModal: new Animated.Value(-screen.width), // position initial de la modal initiale 
+    //         });
+    //     }
+    //     else {
+    //     }
+    // }
 
     render() {
         const { adress , initialRegion ,leftModal } = this.state
@@ -87,28 +93,29 @@ export default class Places extends Component {
                 <MapView
                     style={{ position: "absolute", top: 0, bottom: 0, left: 0, right: 0 }}
                     initialRegion={   {
-                        latitude: trip_User.pointsOfInterest && trip_User.pointsOfInterest[0].latitude,
-                        longitude:  trip_User.pointsOfInterest && trip_User.pointsOfInterest[0].longitude,
-                        latitudeDelta: 0.0822,
-                        longitudeDelta: 0.0521,
+                        latitude: trip_User.pointsOfInterest && parseFloat(trip_User.pointsOfInterest[0].latitude),
+                        longitude:  trip_User.pointsOfInterest && parseFloat(trip_User.pointsOfInterest[0].longitude),
+                        latitudeDelta: 0.0052,
+                        longitudeDelta: 0.0121,
                     }}
                     ref={ref => { this.map = ref; }}
-                    onMapReady={ (e) => {this._mapDidUpdate(e)} }
+                    onMapReady={ (e) => {this._return()} }
                 >
 
                     {/* Boucle pour les marqueurs */}
                     {trip_User.pointsOfInterest && trip_User.pointsOfInterest.map( (marker, index) => {
+                    console.log("Places -> render -> marker", marker)
                  
                         return(
                             <Marker
-                                coordinate={{latitude: marker.latitude,longitude: marker.longitude}}
+                                coordinate={{latitude: parseFloat(marker.latitude) ,longitude: parseFloat(marker.longitude)}}
                                 title={marker.title}
                                 onPress = {() => {
                                     this.map.animateToRegion({
-                                    latitude: marker.latitude,
-                                    longitude: marker.longitude,
-                                    latitudeDelta: 0.0052,
-                                    longitudeDelta: 0.0121,
+                                    latitude: parseFloat(marker.latitude),
+                                    longitude: parseFloat(marker.longitude),
+                                    latitudeDelta: 0.0002,
+                                    longitudeDelta: 0.001,
                                 }, 1000), this._modalPlace(index) }}
                             >
                                 <Image source={Images.marker} style={{ width: 25, height: 34 }} />
@@ -122,7 +129,7 @@ export default class Places extends Component {
   
                     return(
                         <Animated.View style={{ position: "absolute",bottom: 75, right: this.state.index == index ? this.state.rightModal : -screen.width }}>
-                            <ModalPlace title={item.title} description={item.description} onBack={this._return} />
+                            <ModalPlace title={item.title} description={item.description ? item.description : "bientôt une description..."} onBack={this._return} />
                         </Animated.View>
                     )})
                 }
@@ -147,8 +154,8 @@ export default class Places extends Component {
                                     <TouchableOpacity 
                                         onPress = {() => {
                                             this.map.animateToRegion({
-                                            latitude: item.latitude,
-                                            longitude: item.longitude,
+                                            latitude: parseFloat(item.latitude),
+                                            longitude: parseFloat(item.longitude),
                                             latitudeDelta: 0.0052,
                                             longitudeDelta: 0.0121,
                                         }, 1000), this._modalPlace(index)

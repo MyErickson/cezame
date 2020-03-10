@@ -12,10 +12,10 @@ const Styles = StyleSheet.create({
         width: "100%",
         height: 260,
         backgroundColor: Colors.generalBackground,
-
+        zIndex:-1,
         paddingVertical: 40,
         position: 'absolute',
-        bottom: -10,
+        bottom: 0,
     },
     buttonContainer:{
         justifyContent:"space-around",

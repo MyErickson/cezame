@@ -30,7 +30,7 @@ const AlertGallery =({
           </Dialog.Description>
 
           
-        <Dialog.Button  label="ok, j'ai compris" onPress={()=>closeAlert()}/> 
+        <Dialog.Button  label="ok" onPress={()=>closeAlert()}/> 
           
     
         </Dialog.Container>

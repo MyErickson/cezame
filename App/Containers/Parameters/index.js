@@ -452,7 +452,7 @@ export default class Parameters extends PureComponent {
                         </View>
                         {infoUser && infoUser.imageRights?
                         <Text style={{ color: "green", fontSize: 15 }}>
-                        Vous avez accepté(e) d'apparaitre sur les images du séminaire</Text>
+                        Vous avez accepté d'apparaitre sur les images du séminaire</Text>
                         :
                         <Text style={{ color: "#6B6B6B", fontSize: 15 }}>
                         Sans votre accord, votre visage n'apparaitra pas sur les images du séminaire</Text>

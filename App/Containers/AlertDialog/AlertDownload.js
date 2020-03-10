@@ -30,7 +30,7 @@ const AlertDownload =({
           </Dialog.Description>
 
           
-        <Dialog.Button  label="ok, merci" onPress={closeAlert}/> 
+        <Dialog.Button  label="ok" onPress={closeAlert}/> 
     
         </Dialog.Container>
      
