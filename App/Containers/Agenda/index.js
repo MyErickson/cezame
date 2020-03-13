@@ -95,7 +95,7 @@ LocaleConfig.locales['fr'] = {
                         {this.state.expanded == true && (
                             <View style={style.dateContent}>
                     
-                                <Text>{item.description ? item.description : "bientôt une description..."}</Text>
+                                <Text>{item.description ? item.description : ""}</Text>
                             </View>
                             )}
                 

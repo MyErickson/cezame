@@ -9,7 +9,7 @@ import { Text, View,
      ActivityIndicator } from 'react-native';
 import axios from 'axios';
 import Moment from 'moment';
-import LayoutContent from '../../Components/LayoutContent/LayoutContent';
+import ContainerLayoutContent from '../../Components/LayoutContent/ContainerLayoutContent';
 
 
 export default class News extends Component {
@@ -71,7 +71,7 @@ export default class News extends Component {
 
         
         return (
-            <LayoutContent title="Actualités" navigation={this.props.navigation}>
+            <ContainerLayoutContent title="Actualités" navigation={this.props.navigation}>
                 { loading ? ( <ScrollView
                    style={{ marginHorizontal: 0,marginBottom:25 }}
                    showsVerticalScrollIndicator = {false}
@@ -111,7 +111,7 @@ export default class News extends Component {
                     }) :  <Text style={{fontSize:16, fontWeight:'bold'}}> Les actualitèes seront bientôt ajoutés</Text>}
                 </ScrollView>) : <ActivityIndicator size="large" color="#0000ff" />}
                
-            </LayoutContent>
+            </ContainerLayoutContent>
         )
     }
 }

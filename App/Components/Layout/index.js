@@ -26,6 +26,7 @@ export default class Layout extends PureComponent {
 
     componentDidMount() {
         this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+        console.log("Layout -> componentDidMount -> this.backHandler ", this.backHandler )
             this.props.navigation.goBack()
             return true;
         });
@@ -51,6 +52,7 @@ export default class Layout extends PureComponent {
     render() {
         const { tokenConnection,title} = this.props
         const { infoUser } =this.state
+        console.log("Layout -> render -> infoUser", infoUser)
     
 
  

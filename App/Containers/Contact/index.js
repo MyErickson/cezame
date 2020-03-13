@@ -9,7 +9,7 @@ import { Text,
     SafeAreaView  ,
     TouchableOpacity, 
     Linking  } from 'react-native';
-import ContainerLayout from '../../Components/Layout/ContainerLayout';
+import ContainerLayoutContent from '../../Components/Layout/ContainerLayout';
 import Colors from '../../Themes/Colors';
 import { Icon, Input, Button, CheckBox } from 'react-native-elements';
 import Modal from "react-native-modal";
@@ -192,7 +192,7 @@ export default class Contact extends Component {
         const behavior = Platform.OS === "ios" ? "padding":""
 
         return (
-            <ContainerLayout return title="Contact" style={{flex:1, }} navigation={this.props.navigation}>
+            <ContainerLayoutContent return title="Contact" style={{flex:1, }} navigation={this.props.navigation}>
           
                  <StatusBar translucent backgroundColor={Colors.rightColor} />
 
@@ -334,7 +334,7 @@ export default class Contact extends Component {
                     </View>
                 </Modal>
           
-            </ContainerLayout>
+            </ContainerLayoutContent>
         )
     }
 }

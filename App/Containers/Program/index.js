@@ -232,7 +232,7 @@ export default class Program extends Component {
        const random2 = Math.floor(Math.random() * (100 - 1 +2)) + 1
     
         return (
-            <ContainerLayout title="Mon Programme" navigation={this.props.navigation}>
+            <ContainerLayout title="Mon Programme" infoUser={infoUser} navigation={this.props.navigation}>
                 { trip_User ? 
                 <ScrollView 
                 bounces={true}

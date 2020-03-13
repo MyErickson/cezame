@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Text, View, Button } from 'react-native';
 import axios from 'axios';
 import { ScrollView } from 'react-native-gesture-handler';
-import LayoutContent from '../../Components/LayoutContent/LayoutContent';
+import ContainerLayoutContent from '../../Components/LayoutContent/ContainerLayoutContent';
 
 export default class AboutUs extends Component {
 
@@ -14,9 +14,9 @@ export default class AboutUs extends Component {
 
     render() {
         return (
-            <LayoutContent title="A propos" navigation={this.props.navigation}>
+            <ContainerLayoutContent title="A propos" navigation={this.props.navigation}>
                 <Text>Qui sommes-nous ?</Text>
-            </LayoutContent>
+            </ContainerLayoutContent>
         )
     }
 }

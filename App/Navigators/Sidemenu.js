@@ -18,7 +18,7 @@ class SideMenu extends Component {
         this.state = {
           menu: [
               ["Mon programme", "Program"], 
-              ["Points d'intérêts       (bientôt)", 'Places'], 
+              ["Points d'intérêts ", 'Places'], 
               ["Agenda", 'Agenda'], //Agenda
               ["Galerie photos", 'Gallery'], //Gallery
               ["Messagerie", 'Chat'], //Chat
