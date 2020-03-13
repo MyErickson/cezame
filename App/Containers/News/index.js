@@ -32,7 +32,7 @@ export default class News extends Component {
     }
 
     getNews =()=>{
-        axios.get('https://cezame-dev.digitalcube.fr/api/articles?visible=true')
+        axios.get('https://cezame-dev.digitalcube.fr/api/articles')
         .then((res) => {
         console.log("TCL: News -> componentDidMount -> res", res.data["hydra:member"])
 

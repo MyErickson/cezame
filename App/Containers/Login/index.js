@@ -179,35 +179,35 @@ export default class Login extends Component {
 
             console.log("TCL: Login -> Login -> decode", decode)
             decode_Token(decode)
-            
-            // if(decode.roles[0] !== "ROLE_USER"){
-        
-            //   this.ToogleLoader();
-            //   this.setState({
-            //     alertVisible:true,
-            //     messageAlert:"En tant que V.I.P, vous avez le privilège de vous connecter sur le Web",
-            //   })
-              
-            //   return
-            // }
-            const data = new FormData
-            data.token = token
-            data.id = decode.id
-            data.idTrip=decode.trip_id
-            //request ask info Users
-            getUsers(data)
 
-            // request call program
+            if(decode.trip_id){
 
-            callTrips(data)
+              const data = new FormData
+              data.token = token
+              data.id = decode.id
+              data.idTrip=decode.trip_id
+                //request ask info Users
+              getUsers(data)
 
-            AsyncStorage.getItem("jwt_auth").then((value) => {
-              // remove loader
+              // request call program
+
+              callTrips(data)
+
+              AsyncStorage.getItem("jwt_auth").then((value) => {
+                // remove loader
+                this.ToogleLoader();
+                NavigationService.navigate('Program')
+              });
+            }else{
+
               this.ToogleLoader();
-              NavigationService.navigate('Program')
-            });
-          
-            
+              this.setState({
+                alertVisible:true,
+                messageAlert:"En tant que V.I.P, vous avez le privilège de vous connecter sur le Web",
+              })
+              return
+
+            }  
 
           })
           .catch((error) => {

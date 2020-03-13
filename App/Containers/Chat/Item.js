@@ -20,33 +20,35 @@ const Item = ({
    
 }) => { 
     const { user } = item
+    console.log("user", user)
    
     return (
         <View 
         key={item && item["@id"]}
         style={[AppStyles.style.flex, { marginHorizontal: 0, alignItems: "flex-end", marginVertical: 15 }]}
         >
-            {item && user.id !== idUser && 
+            {user &&  user.id !== idUser || user === null &&
                     <Avatar 
                     style={[StylesChat.avatar,{ backgroundColor: Colors.primary}]}
                     rounded 
                     title="C"
-                    source={ item && user.avatar&&{ uri:  user.avatar.contentUrl}}
+                    source={ item && user && user.avatar ? { uri:  user.avatar.contentUrl} : Images.devProfil}
                      />
+                   
             }
             {item && 
             <View style={{ 
-                backgroundColor:item &&  user.id == idUser ? "#DCEDD6" : "#FFEECB", 
+                backgroundColor:item && user &&  user.id == idUser ? "#DCEDD6" : "#FFEECB", 
                 borderRadius: 15,
-                borderBottomRightRadius: item && user.id == idUser? 0 : 15, 
-                borderBottomLeftRadius: item && user.id == idUser? 15 : 0, 
+                borderBottomRightRadius: item &&  user &&  user.id == idUser? 0 : 15, 
+                borderBottomLeftRadius: item && user &&  user.id == idUser? 15 : 0, 
                 paddingVertical: 10, paddingHorizontal: 25,
-                marginLeft: item &&  user.id == idUser ? 25 : 10, 
+                marginLeft: item && user && user.id == idUser ? 25 : 10, 
                 width: '80%'
             }}>
                 <Text 
                 style={[Font.style.normal,
-                 {flexShrink: 1, color:item &&  user.id == idUser? "#181D37" :"#4D3A15"}]}>
+                 {flexShrink: 1, color:item &&  user && user.id == idUser? "#181D37" :"#4D3A15"}]}>
                     {item && item.content}
                 </Text>
 
@@ -55,19 +57,18 @@ const Item = ({
                         {Moment(item.createdAt).format("DD/MM -  H[h]mm")}
                     </Text>
                     <Text style={{ marginTop: 5, fontSize: 12, color: "#A0A0A0",}}>
-                        {`${user.firstName}`}
+                        {`${user && user.firstName ?user.firstName:"Anonyme" }`}
                     </Text>
                 </View>
             </View>
             }
-            {item && user.id == idUser && 
+            {item &&  user && user.id == idUser && 
              
                 <Avatar 
                 style={[StylesChat.avatar,{ backgroundColor: Colors.primary}]}
                 rounded 
                 title="C"
-
-                source={{ uri: item && user.avatar && user.avatar.contentUrl}}
+                source={{ uri: item && user.avatar ? user.avatar.contentUrl : Images.devProfil}}
                  />
             }
         </View>
