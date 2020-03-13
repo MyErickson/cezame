@@ -8,7 +8,8 @@ const initialState = {
   trip_User:undefined,
   info_Token:undefined,
   info_hotel:undefined,
-  day_steps:undefined
+  day_steps:undefined,
+  social_Network:undefined
 };
 
 /**
@@ -25,6 +26,8 @@ export const GET_INFO_HOTEL = 'GET_INFO_HOTEL';
 export const INFO_HOTEL = 'INFO_HOTEL ';
 export const CALL_DAY_STEPS = 'CALL_DAY_STEPS';
 export const DAY_STEPS ='DAY_STEPS';
+export const GET_SOCIAL_NETWORK = 'GET_SOCIAL_NETWORK';
+export const SOCIAL_NETWORK ='SOCIAL_NETWORK'
 /**
  * Traitements
  */
@@ -81,6 +84,13 @@ const reducer = (state = initialState, action = {}) => {
         ...state,
         day_steps:action.data
       }
+    
+    case SOCIAL_NETWORK:
+
+    return {
+      ...state,
+      social_Network:action.data
+    }
 
     case INITITALIZE_STATE:
     

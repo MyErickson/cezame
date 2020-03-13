@@ -128,8 +128,14 @@ export default class Places extends Component {
                 {trip_User.pointsOfInterest && trip_User.pointsOfInterest.map( (item, index) => {
   
                     return(
-                        <Animated.View style={{ position: "absolute",bottom: 75, right: this.state.index == index ? this.state.rightModal : -screen.width }}>
-                            <ModalPlace title={item.title} description={item.description ? item.description : "bientôt une description..."} onBack={this._return} />
+                        <Animated.View 
+                        key={index}
+                        style={{ position: "absolute",bottom: 75, right: this.state.index == index ? this.state.rightModal : -screen.width }}
+                        >
+                            <ModalPlace 
+                            title={item.title} 
+                            description={item.description ? item.description : "bientôt une description..."} 
+                            onBack={this._return} />
                         </Animated.View>
                     )})
                 }
@@ -147,7 +153,8 @@ export default class Places extends Component {
                     <View style={{ paddingLeft: 50, backgroundColor: "white", paddingTop: 15, paddingBottom: 25,borderBottomEndRadius: 15, borderBottomStartRadius: 15 }}>
                         
                         {/* Boucle pour la liste des lieux */}
-                        <FlatList data={trip_User.pointsOfInterest && trip_User.pointsOfInterest} keyExtractor={item => item.id}
+                        <FlatList data={trip_User.pointsOfInterest && trip_User.pointsOfInterest} 
+                        keyExtractor={item => item.id}
                             renderItem={({ item, index }) => {
                             return(
                                 <View>

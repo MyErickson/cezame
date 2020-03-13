@@ -13,10 +13,12 @@ import LandingScreen  from './index'
 import {responseConnection ,decode_Token } from '../../store/actionCreator/Login';
 import { getUsers } from '../../store/actionCreator/Parameters';
 import { callTrips } from '../../store/actionCreator/Program';
+import { getSocialNetwork } from '../../store/actionCreator/SocialNetwork'
 
 const mapStateToProps = (state, ownProps) => ({
 
     tokenConnection:state.tokenConnection,
+    social_Network:state.social_Network
   
 });
 
@@ -33,7 +35,10 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     },
     decode_Token :(data)=>{
         dispatch(decode_Token(data))
-      }
+      },
+    getSocialNetwork:()=>{
+      dispatch(getSocialNetwork())
+    }
 });
 
 const ContainerLandingScreen  = connect(

@@ -79,7 +79,7 @@ LocaleConfig.locales['fr'] = {
                             <View style={{flexDirection: "row", justifyContent: "space-between"}}>
                                 <View>
                                     <Text style={{ fontWeight: "bold", fontSize: 15 ,color:Colors.primary}}>{item.title}</Text>
-                                    <Text>Salle plénière Medineceli - RdC</Text>
+                                   
                                 </View>
                                 <View>
                                     <Icon

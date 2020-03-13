@@ -30,11 +30,30 @@ class SideMenu extends Component {
           return: () => {  this.props.navigation.toggleDrawer() },
           titleMenu: "",
           trip_User:undefined,
-          refreshing:false
+          refreshing:false,
+          socialNetwork :undefined
         }
     }
 
+    componentDidMount(){
+        const { getSocialNetwork } =this.props
+        getSocialNetwork && getSocialNetwork()
+      
+    }
 
+    static  getDerivedStateFromProps(props,state){
+
+        const {social_Network } = props
+      
+
+        if(social_Network){
+            state.socialNetwork = social_Network
+        } else{
+            
+            return null
+        } 
+       
+     }
     changeMenu = () => {
         this.setState({ iconBack: "arrow-back", return: () => { this.goBack() }, titleMenu: "A propos de Cézame" })
         Animated.timing(this.state.left, {
@@ -59,13 +78,13 @@ class SideMenu extends Component {
     }
     onRefresh =async ()=>{ 
  
-        const { callTrips } =this.props
+        const { getSocialNetwork } =this.props
      
          this.setState({
              refreshing:true
          });
          
-         callTrips()
+         getSocialNetwork()
  
          setTimeout(()=>{ this.setState({
              refreshing:false
@@ -76,7 +95,8 @@ class SideMenu extends Component {
   render () {
 
     const { infoUser } = this.props
-    const { refreshing } = this.state
+    const { refreshing,socialNetwork  } = this.state
+  
 
     return (
     <LinearGradient  start={{x: 0, y: 0}} end={{x: 1, y: 0}} colors={['#fff','#E9ECF5']}>
@@ -184,7 +204,7 @@ class SideMenu extends Component {
              
             </ScrollView>
             <View style={{  bottom: 15}}>
-                    <ContainerSocialNetwork  />
+                    <ContainerSocialNetwork  socialNetwork={socialNetwork } />
             </View>
         </ImageBackground>
       </LinearGradient>

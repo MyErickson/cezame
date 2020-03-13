@@ -8,20 +8,50 @@ import Images from '../../Themes/Images';
 import { dataLanding } from '../../Configs/General'
 var jwtDecode = require('jwt-decode');
 import AsyncStorage from '@react-native-community/async-storage';
-
+import axios from 'axios'
 export default class LandingScreen extends Component {
   
-        state ={
-            refreshing:false
-        }
+    state ={
+        refreshing:false,
+        socialNetwork:undefined
+    }
+    componentDidMount(){
+        const { getSocialNetwork } =this.props
+        getSocialNetwork && getSocialNetwork()
+      
+    }
+
+    static  getDerivedStateFromProps(props,state){
+
+        const {social_Network } = props
+      
+
+        if(social_Network){
+            state.socialNetwork = social_Network
+        } else{
+            
+            return null
+        } 
+       
+     }
 
     goToScreen=async(value )=>{
         const { title , navigateName , dataNavigate } = value
-        const {responseConnection,navigation,getUsers,decode_Token} = this.props;
+        const {navigation} = this.props;
         const token = await AsyncStorage.getItem("jwt_auth")
-  
+
         if(token && title === "Accès client"){
-            let decode = jwtDecode(token)
+            this.check(token)
+            navigation.navigate("Program")
+        }else{
+            navigation.navigate(navigateName, dataNavigate && dataNavigate)
+        }
+       
+    }
+
+    check =(token)=>{
+        const {responseConnection,getUsers,decode_Token} = this.props;
+        let decode = jwtDecode(token)
             //decotoken for redux
             decode_Token(decode)
             let data = new FormData
@@ -34,22 +64,20 @@ export default class LandingScreen extends Component {
             //request ask info Users
             responseConnection(token)
             getUsers(data)
-            navigation.navigate("Program")
-        }else{
-            navigation.navigate(navigateName, dataNavigate && dataNavigate)
-        }
-       
     }
+
+ 
+
 
     onRefresh =async ()=>{ 
  
-       const { callTrips } =this.props
+       const { callTrips, getSocialNetwork } =this.props
        const token = await AsyncStorage.getItem("jwt_auth")
         this.setState({
             refreshing:true
         });
         
-        token && callTrips()
+        token &&  getSocialNetwork()
 
         setTimeout(()=>{ this.setState({
             refreshing:false
@@ -60,7 +88,7 @@ export default class LandingScreen extends Component {
 
     render() {
    
-        const { refreshing} =this.state
+        const { refreshing , socialNetwork} =this.state
         return (
 
             <View style={{ flex: 1 , backgroundColor: Colors.generalBackground }}>
@@ -108,7 +136,7 @@ export default class LandingScreen extends Component {
                  
                 </ImageBackground> 
                 <View style={{  bottom: 15, left : 0, right : 0}}>
-                        <SocialNetworkButtons />
+                        <SocialNetworkButtons socialNetwork={socialNetwork} />
                     </View>
              
           </View>

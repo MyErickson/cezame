@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { View, TouchableOpacity, TouchableHighlight ,Linking,Text} from 'react-native';
 import { Icon } from  'react-native-elements';
 import  Styles  from './style';
@@ -6,7 +6,7 @@ import  Colors  from '../../Themes/Colors'
 import axios from 'axios'
 import RNFetchBlob from 'rn-fetch-blob';
 
-export default class SocialNetwork extends Component {
+export default class SocialNetwork extends PureComponent {
 
     state = {
         socialNetwork:undefined
@@ -15,39 +15,17 @@ export default class SocialNetwork extends Component {
 
 
 
-    componentDidMount(){
-        this.getSocials()
-    }
-
-
-    getSocials =()=>{
-        const { tokenConnection, infoUser} = this.props
-        console.log("SocialNetwork -> getSocials -> infoUser", infoUser)
-     
-
-        axios.get(`https://cezame-dev.digitalcube.fr/api/socials`)
-        .then( res =>{
-        console.log("SocialNetwork -> getSocials -> res", res)
-        this.setState({
-            socialNetwork:res.data["hydra:member"] 
-        })
-
-        }).catch( err =>{
-        console.log("SocialNetwork -> getSocials -> err", err)
-
-        })
-
-    }
-
     render() {
-       const { socialNetwork} = this.state
-    //    console.log("SocialNetwork -> render -> socialNetwork", socialNetwork)
+       const { socialNetwork} = this.props
+    
+     
         return (
             <View style={Styles.container}>
                 {socialNetwork && socialNetwork.map((value)=>{
+               
                 
                     return(
- 
+           
                             <TouchableOpacity
                             key={value["@id"]}
                             onPress={()=>Linking.openURL(value.link)}

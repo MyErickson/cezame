@@ -7,6 +7,8 @@ import Colors from '../../Themes/Colors';
 const screen = Dimensions.get("window");
 import { Styles } from './styleLayoutContent'
 export default class LayoutContent extends Component {
+    
+
     render() {
         const { title ,navigation} = this.props
         return (

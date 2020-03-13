@@ -1,10 +1,11 @@
 import axios from 'axios';
 
- import {  CALL_TRIPS,GET_USERS, GET_INFO_HOTEL ,CALL_DAY_STEPS} from './reducer'
+ import {  CALL_TRIPS,GET_USERS, GET_INFO_HOTEL ,CALL_DAY_STEPS , GET_SOCIAL_NETWORK} from './reducer'
 
 import {requestParam} from './request/Parameters'
 import {requestCallProgram , requestDaySteps } from './request/Program'
 import {requestHotel} from './request/Hotel'
+import { requestSocials } from './request/SocialNetwork'
 
  const  ajaxMiddleware = store => next => async action => {
     //  console.log(next,'action')
@@ -62,6 +63,18 @@ import {requestHotel} from './request/Hotel'
       requestDaySteps(valueDaySteps) 
     
         break;
+
+           
+      case   GET_SOCIAL_NETWORK:
+        next(action)
+  
+        let valueSocial = new FormData
+        valueSocial.action = action
+        valueSocial.store = store
+        
+        requestSocials(valueSocial) 
+      
+          break;
 
 
 
