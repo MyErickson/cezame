@@ -26,6 +26,9 @@ import {
   } from "react-native-responsive-screen";
 
 const screen = Dimensions.get("window");
+import io from "socket.io-client"
+
+
 
 const optionsImagePicker = {
     title: 'Select Avatar',
@@ -38,6 +41,10 @@ const optionsImagePicker = {
 
 
 var chat
+const socketAddress = "https://live.cezame-dev.digitalcube.fr";
+const socketPort = "5005";
+
+
 
 export default class Chat extends Component {
   constructor(props){
@@ -46,7 +53,8 @@ export default class Chat extends Component {
         avatarSource: undefined,
         messages:[],
         idUser:undefined, 
-        message:null
+        message:null,
+        socket:undefined
       }
       this.viewAnimated = new Animated.Value(0);
       this.startAnimated=false
@@ -54,35 +62,42 @@ export default class Chat extends Component {
 
 
     componentDidMount(){
-        this.getMessage()
-       chat= setInterval(()=>{
-            this.getMessage()
-        },3000)
+        const { tokenConnection} =this.props
+       let  socket = io(socketAddress + ':' + socketPort, {
+            query: {
+                token: tokenConnection,
+            }
+        });
+        
+        this.getMessage(socket)
+       this.setState({
+           socket
+       })
         
 
     } 
   
     componentWillUnmount(){
         console.log("Chat -> componentWillMount -> componentWillMount")
-        clearInterval(chat);
+        const { socket } =  this.state
+        socket.disconnect(true);
     }
 
-    getMessage=()=>{
+    getMessage=(socket)=>{
         const { infoToken,tokenConnection} =this.props
- 
-        let id = infoToken && infoToken.trip_id
-        axios.get(`https://cezame-dev.digitalcube.fr/api/trips/${id}/messages`,{
-            headers:{
-                'Authorization':"Bearer "+tokenConnection
-        }}).then(res=>{
-        console.log("Chat -> getMessage -> es", res.data["hydra:member"])
-            this.setState({
-                messages:res.data["hydra:member"],
-                idUser:infoToken.id
-            })
-        }).catch(err=>{
-            
-        })
+        socket.on('auth', (status) => {
+            if (!status.isAuth) {
+                console.log(status.error);
+            } else {
+                let messages = status.messages
+                this.setState({
+                    messages:status.messages
+                })
+               console.log("Chat -> getMessage -> status.messages", status)
+            }
+        });
+        
+      
     }
 
 
@@ -213,24 +228,25 @@ export default class Chat extends Component {
     }
 
     sendMessage = ()=>{
-        const { message } =this.state
+        const { message ,socket ,messages} =this.state
         const { tokenConnection } = this.props
 
-        axios.defaults.headers['Authorization']= "Bearer "+tokenConnection;
-        axios.post(`https://cezame-dev.digitalcube.fr/api/messages`,{
-            content:message
-        })
-        .then(res=>{
-        console.log("Chat -> getMessage -> es", res)
-        this.setState({
-            message:undefined
-        })
-        this.getMessage()
-         
-        }).catch(err=>{
-        console.log("Chat -> sendMessage -> err", err)
+        socket.emit('post_message', {content: message });
+        socket.on('post_message_status', (status) => {
+    
+            let isPosted = status.isPosted;
             
-        })
+            if (!isPosted) {
+                console.log(status.error);
+            } else {
+                console.log("Chat -> sendMessage -> status", status)
+               this.setState({
+                   messages:[...messages,status.message],
+                   message:undefined
+               })
+               
+            }
+        });
     }
 
     render() {

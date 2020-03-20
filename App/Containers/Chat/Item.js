@@ -20,35 +20,35 @@ const Item = ({
    
 }) => { 
     const { user } = item
-    console.log("user", user)
+    console.log("user", user.id)
    
     return (
         <View 
         key={item && item["@id"]}
         style={[AppStyles.style.flex, { marginHorizontal: 0, alignItems: "flex-end", marginVertical: 15 }]}
         >
-            {user &&  user.id !== idUser || user === null &&
+            {user &&  user.id !== idUser || user.id === null &&
                     <Avatar 
                     style={[StylesChat.avatar,{ backgroundColor: Colors.primary}]}
                     rounded 
                     title="C"
-                    source={ item && user && user.avatar ? { uri:  user.avatar.contentUrl} : Images.devProfil}
+                    source={ user && user.avatar.contentUrl ? { uri:  user.avatar.contentUrl} : Images.devProfil}
                      />
                    
             }
             {item && 
             <View style={{ 
-                backgroundColor:item && user &&  user.id == idUser ? "#DCEDD6" : "#FFEECB", 
+                backgroundColor:user &&  user.id == idUser ? "#DCEDD6" : "#FFEECB", 
                 borderRadius: 15,
-                borderBottomRightRadius: item &&  user &&  user.id == idUser? 0 : 15, 
-                borderBottomLeftRadius: item && user &&  user.id == idUser? 15 : 0, 
+                borderBottomRightRadius:  user &&  user.id == idUser? 0 : 15, 
+                borderBottomLeftRadius:  user &&  user.id == idUser? 15 : 0, 
                 paddingVertical: 10, paddingHorizontal: 25,
-                marginLeft: item && user && user.id == idUser ? 25 : 10, 
+                marginLeft: user && user.id == idUser ? 25 : 10, 
                 width: '80%'
             }}>
                 <Text 
                 style={[Font.style.normal,
-                 {flexShrink: 1, color:item &&  user && user.id == idUser? "#181D37" :"#4D3A15"}]}>
+                 {flexShrink: 1, color: user && user.id == idUser? "#181D37" :"#4D3A15"}]}>
                     {item && item.content}
                 </Text>
 
@@ -62,13 +62,13 @@ const Item = ({
                 </View>
             </View>
             }
-            {item &&  user && user.id == idUser && 
+            { user && user.id == idUser && 
              
                 <Avatar 
                 style={[StylesChat.avatar,{ backgroundColor: Colors.primary}]}
                 rounded 
                 title="C"
-                source={{ uri: item && user.avatar ? user.avatar.contentUrl : Images.devProfil}}
+                source={{ uri: item && user && user.avatar.content ? user.avatar.contentUrl : Images.devProfil}}
                  />
             }
         </View>
