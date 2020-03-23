@@ -1,12 +1,12 @@
 import React from 'react'
-import { View, Text } from 'react-native'
+import { View, Text ,Image} from 'react-native'
 import { Styles } from '../../Components/Layout/styleLayout';
 import { StylesChat } from './styleChat'
 import AppStyles from '../../Themes/AppStyles';
 import Font from '../../Themes/Font';
 import Moment from 'moment';
 import Colors from '../../Themes/Colors';
-import { Avatar , Image } from 'react-native-elements';
+import { Avatar  } from 'react-native-elements';
 import Images from '../../Themes/Images';
 import {
     widthPercentageToDP as wp,
@@ -16,23 +16,23 @@ import {
 const Item = ({
     item,
     idUser
+    
    
    
-}) => { 
+} ) => { 
     const { user } = item
-    console.log("user", user.id)
+    console.log(" item",  item)
+    console.log(" idUser",  idUser)
    
     return (
         <View 
         key={item && item["@id"]}
         style={[AppStyles.style.flex, { marginHorizontal: 0, alignItems: "flex-end", marginVertical: 15 }]}
         >
-            {user &&  user.id !== idUser || user.id === null &&
-                    <Avatar 
-                    style={[StylesChat.avatar,{ backgroundColor: Colors.primary}]}
-                    rounded 
-                    title="C"
-                    source={ user && user.avatar.contentUrl ? { uri:  user.avatar.contentUrl} : Images.devProfil}
+            {user &&  user.id !== idUser &&
+                    <Image
+                    style={[StylesChat.avatar]}
+                    source={ user && user.avatar.contentUrl ? { uri: user.avatar.contentUrl} : Images.devProfil}
                      />
                    
             }
@@ -62,13 +62,11 @@ const Item = ({
                 </View>
             </View>
             }
-            { user && user.id == idUser && 
+            { user && user.id === idUser && 
              
-                <Avatar 
-                style={[StylesChat.avatar,{ backgroundColor: Colors.primary}]}
-                rounded 
-                title="C"
-                source={{ uri: item && user && user.avatar.content ? user.avatar.contentUrl : Images.devProfil}}
+                <Image
+                style={[StylesChat.avatar]}
+                source={  user && user.avatar.contentUrl ? { uri: user.avatar.contentUrl } : Images.devProfil}
                  />
             }
         </View>

@@ -8,7 +8,24 @@ export const StylesChat = StyleSheet.create({
         borderBottomWidth: 0, 
         height: 50,
         marginBottom:10,
-},
+    },
+    inputAndroid:{
+        backgroundColor: "white",
+        borderBottomWidth: 0, 
+        height: 50,
+        marginBottom:0,
+        
+    },
+    styleAndroid:{
+        marginBottom:20,
+        backgroundColor:Colors.inputBg,
+        borderRadius:35,
+        paddingLeft:15,
+        paddingHorizontal:5,
+        paddingRight:2,
+        height: 50.1,
+
+    },
     avatar:{ 
         width: 35, 
         height: 35, 

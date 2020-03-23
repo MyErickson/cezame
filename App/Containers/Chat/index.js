@@ -63,14 +63,31 @@ export default class Chat extends Component {
 
     componentDidMount(){
         const { tokenConnection} =this.props
+       
+        
        let  socket = io(socketAddress + ':' + socketPort, {
             query: {
                 token: tokenConnection,
             }
         });
+
+
         
+        socket.on('new_posted_message', (message) => {
+            const { messages } =this.state
+            this.setState({
+                messages:[...messages,message],
+            })
+            
+        });
+          
+            
         this.getMessage(socket)
-       this.setState({
+
+        this.getNewMessage(socket)
+
+
+        this.setState({
            socket
        })
         
@@ -85,21 +102,43 @@ export default class Chat extends Component {
 
     getMessage=(socket)=>{
         const { infoToken,tokenConnection} =this.props
+   
+
         socket.on('auth', (status) => {
             if (!status.isAuth) {
                 console.log(status.error);
             } else {
-                let messages = status.messages
+                
                 this.setState({
-                    messages:status.messages
+                    messages:status.messages,
+                    idUser:infoToken.id
                 })
                console.log("Chat -> getMessage -> status.messages", status)
             }
         });
-        
       
     }
 
+    getNewMessage =(socket)=>{
+        
+        socket.on('post_message_status', (status) => {
+    
+            let isPosted = status.isPosted;
+            
+            if (!isPosted) {
+                console.log(status.error);
+            } else {
+               const { messages } = this.state 
+               this.setState({
+                   messages:[...messages,status.message],
+                   message:undefined,
+                 
+               })
+               
+            }
+        }); 
+
+    }
 
     _uploadImage = () => {
         ImagePicker.launchImageLibrary(optionsImagePicker, (response) => {
@@ -228,25 +267,13 @@ export default class Chat extends Component {
     }
 
     sendMessage = ()=>{
-        const { message ,socket ,messages} =this.state
+        const { message ,socket } =this.state
         const { tokenConnection } = this.props
 
-        socket.emit('post_message', {content: message });
-        socket.on('post_message_status', (status) => {
     
-            let isPosted = status.isPosted;
-            
-            if (!isPosted) {
-                console.log(status.error);
-            } else {
-                console.log("Chat -> sendMessage -> status", status)
-               this.setState({
-                   messages:[...messages,status.message],
-                   message:undefined
-               })
-               
-            }
-        });
+        socket.emit('post_message', {content: message });
+
+   
     }
 
     render() {
@@ -289,13 +316,14 @@ export default class Chat extends Component {
    
          
 
-                <View style={[AppStyles.style.flex, {paddingTop: 10,  alignItems: "center",backgroundColor:"white"}]}>
+                <View style={[ {flexDirection:"column",paddingTop: 10,  alignItems: "center",backgroundColor:"white"}]}>
                    
                     <Input 
                         containerStyle={{ width: "100%"}}
+                        rightIconContainerStyle={Platform.OS ==="android" && {marginBottom:20}}
                         value={message}
-                        inputContainerStyle={StylesChat.input}
-                        inputStyle={{ padding: 0 , }}
+                        inputContainerStyle={Platform.OS === "ios" ? StylesChat.input : StylesChat.inputAndroid}
+                        inputStyle={[{ padding: 0  },Platform.OS === "android" && StylesChat.styleAndroid]}
                         multiline={true}
                         placeholderTextColor="#9E9E9E"
                         placeholder='Tapez votre message'
@@ -305,9 +333,9 @@ export default class Chat extends Component {
                             name: 'send',
                             size: 18, 
                             onPress:()=> this.sendMessage() ,
-                            underlayColor:"none" }}
+                             }}
                     />
-                  
+               
                 </View>
     
           
