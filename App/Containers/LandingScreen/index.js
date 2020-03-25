@@ -9,6 +9,8 @@ import { dataLanding } from '../../Configs/General'
 var jwtDecode = require('jwt-decode');
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from 'axios'
+var jwtDecode = require('jwt-decode');
+
 export default class LandingScreen extends Component {
   
     state ={
@@ -39,9 +41,11 @@ export default class LandingScreen extends Component {
         const { title , navigateName , dataNavigate } = value
         const {navigation} = this.props;
         const token = await AsyncStorage.getItem("jwt_auth")
+        const  decode = token && jwtDecode(token)
+        console.log("LandingScreen -> goToScreen -> decode", decode)
 
-        if(token && title === "Accès client"){
-            this.check(token)
+        if(token && title === "Accès client" && decode.trip_id){
+            this.check(decode,token)
             navigation.navigate("Program")
         }else{
             navigation.navigate(navigateName, dataNavigate && dataNavigate)
@@ -49,9 +53,8 @@ export default class LandingScreen extends Component {
        
     }
 
-    check =(token)=>{
+    check =(decode,token)=>{
         const {responseConnection,getUsers,decode_Token} = this.props;
-        let decode = jwtDecode(token)
             //decotoken for redux
             decode_Token(decode)
             let data = new FormData
