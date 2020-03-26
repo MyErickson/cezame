@@ -10,10 +10,10 @@ import News from '../Containers/News';
 import ContainerAgenda  from '../Containers/Agenda/ContainerAgenda';
 import AboutUs from '../Containers/AboutUs';
 import LegalNotice from '../Containers/LegalNotice';
-import Program from '../Containers/Program/ContainerProgram';
+import ContainerProgram from '../Containers/Program/ContainerProgram';
 import { Dimensions } from 'react-native';
 import ContainerSideMenu from './ContainerSideMenu ';
-import Notifications from '../Containers/Notifications';
+import ContainerNotifications from '../Containers/Notifications/ContainerNotif';
 import ContainerChat  from '../Containers/Chat/ContainerChat';
 import ContainerPlaces from '../Containers/Places/ContainerPlaces';
 import ContainerParam from '../Containers/Parameters/ContainerParam';
@@ -32,8 +32,8 @@ const MainNavigator = createStackNavigator(
     Agenda : ContainerAgenda ,
     AboutUs :  AboutUs,
     LegalNotice :  LegalNotice,
-    Program :  Program,
-    Notifications :  Notifications,
+    Program :  ContainerProgram,
+    Notifications :  ContainerNotifications,
     Chat :  ContainerChat ,
     Places :  ContainerPlaces, 
     Parameters :  ContainerParam, 

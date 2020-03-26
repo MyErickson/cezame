@@ -95,7 +95,7 @@ export default class Chat extends Component {
     } 
   
     componentWillUnmount(){
-        console.log("Chat -> componentWillMount -> componentWillMount")
+      
         const { socket } =  this.state
         socket.disconnect(true);
     }
@@ -113,7 +113,7 @@ export default class Chat extends Component {
                     messages:status.messages,
                     idUser:infoToken.id
                 })
-               console.log("Chat -> getMessage -> status.messages", status)
+               
             }
         });
       
@@ -142,7 +142,7 @@ export default class Chat extends Component {
 
     _uploadImage = () => {
         ImagePicker.launchImageLibrary(optionsImagePicker, (response) => {
-            console.log('Response = ', response);
+         
 
             if (response.didCancel) {
                 console.log('User cancelled image picker');

@@ -25,6 +25,8 @@
 		41AFDBB01CEB44B4BE6F6F8B /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0E91EB7CEE5549598EA612DC /* Entypo.ttf */; };
 		518EF3C8A5274B71B5659865 /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7C51635C93E843D79FD9EFAA /* Foundation.ttf */; };
 		66EEAF4C58BE4523AA81B5EF /* Fontisto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1BCA9DE4DF554F8989C4A2B6 /* Fontisto.ttf */; };
+		6877CD89242BE9E300097FB6 /* NotificationService.m in Sources */ = {isa = PBXBuildFile; fileRef = 6877CD88242BE9E300097FB6 /* NotificationService.m */; };
+		6877CD8D242BE9E300097FB6 /* OneSignalNotificationServiceExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 6877CD85242BE9E300097FB6 /* OneSignalNotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		687B14A424067D0200990780 /* libreact-native-cameraroll.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 687B14A324067D0200990780 /* libreact-native-cameraroll.a */; };
 		6D0F19FB7BED4DC6AB3C8A0A /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B80FAE629CBE4A1CAF896795 /* SimpleLineIcons.ttf */; };
 		7CDF081D56A74E138F0D0BC1 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C0600167E4CA44A79C07E9EC /* Zocial.ttf */; };
@@ -32,6 +34,7 @@
 		93617D80B6654415A5488635 /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C025F63ED9914CB0AAA30D43 /* MaterialCommunityIcons.ttf */; };
 		953A2413A788EEB4E9311DBD /* libPods-Cezame-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A35C19279F23067B63065359 /* libPods-Cezame-tvOSTests.a */; };
 		B62772C48ECC36D8B311D428 /* libPods-Cezame-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F132C6EA3F0C110CCC4D8DEC /* libPods-Cezame-tvOS.a */; };
+		BAB313BC550641F76571ABC5 /* libPods-OneSignalNotificationServiceExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 14AD860FE5A1B766FF08F8F8 /* libPods-OneSignalNotificationServiceExtension.a */; };
 		BDAB8264806C49528BEF6BD2 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 992C6187F57449D3BEB98DBC /* Octicons.ttf */; };
 		C324BBDD9B82462BB35D07E1 /* AntDesign.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 596F465AF07F441A872F1F66 /* AntDesign.ttf */; };
 		C87EFE360AF64BDE87A30F37 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 218A20AA704344C587DE3AEB /* FontAwesome.ttf */; };
@@ -54,7 +57,28 @@
 			remoteGlobalIDString = 2D02E47A1E0B4A5D006451C7;
 			remoteInfo = "Cezame-tvOS";
 		};
+		6877CD8B242BE9E300097FB6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6877CD84242BE9E300097FB6;
+			remoteInfo = OneSignalNotificationServiceExtension;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		6877CD91242BE9E300097FB6 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				6877CD8D242BE9E300097FB6 /* OneSignalNotificationServiceExtension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
@@ -70,6 +94,7 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Cezame/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Cezame/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Cezame/main.m; sourceTree = "<group>"; };
+		14AD860FE5A1B766FF08F8F8 /* libPods-OneSignalNotificationServiceExtension.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OneSignalNotificationServiceExtension.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A1F80CFB24C44DF9977B941 /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Brands.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; };
 		1BCA9DE4DF554F8989C4A2B6 /* Fontisto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Fontisto.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Fontisto.ttf"; sourceTree = "<group>"; };
 		1DAC24651D7A101F88C9D66D /* Pods-Cezame-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Cezame-tvOS.release.xcconfig"; path = "Target Support Files/Pods-Cezame-tvOS/Pods-Cezame-tvOS.release.xcconfig"; sourceTree = "<group>"; };
@@ -81,9 +106,16 @@
 		3512A0ACB56D843608632D04 /* Pods-Cezame.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Cezame.debug.xcconfig"; path = "Target Support Files/Pods-Cezame/Pods-Cezame.debug.xcconfig"; sourceTree = "<group>"; };
 		57F683430F1B5FB11EC32723 /* libPods-CezameTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CezameTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		596F465AF07F441A872F1F66 /* AntDesign.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = AntDesign.ttf; path = "../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf"; sourceTree = "<group>"; };
+		6877CD80242BE89100097FB6 /* Cezame.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Cezame.entitlements; path = Cezame/Cezame.entitlements; sourceTree = "<group>"; };
+		6877CD85242BE9E300097FB6 /* OneSignalNotificationServiceExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = OneSignalNotificationServiceExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		6877CD87242BE9E300097FB6 /* NotificationService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationService.h; sourceTree = "<group>"; };
+		6877CD88242BE9E300097FB6 /* NotificationService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotificationService.m; sourceTree = "<group>"; };
+		6877CD8A242BE9E300097FB6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		687B14A324067D0200990780 /* libreact-native-cameraroll.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libreact-native-cameraroll.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6E4DB464534246FBA9448C19 /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
+		76444EE4F33478696835CBCB /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.release.xcconfig"; path = "Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.release.xcconfig"; sourceTree = "<group>"; };
 		7C51635C93E843D79FD9EFAA /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
+		8349812474FDECF7B410455B /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; path = "Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; sourceTree = "<group>"; };
 		853C65AF93CE4D7ABEFC848C /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Solid.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Solid.ttf"; sourceTree = "<group>"; };
 		8C2B6904D137DEBF1A2E6F79 /* Pods-Cezame-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Cezame-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-Cezame-tvOSTests/Pods-Cezame-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		91F3267B724877ABB968444B /* Pods-Cezame.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Cezame.release.xcconfig"; path = "Target Support Files/Pods-Cezame/Pods-Cezame.release.xcconfig"; sourceTree = "<group>"; };
@@ -137,6 +169,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		6877CD82242BE9E300097FB6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BAB313BC550641F76571ABC5 /* libPods-OneSignalNotificationServiceExtension.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -160,6 +200,7 @@
 		13B07FAE1A68108700A75B9A /* Cezame */ = {
 			isa = PBXGroup;
 			children = (
+				6877CD80242BE89100097FB6 /* Cezame.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -181,6 +222,7 @@
 				F132C6EA3F0C110CCC4D8DEC /* libPods-Cezame-tvOS.a */,
 				A35C19279F23067B63065359 /* libPods-Cezame-tvOSTests.a */,
 				57F683430F1B5FB11EC32723 /* libPods-CezameTests.a */,
+				14AD860FE5A1B766FF08F8F8 /* libPods-OneSignalNotificationServiceExtension.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -208,6 +250,16 @@
 			name = Resources;
 			sourceTree = "<group>";
 		};
+		6877CD86242BE9E300097FB6 /* OneSignalNotificationServiceExtension */ = {
+			isa = PBXGroup;
+			children = (
+				6877CD87242BE9E300097FB6 /* NotificationService.h */,
+				6877CD88242BE9E300097FB6 /* NotificationService.m */,
+				6877CD8A242BE9E300097FB6 /* Info.plist */,
+			);
+			path = OneSignalNotificationServiceExtension;
+			sourceTree = "<group>";
+		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
@@ -221,6 +273,7 @@
 				13B07FAE1A68108700A75B9A /* Cezame */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* CezameTests */,
+				6877CD86242BE9E300097FB6 /* OneSignalNotificationServiceExtension */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				AFB302F079EA3913DC70E435 /* Pods */,
@@ -238,6 +291,7 @@
 				00E356EE1AD99517003FC87E /* CezameTests.xctest */,
 				2D02E47B1E0B4A5D006451C7 /* Cezame-tvOS.app */,
 				2D02E4901E0B4A5D006451C7 /* Cezame-tvOSTests.xctest */,
+				6877CD85242BE9E300097FB6 /* OneSignalNotificationServiceExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -253,6 +307,8 @@
 				B47B29E4D1E146EE2856037A /* Pods-Cezame-tvOSTests.release.xcconfig */,
 				26B0F00F74590B84BC0B7B00 /* Pods-CezameTests.debug.xcconfig */,
 				2A3F374CB6B4AD9E04E3E7A8 /* Pods-CezameTests.release.xcconfig */,
+				8349812474FDECF7B410455B /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */,
+				76444EE4F33478696835CBCB /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -290,10 +346,12 @@
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				D28245F606157C9F0D026EB4 /* [CP] Copy Pods Resources */,
+				6877CD91242BE9E300097FB6 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				6877CD8C242BE9E300097FB6 /* PBXTargetDependency */,
 			);
 			name = Cezame;
 			productName = Cezame;
@@ -339,12 +397,31 @@
 			productReference = 2D02E4901E0B4A5D006451C7 /* Cezame-tvOSTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		6877CD84242BE9E300097FB6 /* OneSignalNotificationServiceExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6877CD8E242BE9E300097FB6 /* Build configuration list for PBXNativeTarget "OneSignalNotificationServiceExtension" */;
+			buildPhases = (
+				0B46315874F00831B6701C01 /* [CP] Check Pods Manifest.lock */,
+				6877CD81242BE9E300097FB6 /* Sources */,
+				6877CD82242BE9E300097FB6 /* Frameworks */,
+				6877CD83242BE9E300097FB6 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = OneSignalNotificationServiceExtension;
+			productName = OneSignalNotificationServiceExtension;
+			productReference = 6877CD85242BE9E300097FB6 /* OneSignalNotificationServiceExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				DefaultBuildSystemTypeForWorkspace = Original;
 				LastUpgradeCheck = 940;
 				ORGANIZATIONNAME = Facebook;
 				TargetAttributes = {
@@ -363,6 +440,11 @@
 						CreatedOnToolsVersion = 8.2.1;
 						ProvisioningStyle = Automatic;
 						TestTargetID = 2D02E47A1E0B4A5D006451C7;
+					};
+					6877CD84242BE9E300097FB6 = {
+						CreatedOnToolsVersion = 11.3.1;
+						DevelopmentTeam = BF8458RVX6;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -384,6 +466,7 @@
 				00E356ED1AD99517003FC87E /* CezameTests */,
 				2D02E47A1E0B4A5D006451C7 /* Cezame-tvOS */,
 				2D02E48F1E0B4A5D006451C7 /* Cezame-tvOSTests */,
+				6877CD84242BE9E300097FB6 /* OneSignalNotificationServiceExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -436,6 +519,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		6877CD83242BE9E300097FB6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
@@ -452,6 +542,28 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
+		};
+		0B46315874F00831B6701C01 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-OneSignalNotificationServiceExtension-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
 		};
 		2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -678,6 +790,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		6877CD81242BE9E300097FB6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6877CD89242BE9E300097FB6 /* NotificationService.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -690,6 +810,11 @@
 			isa = PBXTargetDependency;
 			target = 2D02E47A1E0B4A5D006451C7 /* Cezame-tvOS */;
 			targetProxy = 2D02E4911E0B4A5D006451C7 /* PBXContainerItemProxy */;
+		};
+		6877CD8C242BE9E300097FB6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6877CD84242BE9E300097FB6 /* OneSignalNotificationServiceExtension */;
+			targetProxy = 6877CD8B242BE9E300097FB6 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -754,6 +879,7 @@
 			baseConfigurationReference = 3512A0ACB56D843608632D04 /* Pods-Cezame.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Cezame/Cezame.entitlements;
 				CURRENT_PROJECT_VERSION = 32;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = BF8458RVX6;
@@ -776,6 +902,7 @@
 			baseConfigurationReference = 91F3267B724877ABB968444B /* Pods-Cezame.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Cezame/Cezame.entitlements;
 				CURRENT_PROJECT_VERSION = 32;
 				DEVELOPMENT_TEAM = BF8458RVX6;
 				INFOPLIST_FILE = Cezame/Info.plist;
@@ -899,6 +1026,58 @@
 				SDKROOT = appletvos;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Cezame-tvOS.app/Cezame-tvOS";
 				TVOS_DEPLOYMENT_TARGET = 10.1;
+			};
+			name = Release;
+		};
+		6877CD8F242BE9E300097FB6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8349812474FDECF7B410455B /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = BF8458RVX6;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = OneSignalNotificationServiceExtension/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.Cezame.OneSignalNotificationServiceExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		6877CD90242BE9E300097FB6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 76444EE4F33478696835CBCB /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = BF8458RVX6;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = OneSignalNotificationServiceExtension/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.Cezame.OneSignalNotificationServiceExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -1036,6 +1215,15 @@
 			buildConfigurations = (
 				2D02E4991E0B4A5E006451C7 /* Debug */,
 				2D02E49A1E0B4A5E006451C7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6877CD8E242BE9E300097FB6 /* Build configuration list for PBXNativeTarget "OneSignalNotificationServiceExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6877CD8F242BE9E300097FB6 /* Debug */,
+				6877CD90242BE9E300097FB6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

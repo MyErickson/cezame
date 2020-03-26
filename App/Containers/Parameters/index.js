@@ -38,6 +38,7 @@ export default class Parameters extends PureComponent {
            
         };
         this.input= {}
+
     }
     componentDidMount(){
         const{ infoUser}  = this.props
@@ -46,7 +47,7 @@ export default class Parameters extends PureComponent {
                 checked:infoUser.imageRights
             })
         }
-       
+   
     }
     static getDerivedStateFromProps(props,state){
         if( props.infoUser){
@@ -319,8 +320,7 @@ export default class Parameters extends PureComponent {
             // Visibility = false
             eyeIcon = <Icon name='eye' type="font-awesome" size={18} color='#969696' onPress={this.TooglePasswordVisibility}/>;
         }
-
-
+       
         return (
             <ContainerLayout  title="Paramètres" navigation={this.props.navigation}>
                

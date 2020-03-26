@@ -19,7 +19,7 @@ import AlertDialog from '../AlertDialog/AlertDialog';
 import AlertImageRight from '../AlertDialog/AlertImageRight'
 var jwtDecode = require('jwt-decode');
 import axios from 'axios';
-
+import OneSignal from 'react-native-onesignal';
 
 export default class Program extends Component {
 
@@ -41,13 +41,20 @@ export default class Program extends Component {
             rightModal : new Animated.Value(-screen.width), // position initial des modals des lieux
             leftModal: new Animated.Value(screen.width-(screen.width-(85/2))), // position initial de la modal initiale
         }
+        OneSignal.init("23c611a6-23d6-478a-ad9f-976e78db3020", {kOSSettingsKeyAutoPrompt : true});
+
+        OneSignal.addEventListener('received', this.onReceived);
+       
+        OneSignal.addEventListener('ids', this.onIds);
+        OneSignal.addEventListener('inAppMessageClicked', this.onInAppClicked);
+     
     }
 
     componentDidMount(){
-       
+        console.log("Program -> onOpened -> this.props.navigation.navigate", this.props)
         this.getTrips()
         setTimeout(()=>this.getImageright(),3000)
-
+        OneSignal.addEventListener('opened', this.onOpened);
 
     }
 
@@ -74,6 +81,40 @@ export default class Program extends Component {
         }
         return null
     }
+
+    componentWillUnmount() {
+        OneSignal.removeEventListener('received', this.onReceived);
+        OneSignal.removeEventListener('opened', this.onOpened);
+        OneSignal.removeEventListener('ids', this.onIds);
+        
+      }
+
+      onInAppClicked(action){
+        let {clickUrl, clickName, firstClick, closesMessage} = action;
+        console.log("Program -> onInAppClicked -> clickUrl,", clickUrl,)
+        
+      }
+
+
+    onReceived(notification) {
+        console.log("Notification received: ", notification);
+    }
+
+    onOpened(openResult) {
+        console.log('Message: ', openResult.notification.payload.body);
+        console.log('Data: ', openResult.notification.payload.additionalData);
+        console.log('isActive: ', openResult.notification.isAppInFocus);
+        console.log('openResult: ', openResult);
+        openResult.notification.payload.additionalData
+        NavigationService.navigate('Notifications')
+       console.log("this;props",NavigationService)
+        // 
+    }
+
+    onIds(device) {
+        console.log('Device info: ', device);
+    }
+
 
     openAlert=(text)=>{
         this.setState({

@@ -21,8 +21,7 @@ const Item = ({
    
 } ) => { 
     const { user } = item
-    console.log(" item",  item)
-    console.log(" idUser",  idUser)
+
    
     return (
         <View 
