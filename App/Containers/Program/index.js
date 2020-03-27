@@ -44,18 +44,16 @@ export default class Program extends Component {
         OneSignal.init("23c611a6-23d6-478a-ad9f-976e78db3020", {kOSSettingsKeyAutoPrompt : true});
 
         OneSignal.addEventListener('received', this.onReceived);
-       
+        OneSignal.addEventListener('opened', this.onOpened);
         OneSignal.addEventListener('ids', this.onIds);
-        OneSignal.addEventListener('inAppMessageClicked', this.onInAppClicked);
-     
+
     }
 
     componentDidMount(){
-        console.log("Program -> onOpened -> this.props.navigation.navigate", this.props)
+    
         this.getTrips()
         setTimeout(()=>this.getImageright(),3000)
-        OneSignal.addEventListener('opened', this.onOpened);
-
+  
     }
 
     static getDerivedStateFromProps(props,state){
@@ -89,30 +87,47 @@ export default class Program extends Component {
         
       }
 
-      onInAppClicked(action){
-        let {clickUrl, clickName, firstClick, closesMessage} = action;
-        console.log("Program -> onInAppClicked -> clickUrl,", clickUrl,)
-        
-      }
 
-
-    onReceived(notification) {
+    onReceived(notification){
         console.log("Notification received: ", notification);
     }
 
     onOpened(openResult) {
-        console.log('Message: ', openResult.notification.payload.body);
-        console.log('Data: ', openResult.notification.payload.additionalData);
-        console.log('isActive: ', openResult.notification.isAppInFocus);
+        // console.log('Message: ', openResult.notification.payload.body);
+        // console.log('Data: ', openResult.notification.payload.additionalData);
+        // console.log('isActive: ', openResult.notification.isAppInFocus);
         console.log('openResult: ', openResult);
-        openResult.notification.payload.additionalData
+        
         NavigationService.navigate('Notifications')
-       console.log("this;props",NavigationService)
-        // 
+       
+     
     }
 
-    onIds(device) {
+    onIds =(device)=> {
         console.log('Device info: ', device);
+        if(device){
+            const { userId } = device
+            const { tokenConnection ,info_Token } = this.props
+           
+            let exist = info_Token.onesignal_ids.includes(userId)
+           
+    
+            if(info_Token.onesignal_ids.lenght !== 0 && !exist  ){
+                console.log("Program -> onIds -> exist", exist)
+                axios.defaults.headers['Authorization']= "Bearer "+tokenConnection;
+                axios.post(`one_signals`,{
+                    clientId:userId
+                }).then(res=>{
+                console.log("Program -> onIds -> res", res)
+    
+                }).catch(err=>{
+                console.log("Program -> onIds -> er", err)
+                    
+                })
+            }
+      
+        }
+    
     }
 
 
@@ -126,7 +141,7 @@ export default class Program extends Component {
     }
 
     closeAlert=(close)=>{
-    console.log("Program -> closeAlert -> close", close)
+   
 
         this.setState({[close]:false})
         

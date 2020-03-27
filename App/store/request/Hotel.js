@@ -13,7 +13,7 @@ export const requestHotel=(value)=>{
         } 
       })
        .then( res =>{
-        console.log("TCL: es", res)
+        // console.log("TCL: es", res)
        store.dispatch(info_hotel(res.data))
 
        })

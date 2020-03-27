@@ -7,7 +7,7 @@ export  const requestSocials =(value)=>{
 
         axios.get(`https://cezame-dev.digitalcube.fr/api/socials`)
         .then( res =>{
-        console.log("SocialNetwork -> getSocials -> res", res)
+        // console.log("SocialNetwork -> getSocials -> res", res)
       
             store.dispatch(social_network(res.data["hydra:member"])) 
       

@@ -11,7 +11,7 @@ export const requestCallProgram=(value)=>{
         } 
       })
        .then( res =>{
-       console.log("TCL: res tripuser tipuser", res)
+      //  console.log("TCL: res tripuser tipuser", res)
     
 
        store.dispatch(receiveTrips(res.data))
@@ -36,7 +36,7 @@ export const requestDaySteps = (value)=>{
       } 
     })
     .then( res =>{
-      console.log("TCL: requestDaySteps -> store", res)
+      // console.log("TCL: requestDaySteps -> store", res)
 
 
     store.dispatch(receivedaySteps(res.data["hydra:member"]))

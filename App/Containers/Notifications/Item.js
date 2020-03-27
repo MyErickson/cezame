@@ -7,7 +7,7 @@ import AppStyles from '../../Themes/AppStyles';
 import Moment from 'moment';
 
 const  Item=({item}) =>{
-    console.log("Item -> item}", item)
+ 
     return(
         <View style={{ 
             flexDirection: "row", justifyContent: "center", alignItems: "center",
@@ -19,12 +19,12 @@ const  Item=({item}) =>{
             
             <View style={{ width: 280, marginRight: 50 }}>
                 <Text style={{ flexShrink: 1, fontWeight: item && item.seen ? "normal" : "bold" }}>
-                    {item && item.notification.content}
+                    {item.notification && item.notification.content}
                 </Text>
                 <View style={[AppStyles.style.flex, { alignItems: "center" }]}>
                     <Icon name="access-time" size={12} containerStyle={{ marginRight: 5 }} color={"#B6B6B6"} />
                     <Text style={{color: '#B6B6B6' }}>
-                        Le {item && Moment(item.notification.createdAt).format("DD/MM -  H[h]mm")}
+                        Le {item.notification && Moment(item.notification.createdAt).format("DD/MM -  H[h]mm")}
                     </Text>
                 </View>
             </View>
