@@ -98,6 +98,6 @@ export const sideMenuApropos =[
     {
         title:"Confidentialité",
         iconName:"lock",
-        navigate:"program"
+        navigate:"Confidentiality"
     }
 ]

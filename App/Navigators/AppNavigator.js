@@ -21,7 +21,7 @@ import ContainerHotel from '../Containers/Hotel/ContainerHotel'
 import ContainerContact from '../Containers/Contact/ContainerContact';
 import CurrentImage from '../Containers/Gallery/CurrentImage/CurrentImage'
 import ContainerGallery from '../Containers/Gallery/ContainerGallery';
-
+import Confidentiality from '../Containers/Confidentiality'
 const screen = Dimensions.get("window");
 
 const MainNavigator = createStackNavigator(
@@ -40,6 +40,7 @@ const MainNavigator = createStackNavigator(
     Contact :  ContainerContact,
     Gallery :  ContainerGallery,
     Hotel: ContainerHotel,
+    Confidentiality:Confidentiality,
     CurrentImage:CurrentImage
 
   },

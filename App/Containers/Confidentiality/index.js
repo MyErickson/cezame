@@ -7,7 +7,7 @@ import { WebView } from 'react-native-webview'
 import HTML from 'react-native-render-html';
 
 
-export default class AboutUs extends Component {
+export default class Confidentiality extends Component {
 
     constructor(props){
         super(props);
@@ -17,7 +17,7 @@ export default class AboutUs extends Component {
     }
     componentDidMount(){
 
-        axios.get('https://cezame-dev.digitalcube.fr/api/cms?pageTag=about').then(res=>{
+        axios.get('https://cezame-dev.digitalcube.fr/api/cms?pageTag=confidentiality').then(res=>{
 
         this;this.setState({
             about:res.data["hydra:member"][0].content
@@ -34,7 +34,7 @@ export default class AboutUs extends Component {
 
         return (
             <ContainerLayoutContent title="A propos" navigation={this.props.navigation}>
-                <ScrollView    
+                 <ScrollView    
                     style={{ marginHorizontal: 0 ,marginBottom:0,}}
                     showsVerticalScrollIndicator = {false}
                 >

@@ -46,7 +46,7 @@ export default class Program extends Component {
         OneSignal.addEventListener('received', this.onReceived);
         OneSignal.addEventListener('opened', this.onOpened);
         OneSignal.addEventListener('ids', this.onIds);
-
+        OneSignal.inFocusDisplaying(2);
     }
 
     componentDidMount(){
@@ -112,7 +112,7 @@ export default class Program extends Component {
             let exist = info_Token.onesignal_ids.includes(userId)
            
     
-            if(info_Token.onesignal_ids.lenght !== 0 && !exist  ){
+            if(info_Token.onesignal_ids.lenght !== 0 && !exist && tokenConnection  ){
                 console.log("Program -> onIds -> exist", exist)
                 axios.defaults.headers['Authorization']= "Bearer "+tokenConnection;
                 axios.post(`one_signals`,{
