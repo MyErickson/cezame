@@ -99,7 +99,7 @@ export default class Program extends Component {
         // console.log('isActive: ', openResult.notification.isAppInFocus);
         console.log('openResult: ', openResult);
 
-        NavigationService.navigate('Notifications')
+        NavigationService.navigate(openResult.notification.payload.additionalData.redirect)
        
      
     }
