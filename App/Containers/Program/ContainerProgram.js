@@ -13,6 +13,8 @@ import Program from './index'
 
 import { callTrips ,callDaySteps} from '../../store/actionCreator/Program';
 import { info_user} from '../../store/actionCreator/Parameters'
+import { get_Notif } from "../../store/actionCreator/Notification"
+
 
 const mapStateToProps = (state, ownProps) => ({
     tokenConnection:state.tokenConnection,
@@ -32,6 +34,9 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   },
   info_user:(data)=>{
     dispatch(info_user(data))
+  },
+  get_Notif:(data) =>{
+    dispatch(get_Notif(data))
   }
 
 });

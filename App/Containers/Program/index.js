@@ -50,7 +50,7 @@ export default class Program extends Component {
     }
 
     componentDidMount(){
-    
+        this.getNotif() 
         this.getTrips()
         setTimeout(()=>this.getImageright(),3000)
   
@@ -88,16 +88,17 @@ export default class Program extends Component {
       }
 
 
-    onReceived(notification){
+    onReceived=(notification)=>{
         console.log("Notification received: ", notification);
+     this.getNotif() 
     }
 
-    onOpened(openResult) {
+    onOpened=(openResult)=> {
         // console.log('Message: ', openResult.notification.payload.body);
         // console.log('Data: ', openResult.notification.payload.additionalData);
         // console.log('isActive: ', openResult.notification.isAppInFocus);
         console.log('openResult: ', openResult);
-        
+
         NavigationService.navigate('Notifications')
        
      
@@ -107,21 +108,23 @@ export default class Program extends Component {
         console.log('Device info: ', device);
         if(device){
             const { userId } = device
+      
             const { tokenConnection ,info_Token } = this.props
+
            
             let exist = info_Token.onesignal_ids.includes(userId)
+        
            
-    
-            if(info_Token.onesignal_ids.lenght !== 0 && !exist && tokenConnection  ){
-                console.log("Program -> onIds -> exist", exist)
+            if(info_Token.onesignal_ids.length === 0 && !exist && tokenConnection  ){
+                console.log("Program -> onIds -> exist ====", exist)
                 axios.defaults.headers['Authorization']= "Bearer "+tokenConnection;
-                axios.post(`one_signals`,{
+                axios.post(`https://cezame-dev.digitalcube.fr/api/one_signals`,{
                     clientId:userId
                 }).then(res=>{
                 console.log("Program -> onIds -> res", res)
     
                 }).catch(err=>{
-                console.log("Program -> onIds -> er", err)
+                console.log("Program -> onIds -> er", err.response)
                     
                 })
             }
@@ -129,7 +132,14 @@ export default class Program extends Component {
         }
     
     }
-
+    getNotif =()=>{
+        const { infoUser, tokenConnection , get_Notif } = this.props
+        let data = {}
+             data.id = infoUser.id
+             data.token = tokenConnection
+             get_Notif(data)
+       }
+    
 
     openAlert=(text)=>{
         this.setState({

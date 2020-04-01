@@ -45,32 +45,29 @@ export default class Notifications extends Component {
     }
 
    componentDidMount(){
-         this.getNotif()
+  
+    this.getNotif()
+         
    }
 
-   getNotif=()=>{
- 
-        const { infoUser, tokenConnection} = this.props
+   static getDerivedStateFromProps(props,state){ 
+       if(props.all_Notif){
+        state.allNotifs = props.all_Notif
+       }
 
-        axios.get(`users/${infoUser.id}/user_notifications`,{
-            headers:{
-                'Authorization':"Bearer "+tokenConnection
-            } 
-        }).then(res=>{
-        console.log("Notifications -> getNotif -> es", res)
-            this.setState({
-                allNotifs:res.data["hydra:member"]
-            }) 
-            
-        }).catch(err=>{
-        console.log("Notifications -> getNotif -> err", err)
-            
-        })
-    
+
+   }
+
+   getNotif =()=>{
+    const { infoUser, tokenConnection , get_Notif } = this.props
+    let data = {}
+         data.id = infoUser.id
+         data.token = tokenConnection
+         get_Notif(data)
    }
 
     putNotif=(item)=>{
-        const {tokenConnection} = this.props
+        const {tokenConnection,get_Notif} = this.props
         axios.defaults.headers['Authorization']= "Bearer "+tokenConnection;
 
         if(item.seen !== true ){
@@ -92,6 +89,9 @@ export default class Notifications extends Component {
 
     render() {
         const { allNotifs } =this.state
+
+    
+       
         return (
             <Layout return title="Notification" navigation={this.props.navigation}>
                 <FlatList 

@@ -33,7 +33,7 @@ export default class Confidentiality extends Component {
         const { about } = this.state
 
         return (
-            <ContainerLayoutContent title="A propos" navigation={this.props.navigation}>
+            <ContainerLayoutContent title="Confidentialité" navigation={this.props.navigation}>
                  <ScrollView    
                     style={{ marginHorizontal: 0 ,marginBottom:0,}}
                     showsVerticalScrollIndicator = {false}

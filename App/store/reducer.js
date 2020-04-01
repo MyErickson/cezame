@@ -9,7 +9,9 @@ const initialState = {
   info_Token:undefined,
   info_hotel:undefined,
   day_steps:undefined,
-  social_Network:undefined
+  social_Network:undefined,
+  all_Notif:undefined,
+  count_Notif:undefined
 };
 
 /**
@@ -28,6 +30,9 @@ export const CALL_DAY_STEPS = 'CALL_DAY_STEPS';
 export const DAY_STEPS ='DAY_STEPS';
 export const GET_SOCIAL_NETWORK = 'GET_SOCIAL_NETWORK';
 export const SOCIAL_NETWORK ='SOCIAL_NETWORK'
+export const GET_NOTIF = "GET_NOTIF";
+export const ALL_NOTIF = "ALL_NOTIF";
+export const COUNT_NOTIF ="COUNT_NOTIF"
 /**
  * Traitements
  */
@@ -92,6 +97,18 @@ const reducer = (state = initialState, action = {}) => {
       social_Network:action.data
     }
 
+    case ALL_NOTIF:
+      return{
+        ...state,
+        all_Notif:action.data
+      }
+    
+      case COUNT_NOTIF:
+        return{
+          ...state,
+          count_Notif:action.data
+        }
+
     case INITITALIZE_STATE:
     
       return {
@@ -99,7 +116,8 @@ const reducer = (state = initialState, action = {}) => {
         info_User:undefined,
         trip_User:undefined,
         info_Token:undefined,
-        info_hotel:undefined
+        info_hotel:undefined,
+        all_Notif:undefined
       };
 
 

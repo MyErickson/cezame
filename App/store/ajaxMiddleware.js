@@ -1,12 +1,12 @@
 import axios from 'axios';
 
- import {  CALL_TRIPS,GET_USERS, GET_INFO_HOTEL ,CALL_DAY_STEPS , GET_SOCIAL_NETWORK} from './reducer'
+ import {  GET_NOTIF,CALL_TRIPS,GET_USERS, GET_INFO_HOTEL ,CALL_DAY_STEPS , GET_SOCIAL_NETWORK} from './reducer'
 
 import {requestParam} from './request/Parameters'
 import {requestCallProgram , requestDaySteps } from './request/Program'
 import {requestHotel} from './request/Hotel'
 import { requestSocials } from './request/SocialNetwork'
-
+import {requestNotif} from './request/Notification'
  const  ajaxMiddleware = store => next => async action => {
     //  console.log(next,'action')
   
@@ -75,6 +75,16 @@ import { requestSocials } from './request/SocialNetwork'
         requestSocials(valueSocial) 
       
           break;
+      
+      case GET_NOTIF :
+        next(action)
+
+        let notif = {}
+        notif.action = action
+        notif.store = store
+
+        requestNotif(notif)
+
 
 
 

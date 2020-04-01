@@ -13,6 +13,7 @@ import Login from './index'
 import {responseConnection,decode_Token } from '../../store/actionCreator/Login';
 import { getUsers } from '../../store/actionCreator/Parameters';
 import { callTrips } from '../../store/actionCreator/Program';
+import { get_Notif } from "../../store/actionCreator/Notification"
 
 const mapStateToProps = (state, ownProps) => ({
   trip_User:state.trip_User ,
@@ -33,7 +34,11 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   },
   decode_Token :(data)=>{
     dispatch(decode_Token(data))
+  },
+  get_Notif:(data) =>{
+    dispatch(get_Notif(data))
   }
+  
 
 });
 

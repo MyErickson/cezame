@@ -11,6 +11,7 @@ import AppStyles from '../../Themes/AppStyles';
 import Images from '../../Themes/Images';
  import ContainerUplaoadImage from '../../Containers/Gallery/UploadImage/ContainerUplaoadImage';
 import { Styles } from './styleLayout'
+
 const screen = Dimensions.get("window");
 
 
@@ -20,7 +21,8 @@ export default class Layout extends PureComponent {
 
       state={
         tokenConnection:undefined,
-        infoUser:undefined
+        infoUser:undefined,
+        count:undefined
       }
 
 
@@ -36,6 +38,13 @@ export default class Layout extends PureComponent {
       
             if(props.infoUser){
                 state.infoUser = props.infoUser
+         
+                if(props.count_Notif){
+                    state.count = props.count_Notif
+          
+                }
+               
+
             }else{
                 return null
             }
@@ -51,8 +60,9 @@ export default class Layout extends PureComponent {
  }
     render() {
         const { tokenConnection,title} = this.props
-        const { infoUser } =this.state
-        console.log("Layout -> render -> infoUser", infoUser)
+        const { infoUser,count } =this.state
+        console.log("Layout -> render -> unt", count)
+
     
 
  
@@ -105,9 +115,11 @@ export default class Layout extends PureComponent {
                     </View> 
                         : 
                     <View style={[AppStyles.style.flex, { alignItems: "center"}]}>
+                        <Text style={{color:"red",marginLeft:15,position:"absolute",bottom:20,fontWeight:"bold"}}>{count}</Text>
                     <TouchableOpacity 
                          onPress={() =>  NavigationService.navigate('Notifications')}
                          >
+                    
                         <Icon 
                             underlayColor="none"
                             name="notifications" 

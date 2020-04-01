@@ -171,7 +171,7 @@ export default class Login extends Component {
    
             // // handle success
             const {token }= response.data;
-            const { responseConnection,getUsers ,callTrips,decode_Token } = this.props
+            const { responseConnection,getUsers ,callTrips,decode_Token ,get_Notif} = this.props
       
             responseConnection(token)
             this.StoreToken('jwt_auth', token);
@@ -188,7 +188,7 @@ export default class Login extends Component {
               data.idTrip=decode.trip_id
                 //request ask info Users
               getUsers(data)
-
+              get_Notif(data)
               // request call program
 
               callTrips(data)
