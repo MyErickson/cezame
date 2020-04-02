@@ -8,30 +8,6 @@ import Item from "./Item"
 import axios from "axios"
 
 
-const data = [
-    {
-      id: 1, 
-      text: "Informations de l'opération mis à jour",
-      date: "17/19/2019",
-      hours: '19h10',
-      see: false
-    },
-    {
-        id: 2, 
-        text: "Informations de l'opération mis à jour",
-        date: "17/19/2019",
-        hours: '19h10',
-        see: true
-    },
-    {
-        id: 3, 
-        text: "Informations de l'opération mis à jour",
-        date: "17/19/2019",
-        hours: '19h10',
-        see: true
-    }
-]
-
 
 
 export default class Notifications extends Component {
@@ -59,11 +35,14 @@ export default class Notifications extends Component {
    }
 
    getNotif =()=>{
-    const { infoUser, tokenConnection , get_Notif } = this.props
-    let data = {}
-         data.id = infoUser.id
-         data.token = tokenConnection
-         get_Notif(data)
+    const { info_Token, tokenConnection , get_Notif } = this.props
+        if(info_Token){
+            let data = {}
+            data.id = info_Token.id
+            data.token = tokenConnection
+            get_Notif(data)
+        }
+
    }
 
     putNotif=(item)=>{
@@ -94,6 +73,9 @@ export default class Notifications extends Component {
        
         return (
             <Layout return title="Notification" navigation={this.props.navigation}>
+                <View style={{flexDirection:"row", marginRight:10,justifyContent:"flex-end",height:20,backgroundColor:"rgba(52,52,52,alpha)" }}>
+                    <Text style={{fontSize: 13,color:'blue'}}>Marquer comme lu</Text>
+                </View>
                 <FlatList 
                     data={allNotifs}
                     renderItem={({ item }) => 

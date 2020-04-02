@@ -110,34 +110,38 @@ export default class Program extends Component {
             const { userId } = device
       
             const { tokenConnection ,info_Token } = this.props
-
+            console.log("Program -> onIds -> info_Token", info_Token)
+            let exist;
+            if(info_Token.onesignal_ids){
+                exist = info_Token.onesignal_ids.includes(userId)
            
-            let exist = info_Token.onesignal_ids.includes(userId)
+                if(info_Token.onesignal_ids.length === 0 && !exist && tokenConnection  ){
+                    console.log("Program -> onIds -> exist ====", exist)
+                    axios.defaults.headers['Authorization']= "Bearer "+tokenConnection;
+                    axios.post(`https://cezame-dev.digitalcube.fr/api/one_signals`,{
+                        clientId:userId
+                    }).then(res=>{
+                    console.log("Program -> onIds -> res", res)
         
-           
-            if(info_Token.onesignal_ids.length === 0 && !exist && tokenConnection  ){
-                console.log("Program -> onIds -> exist ====", exist)
-                axios.defaults.headers['Authorization']= "Bearer "+tokenConnection;
-                axios.post(`https://cezame-dev.digitalcube.fr/api/one_signals`,{
-                    clientId:userId
-                }).then(res=>{
-                console.log("Program -> onIds -> res", res)
-    
-                }).catch(err=>{
-                console.log("Program -> onIds -> er", err.response)
-                    
-                })
+                    }).catch(err=>{
+                    console.log("Program -> onIds -> er", err.response)
+                        
+                    })
             }
-      
+            }
         }
     
     }
     getNotif =()=>{
-        const { infoUser, tokenConnection , get_Notif } = this.props
-        let data = {}
-             data.id = infoUser.id
-             data.token = tokenConnection
-             get_Notif(data)
+        const {  info_Token, tokenConnection , get_Notif } = this.props
+        console.log("Program -> getNotif -> infoUser,", info_Token)
+        if(info_Token && info_Token.id){
+            let data = {}
+            data.id = info_Token.id 
+            data.token = tokenConnection
+            get_Notif(data)
+        }
+   
        }
     
 

@@ -38,6 +38,9 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
       },
     getSocialNetwork:()=>{
       dispatch(getSocialNetwork())
+    },
+    decode_Token :(data)=>{
+      dispatch(decode_Token(data))
     }
 });
 

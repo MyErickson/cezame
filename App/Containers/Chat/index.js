@@ -54,7 +54,8 @@ export default class Chat extends Component {
         messages:[],
         idUser:undefined, 
         message:null,
-        socket:undefined
+        socket:undefined,
+        modo:undefined
       }
       this.viewAnimated = new Animated.Value(0);
       this.startAnimated=false
@@ -62,7 +63,8 @@ export default class Chat extends Component {
 
 
     componentDidMount(){
-        const { tokenConnection} =this.props
+        const { tokenConnection ,trip_User} =this.props
+        console.log("Chat -> componentDidMount -> trip_User",  trip_User.users[0])
        
         
        let  socket = io(socketAddress + ':' + socketPort, {
@@ -88,6 +90,7 @@ export default class Chat extends Component {
 
 
         this.setState({
+           modo:trip_User.users[0],
            socket
        })
         
@@ -163,95 +166,7 @@ export default class Chat extends Component {
         });
     }
     
-    viewTopBarModo =()=>{
- 
-            return (
-                <Animated.View
-                style={{
-                    ...this.props.style,
-                    opacity:this.viewAnimated
-                }}
-                // onPress={() => NavigationService.navigate("Contact")}
-                >
-                    {this.topBarModo()}
-                </Animated.View>
-            )
-       
-    }
- 
 
-    
-    showTopBarModo =()=>{
-        
-        const { viewAnimated,startAnimated } = this
-      
-
-        if(!startAnimated){
-          
-            this.startAnimated=true
-            Animated.timing(
-                viewAnimated ,
-                {
-                  toValue: 1,
-                  duration: 2000,
-                }
-              ).start(()=>{
-        
-                Animated.timing(
-                    viewAnimated ,
-                    
-                    {
-                      delay:1500,
-                      toValue: 0,
-                      duration: 1000,
-                    }
-                  ).start(()=>{
-                      setTimeout(()=>{
-                      
-                         
-                            this.startAnimated=false
-                        
-                      },2000)
-                   
-                  });
-              });
-        }
-
-        
-
-    }
-
-
-    topBarModo=()=>{
-  
-       
-                return (
-                    <View style={[AppStyles.style.flex, { width:"100%",alignItems: "center", backgroundColor: Colors.lightPrimary, paddingVertical: 15, paddingHorizontal: 25, justifyContent: "space-between",position:"absolute" }]}>
-                        <View style={[AppStyles.style.flex, { alignItems: "center" }]}>
-                            <Avatar 
-                            style={{width: 35, height: 35, backgroundColor: Colors.primary, borderRadius: 35, marginRight: 15 }}
-                            rounded 
-                            title="M"
-                            />
-
-                            <View onPress={() => NavigationService.navigate("Contact")}>
-                                <Text style={Font.style.h2}>Contact</Text>
-                                <Text style={{ color: Colors.white }}>Les Moderateurs/admins</Text>
-                            </View>
-                        </View>
-                        <TouchableOpacity onPress={() => NavigationService.navigate("Contact")}>
-                            <Icon 
-                                underlayColor="none"
-                                name="mail"
-                                color={Colors.white}
-                                
-                                size={25}
-                                
-                            />
-                        </TouchableOpacity>
-                </View>
-                )
-    }
 
     inputMesssage=(msg)=>{
 
@@ -278,12 +193,31 @@ export default class Chat extends Component {
 
     render() {
      
-        const { messages ,idUser,message} = this.state
+        const { messages ,idUser,message ,modo} = this.state
        
         return (
             
         <Layout noPaddingTop chat return title="Messagerie instantanée" navigation={this.props.navigation}>
-             <KeyboardAwareScrollView 
+            
+ 
+            <View style={[AppStyles.style.flex, { alignItems: "center", backgroundColor: Colors.lightPrimary, paddingVertical: 15, paddingHorizontal: 25, justifyContent: "space-between", zIndex: 3, }]}>
+                <View style={[AppStyles.style.flex, { alignItems: "center" }]}>
+                
+                    <View>
+                        <Text style={Font.style.h2}>{modo && `${modo.firstName} ${modo.lastName}`}</Text>
+                        <Text style={{ color: Colors.white }}>Modérateur</Text>
+                    </View>
+                </View>
+                <View>
+                    <Icon 
+                        name="mail"
+                        color={Colors.white}
+                        size={25}
+                        onPress={() => NavigationService.navigate("Contact")}
+                    />
+                </View>
+            </View>
+            <KeyboardAwareScrollView 
              keyboardOpeningTime={50}
              extraScrollHeight={30}
              keyboardDismissMode='on-drag'
@@ -291,12 +225,18 @@ export default class Chat extends Component {
              enableAutomaticScroll={true}
              keyboardShouldPersistTaps="always"
              showsVerticalScrollIndicator = {false}
-             style={{marginBottom:5}}
+             style={{marginBottom:10}}
          
              >
-                
-            {this.viewTopBarModo()}
+
+             <KeyboardAwareScrollView 
+             scrollEnabled={false}
+             enableAutomaticScroll={true}
+             showsVerticalScrollIndicator = {false}
+             
          
+             >
+
             <FlatList 
                 ref={ref => (this.scrollView = ref)}
                 data={ messages}  
@@ -306,41 +246,38 @@ export default class Chat extends Component {
                 // keyboardShouldPersistTaps={Platform.OS==="android"?"handled":"always" }
                 keyboardDismissMode='on-drag'
               
-                style={{ height: Platform.OS==="ios"?screen.height-180 :screen.height-165,zIndex:-1}} 
+                style={{ height: Platform.OS==="ios"?screen.height-220 :screen.height-220,zIndex:-1}} 
                 showsVerticalScrollIndicator = {false}
-                onScrollEndDrag={()=>this.showTopBarModo()}
                 onContentSizeChange={() => {
                     this.scrollView.scrollToEnd({ animated: true, index: -1 }, 200);
                 }}
             />
-   
-         
-
-                <View style={[ {flexDirection:"column",paddingTop: 10,  alignItems: "center",backgroundColor:"white"}]}>
-                   
-                    <Input 
-                        containerStyle={{ width: "100%"}}
-                        rightIconContainerStyle={Platform.OS ==="android" && {marginBottom:20}}
-                        value={message}
-                        inputContainerStyle={Platform.OS === "ios" ? StylesChat.input : StylesChat.inputAndroid}
-                        inputStyle={[{ padding: 0  },Platform.OS === "android" && StylesChat.styleAndroid]}
-                        multiline={true}
-                        placeholderTextColor="#9E9E9E"
-                        placeholder='Tapez votre message'
-                        onChangeText={(e)=> this.inputMesssage(e)}
-                        rightIcon={message&&{ 
-                            type: 'font-awesome',
-                            name: 'send',
-                            size: 18, 
-                            onPress:()=> this.sendMessage() ,
-                             }}
-                    />
-               
-                </View>
-    
-          
         
             </KeyboardAwareScrollView>
+            <SafeAreaView style={{marginTop:-10}}>
+            <View style={[ {flexDirection:"column",paddingTop:Platform.OS==="android"? 20:10,  alignItems: "center",backgroundColor:"white"}]}>
+                   
+                   <Input 
+                       containerStyle={{ width: "100%"}}
+                       // rightIconContainerStyle={Platform.OS ==="android" && {marginBottom:20}}
+                       value={message}
+                       inputContainerStyle={Platform.OS === "ios" ? StylesChat.input : StylesChat.inputAndroid}
+                       inputStyle={[{ padding: 0  },Platform.OS === "android" && StylesChat.styleAndroid]}
+                       multiline={true}
+                       placeholderTextColor="#9E9E9E"
+                       placeholder='Tapez votre message'
+                       onChangeText={(e)=> this.inputMesssage(e)}
+                       rightIcon={message&&{ 
+                           type: 'font-awesome',
+                           name: 'send',
+                           size: 18, 
+                           onPress:()=> this.sendMessage() ,
+                            }}
+                   />
+              
+               </View>
+               </SafeAreaView>
+               </KeyboardAwareScrollView>
         </Layout>
         )
     }

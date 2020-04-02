@@ -39,11 +39,11 @@ export default class LandingScreen extends Component {
 
     goToScreen=async(value )=>{
         const { title , navigateName , dataNavigate } = value
-        const {navigation} = this.props;
+        const {navigation , decode_Token } = this.props;
         const token = await AsyncStorage.getItem("jwt_auth")
         const  decode = token && jwtDecode(token)
-        console.log("LandingScreen -> goToScreen -> decode", decode)
-
+       
+        decode_Token(decode)
         if(token && title === "Accès client" && decode.trip_id){
             this.check(decode,token)
             navigation.navigate("Program")

@@ -15,7 +15,8 @@ import { get_Notif } from "../../store/actionCreator/Notification"
 const mapStateToProps = (state, ownProps) => ({
     tokenConnection:state.tokenConnection,
     infoUser:state.info_User,
-    all_Notif:state.all_Notif
+    all_Notif:state.all_Notif,
+    info_Token:state.info_Token,
 
 
 });

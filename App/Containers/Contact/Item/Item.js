@@ -7,6 +7,7 @@ import { Styles } from '../styleContact'
 import { Icon} from 'react-native-elements';
 
 const Item = ({item}) => {
+console.log("Item -> item", item)
 
     return (
         

@@ -40,9 +40,7 @@ const  Item=({item}) =>{
                     <Icon name="check" color={ "white"} size={22} />
                 
                 </View>
-                {item.seen === true && (
-                    <Text style ={{fontSize:10}}>Marquer comme lu</Text>
-                )}
+           
             </View>
         </View>
     )

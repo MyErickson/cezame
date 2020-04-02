@@ -25,23 +25,7 @@ import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp
   } from "react-native-responsive-screen";
-const data = [
-    {
-        id: 0,
-        name: "Digitalcube",
-        tel: "+33 1 34 48 75 63"
-    },
-    {
-        id: 1,
-        name: "Matthieu Delavallade",
-        tel: "+33 1 58 17 01 01"
-    },
-    {
-        id: 3,
-        name: "Sandrice LOUYER (BPCE)",
-        tel: "00 33 6 20 93 81 95"
-    },
-]
+
 
 
 export default class Contact extends Component {
