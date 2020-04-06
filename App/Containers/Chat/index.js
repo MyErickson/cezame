@@ -66,6 +66,7 @@ export default class Chat extends Component {
         const { tokenConnection ,trip_User} =this.props
         console.log("Chat -> componentDidMount -> trip_User",  trip_User.users[0])
        
+        console.log("Chat -> componentDidMount -> screen ", screen )
         
        let  socket = io(socketAddress + ':' + socketPort, {
             query: {
@@ -219,7 +220,7 @@ export default class Chat extends Component {
             </View>
             <KeyboardAwareScrollView 
              keyboardOpeningTime={50}
-             extraScrollHeight={30}
+             extraScrollHeight={screen.height <700 ? 70 :152}
              keyboardDismissMode='on-drag'
              scrollEnabled={false}
              enableAutomaticScroll={true}
@@ -234,7 +235,7 @@ export default class Chat extends Component {
              enableAutomaticScroll={true}
              showsVerticalScrollIndicator = {false}
              
-         
+
              >
 
             <FlatList 
@@ -246,7 +247,7 @@ export default class Chat extends Component {
                 // keyboardShouldPersistTaps={Platform.OS==="android"?"handled":"always" }
                 keyboardDismissMode='on-drag'
               
-                style={{ height: Platform.OS==="ios"?screen.height-220 :screen.height-220,zIndex:-1}} 
+                style={{ height: Platform.OS==="ios"?screen.height < 700 ? screen.height-195 : screen.height - 230 :screen.height-220,zIndex:-1}} 
                 showsVerticalScrollIndicator = {false}
                 onContentSizeChange={() => {
                     this.scrollView.scrollToEnd({ animated: true, index: -1 }, 200);
@@ -259,7 +260,7 @@ export default class Chat extends Component {
                    
                    <Input 
                        containerStyle={{ width: "100%"}}
-                       // rightIconContainerStyle={Platform.OS ==="android" && {marginBottom:20}}
+                       rightIconContainerStyle={Platform.OS ==="android" && {marginBottom:20}}
                        value={message}
                        inputContainerStyle={Platform.OS === "ios" ? StylesChat.input : StylesChat.inputAndroid}
                        inputStyle={[{ padding: 0  },Platform.OS === "android" && StylesChat.styleAndroid]}

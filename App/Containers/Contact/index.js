@@ -59,14 +59,7 @@ export default class Contact extends Component {
         this.setState({ [name] :  event.nativeEvent.text})
     }
 
-    sendMessage = (login) => {
-        if(login){
-            this.requestForUser()
-        }else{
-            this.requestUserLogin ()
-        }
 
-    }
     requestUserLogin = ()=>{
         const { tokenConnection } = this.props
         const { comments } =this.state
@@ -298,7 +291,7 @@ export default class Contact extends Component {
                             <Button 
                                 title="Envoyer" 
                                 
-                                onPress={() => {!tokenConnection ? this.sendMessage(true) : this.sendMessage(false)}}
+                                onPress={() => {!tokenConnection ?  this.requestForUser() :  this.requestUserLogin()}}
                                 buttonStyle={Styles.buttonStyle} 
                             />
                         </View>

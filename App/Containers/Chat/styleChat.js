@@ -8,6 +8,7 @@ export const StylesChat = StyleSheet.create({
         borderBottomWidth: 0, 
         height: 50,
         marginBottom:10,
+    
     },
     inputAndroid:{
         backgroundColor: "white",

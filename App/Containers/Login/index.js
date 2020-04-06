@@ -13,7 +13,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { Input, Button, Icon } from 'react-native-elements';
 
 import Styles from './style';
-import { config, patternEmail, errorsMsg } from '../../Configs/General'
+import { config,  errorsMsg } from '../../Configs/General'
 import Images from '../../Themes/Images';
 import Colors from '../../Themes/Colors';
 import NavigationService from '../../Services/NavigationService';
@@ -35,8 +35,8 @@ export default class Login extends Component {
         super(props);
         this.state = {
           // inputs
-          email             : "",
           password          : "",
+          login             : "",
 
           emailErrorMsg     : "",
           passwordErrorMsg  : "",
@@ -74,6 +74,7 @@ export default class Login extends Component {
     //---------------------------------//
     UpdateInputToState = (event) => {
         const name = event._targetInst.pendingProps.name;
+       
         this.setState({ [name] :  event.nativeEvent.text})
     }
 
@@ -97,27 +98,6 @@ export default class Login extends Component {
     //------- INPUT VALIDATOR ----------//
     //---------------------------------//
 
-    EmailValidator = (emailToCheck, emailInputName) => {
-      let email;
-
-      // Email
-      if (emailToCheck){
-        if(patternEmail.test(emailToCheck.trim())){
-          email = emailToCheck.toLowerCase();
-          this.setState({[emailInputName] : ""});
-          
-        }
-        else{
-          this.setState({[emailInputName] : errorsMsg.emailInvalide});
-        }
-      }
-      else{
-        this.setState({[emailInputName] : errorsMsg.emptyFiled });
-      }
-
-      return (email);
-    }
-
     PasswordValidator = (passwordToCheck) => {
       let password;
 
@@ -133,12 +113,11 @@ export default class Login extends Component {
       return password;
     }
 
-    FormLoginValidator = async (emailToCheck, passwordToCheck) => {
-      let email;
+    FormLoginValidator = async ( passwordToCheck) => {
       let password;
 
       try{
-        email     = await this.EmailValidator(emailToCheck, "emailErrorMsg");
+
         password  = await this.PasswordValidator(passwordToCheck);
 
       }
@@ -146,24 +125,24 @@ export default class Login extends Component {
         console.log(error);
       }
 
-      return { email, password };
+      return {  password };
     }
 
     //--------------------------------//
     //------- MAIN ACTION -----------//
     //------------------------------//
     Login = async () => {
-      const { email, password} = this.state
+      const { login, password} = this.state
       try{
         // activate loader
         this.ToogleLoader();
-        let validateInputs = await this.FormLoginValidator(email,password);
+        let validateInputs = await this.FormLoginValidator(password);
         // NavigationService.navigate('Program')
-        if(validateInputs.email && validateInputs.password){
+        if(login.trim() && validateInputs.password){
 
           axios.post("https://cezame-dev.digitalcube.fr/api/login_check",
               {    
-                  username: validateInputs.email,
+                  username: login,
                   password: validateInputs.password
               })
             .then((response) => {
@@ -217,7 +196,7 @@ export default class Login extends Component {
             this.ToogleLoader();
             this.setState({
               alertVisible:true,
-              messageAlert:"Le mot de passe ou l'email est invalide.",
+              messageAlert:"Le mot de passe ou l'identifiant est invalide.",
             })
           });
         }
@@ -233,14 +212,15 @@ export default class Login extends Component {
     }
 
     ResetPassword = async () => {
+      const { login } = this.state
       try{
-        const email = await this.EmailValidator(this.state.passwordForgotten, "passwordForgottenErrorMsg");
+       
 
-        if(email){
+        if(login.trim()){
   
           axios.post( 'https://cezame-dev.digitalcube.fr/api/forgot-password',
           {
-            email:email
+            username:login
           })
           .then((res) => {
 
@@ -249,7 +229,7 @@ export default class Login extends Component {
           .catch((err) => {
             this.setState({
               alertVisible:true,
-              messageAlert:"Ce mail n'est pas dans notre base de données",
+              messageAlert:"l'identifiant n'est pas dans notre base de données",
             })
           });
           
@@ -345,9 +325,9 @@ export default class Login extends Component {
                   contentInsetAdjustmentBehavior="never"
                 >
                   <Input
-                    name='email' 
+                    name='login' 
                     label='Identifiant'
-                    placeholder='email@adress.com'
+                    placeholder='Identifiant'
                     errorStyle={{ color: 'red' }}
                     errorMessage={this.state.emailErrorMsg} 
                     value={this.state.email} 
@@ -409,13 +389,13 @@ export default class Login extends Component {
                   <View>
                     <View>
                       <Text style={Styles.modalTitle}>
-                        Saisissez votre adresse email, nous vous enverrons un email de récupération de mot de passe
+                        Saisissez votre Identifiant, nous vous enverrons un email de récupération de mot de passe
                       </Text>
                       <Input
                        inputContainerStyle={{color:"black"}}
                         name='passwordForgotten' 
-                        label='Votre email'
-                        placeholder='email@my_email.com'
+                        label='Identifiant'
+                        
                         errorStyle={{ color: 'red' }}
                         errorMessage={ this.state.passwordForgottenErrorMsg } 
                         value={this.state.passwordForgotten} 

@@ -9,7 +9,8 @@ import { dataLanding } from '../../Configs/General'
 var jwtDecode = require('jwt-decode');
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from 'axios'
-var jwtDecode = require('jwt-decode');
+import validator from "validator"
+
 
 export default class LandingScreen extends Component {
   
@@ -39,15 +40,41 @@ export default class LandingScreen extends Component {
 
     goToScreen=async(value )=>{
         const { title , navigateName , dataNavigate } = value
-        const {navigation , decode_Token } = this.props;
+        const {navigation , decode_Token,initialize_State,getUsers,get_Notif,callTrips } = this.props;
         const token = await AsyncStorage.getItem("jwt_auth")
+        console.log("LandingScreen -> goToScreen -> token ", token )
         const  decode = token && jwtDecode(token)
+        const validToken = token && validator.isJWT(token)
+        console.log("LandingScreen -> goToScreen ->  validToken ",  validToken )
+      
        
-        decode_Token(decode)
-        if(token && title === "Accès client" && decode.trip_id){
-            this.check(decode,token)
-            navigation.navigate("Program")
+ 
+
+        if(token && title === "Accès client" && decode.trip_id && decode.username){
+            if(validToken){
+                decode_Token(decode)
+
+              const data = {}
+              data.token = token
+              data.id = decode.id
+              data.idTrip=decode.trip_id
+                getUsers(data)
+                get_Notif(data)
+                // request call program
+  
+                callTrips(data)
+               
+                this.check(decode,token)
+                navigation.navigate("Program")
+            }else {
+                await AsyncStorage.removeItem('jwt_auth')
+                initialize_State()
+                navigation.navigate(navigateName, dataNavigate && dataNavigate)
+               
+            }
+           
         }else{
+
             navigation.navigate(navigateName, dataNavigate && dataNavigate)
         }
        
