@@ -193,7 +193,8 @@ export default class Chat extends Component {
     }
 
     render() {
-     
+        screen.height 
+        console.log("Chat -> render ->        screen.height ",        screen.height )
         const { messages ,idUser,message ,modo} = this.state
        
         return (
@@ -220,7 +221,7 @@ export default class Chat extends Component {
             </View>
             <KeyboardAwareScrollView 
              keyboardOpeningTime={50}
-             extraScrollHeight={screen.height <700 ? 70 :152}
+             extraScrollHeight={screen.height <750 ? 70 :100}
              keyboardDismissMode='on-drag'
              scrollEnabled={false}
              enableAutomaticScroll={true}
@@ -247,7 +248,7 @@ export default class Chat extends Component {
                 // keyboardShouldPersistTaps={Platform.OS==="android"?"handled":"always" }
                 keyboardDismissMode='on-drag'
               
-                style={{ height: Platform.OS==="ios"?screen.height < 700 ? screen.height-195 : screen.height - 230 :screen.height-220,zIndex:-1}} 
+                style={{ height: Platform.OS==="ios"?screen.height < 750 ? screen.height-200 : screen.height - 250 :screen.height-220,zIndex:-1}} 
                 showsVerticalScrollIndicator = {false}
                 onContentSizeChange={() => {
                     this.scrollView.scrollToEnd({ animated: true, index: -1 }, 200);
@@ -255,7 +256,7 @@ export default class Chat extends Component {
             />
         
             </KeyboardAwareScrollView>
-            <SafeAreaView style={{marginTop:-10}}>
+            
             <View style={[ {flexDirection:"column",paddingTop:Platform.OS==="android"? 20:10,  alignItems: "center",backgroundColor:"white"}]}>
                    
                    <Input 
@@ -277,7 +278,7 @@ export default class Chat extends Component {
                    />
               
                </View>
-               </SafeAreaView>
+               
                </KeyboardAwareScrollView>
         </Layout>
         )

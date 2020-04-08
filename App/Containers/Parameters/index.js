@@ -154,7 +154,7 @@ export default class Parameters extends PureComponent {
         }).then((response)=>{
 
 
-    
+
             this.setState({
                 firstName:"",
                 lastName:"",
@@ -246,8 +246,9 @@ export default class Parameters extends PureComponent {
   
     AsyncStorage.removeItem('jwt_auth')
     
-    this.props.initialize_State()
+       this.props.initialize_State()
     this.props.navigation.navigate("Home")
+
    }
 
 

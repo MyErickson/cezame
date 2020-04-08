@@ -288,10 +288,10 @@ export default class Program extends Component {
         
         let  startDate,endDate,endMonth,startMonth = undefined
 
-        if(trip_User){
-            startDate = new Date(trip_User.startAt)
+        if(trip_User && trip_User.startAt && trip_User.endAt){
+            startDate =  new Date(trip_User.startAt)
             startMonth =  startDate.getMonth()+1 < 10 ? "0"+(startDate.getMonth()+1) : startDate.getMonth()+1
-            endDate =  new Date(trip_User.endAt)
+            endDate = new Date(trip_User.endAt)
             endMonth = endDate.getMonth()+1 <10 ? "0" + (endDate.getMonth()+1) : endDate.getMonth()+1
         
          }

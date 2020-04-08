@@ -35,6 +35,7 @@ LocaleConfig.locales['fr'] = {
             expanded: this.props.item.expanded, 
             arrow: "chevron-circle-down"
         };
+
     };
 
     toggle() {
@@ -211,31 +212,36 @@ export default class Agenda extends Component {
     }
 
     period =()=>{
-
-        const { startAt , endAt} = this.props.trip_User
-
-        let start = Moment(startAt).format("YYYY-MM-DD")
-        let end = Moment(endAt).format("YYYY-MM-DD") 
-        let time =  new Date(start)
-        let tab = {}
-        let i = 1
-     
-        
-        tab[start] = {selected: true, startingDay: true, color: 'white', textColor: '#1991EB'}
-
-        do{
-          let day = Moment(time).add(i,'days').format("YYYY-MM-DD")
-
-          tab[day]= {selected: true, color: 'white', textColor: '#1991EB'}
+ 
+      
+        if(this.props.trip_User){
+            const { startAt , endAt} = this.props.trip_User
+            console.log("Agenda -> period -> startAt ", startAt )
+    
+            let start = startAt && Moment(startAt).format("YYYY-MM-DD")
+            let end = endAt && Moment(endAt).format("YYYY-MM-DD") 
+            let time =  new Date(start)
+            let tab = {}
+            let i = 1
          
-          i += 1
-          start = day
-
-        }while(start !== end)
-
-        tab[end] = {selected: true, endingDay: true, color: 'white', textColor: '#1991EB'}
-
-        return tab
+            
+            tab[start] = {selected: true, startingDay: true, color: 'white', textColor: '#1991EB'}
+    
+            do{
+              let day = Moment(time).add(i,'days').format("YYYY-MM-DD")
+    
+              tab[day]= {selected: true, color: 'white', textColor: '#1991EB'}
+             
+              i += 1
+              start = day
+    
+            }while(start !== end)
+    
+            tab[end] = {selected: true, endingDay: true, color: 'white', textColor: '#1991EB'}
+    
+            return tab
+        }
+        
     }
 
     showPlaning =(day)=>{
