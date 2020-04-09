@@ -15,7 +15,7 @@ console.log("Item -> item", item)
           {  item &&
             <View style={Styles.containerItem}  >
             <View >
-                <Text style={{ fontSize: 15, fontWeight: "bold" }}>{item.firstName}</Text>
+                <Text style={{ fontSize: 15, fontWeight: "bold" }}>{item.firstName+" "+ item.lastName}</Text>
                
                 <View  style={[AppStyles.style.flex, {alignItems: "center", marginTop: 2}]}>
                     <Icon  name="phone-square" type="font-awesome" color={Colors.primary} size={14} containerStyle={{ marginRight: 5 }} />

@@ -206,8 +206,7 @@ export default class Chat extends Component {
                 <View style={[AppStyles.style.flex, { alignItems: "center" }]}>
                 
                     <View>
-                        <Text style={Font.style.h2}>{modo && `${modo.firstName} ${modo.lastName}`}</Text>
-                        <Text style={{ color: Colors.white }}>Modérateur</Text>
+                        <Text style={{ color: Colors.white,fontWeight:"bold" }}>Modérateur</Text>
                     </View>
                 </View>
                 <View>
