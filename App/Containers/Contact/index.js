@@ -192,7 +192,7 @@ export default class Contact extends Component {
 
                      
                      <Text style={Styles.text}> 
-                        Nous vous accompagnons durant votre seminaire
+                        Nous vous accompagnons pendant votre séminaire
                      </Text>
                 
 
@@ -280,7 +280,7 @@ export default class Contact extends Component {
                                 multiline
                                 value={comments}
                                 numberOfLines={6}
-                                label="Commentaire"
+                                label="Message"
                                 textAlignVertical="top"
                                 onChange={(e)=>this.UpdateInputToState(e) }
                                 labelStyle={Styles.labelStyle}

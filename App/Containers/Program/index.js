@@ -115,7 +115,7 @@ export default class Program extends Component {
             if(info_Token.onesignal_ids){
                 exist = info_Token.onesignal_ids.includes(userId)
            
-                if(info_Token.onesignal_ids.length === 0 && !exist && tokenConnection  ){
+                if( !exist && tokenConnection  ){
                     console.log("Program -> onIds -> exist ====", exist)
                     axios.defaults.headers['Authorization']= "Bearer "+tokenConnection;
                     axios.post(`https://cezame-dev.digitalcube.fr/api/one_signals`,{
