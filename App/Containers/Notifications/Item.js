@@ -1,13 +1,15 @@
 import React from 'react';
-import { View, Text} from 'react-native';
+import { View, Text , Platform ,useWindowDimensions} from 'react-native';
 
 import { Icon } from 'react-native-elements';
 import Colors from '../../Themes/Colors';
 import AppStyles from '../../Themes/AppStyles';
 import Moment from 'moment';
 
+
 const  Item=({item}) =>{
- 
+    const width = useWindowDimensions().width
+    console.log("width", width)
     return(
         <View style={{ 
             flexDirection: "row",  alignItems: "center",justifyContent:"space-around",
@@ -17,7 +19,7 @@ const  Item=({item}) =>{
             borderBottomWidth: 1
         }}>
             
-            <View style={{ width: 300, marginRight: 50,}}>
+            <View style={{ width: width-90 , marginRight: 50}}>
                 <Text style={{ flexShrink: 1, fontWeight: item && item.seen ? "normal" : "bold" ,paddingLeft:20}}>
                     {item.notification && item.notification.content}
                 </Text>
