@@ -114,7 +114,7 @@ export default class Chat extends Component {
             } else {
                 
                 this.setState({
-                    messages:status.messages,
+                    messages:status.messages.reverse(),
                     idUser:infoToken.id
                 })
                
@@ -193,8 +193,7 @@ export default class Chat extends Component {
     }
 
     render() {
-        screen.height 
-        console.log("Chat -> render ->        screen.height ",        screen.height )
+
         const { messages ,idUser,message ,modo} = this.state
        
         return (
@@ -219,14 +218,14 @@ export default class Chat extends Component {
                 </View>
             </View>
             <KeyboardAwareScrollView 
-             keyboardOpeningTime={50}
-             extraScrollHeight={screen.height <750 ? 70 :100}
-             keyboardDismissMode='on-drag'
-             scrollEnabled={false}
-             enableAutomaticScroll={true}
-             keyboardShouldPersistTaps="always"
-             showsVerticalScrollIndicator = {false}
-             style={{marginBottom:10}}
+                keyboardOpeningTime={50}
+                extraScrollHeight={screen.height <750 ? 70 :100}
+                keyboardDismissMode='on-drag'
+                scrollEnabled={false}
+                enableAutomaticScroll={true}
+                keyboardShouldPersistTaps="always"
+                showsVerticalScrollIndicator = {false}
+                style={{marginBottom:10}}
          
              >
 
@@ -246,12 +245,12 @@ export default class Chat extends Component {
                 // contentInsetAdjustmentBehavior="never"
                 // keyboardShouldPersistTaps={Platform.OS==="android"?"handled":"always" }
                 keyboardDismissMode='on-drag'
-              
+                inverted
                 style={{ height: Platform.OS==="ios"?screen.height < 750 ? screen.height-200 : screen.height - 250 :screen.height-220,zIndex:-1}} 
                 showsVerticalScrollIndicator = {false}
-                onContentSizeChange={() => {
-                    this.scrollView.scrollToEnd({ animated: true, index: -1 }, 200);
-                }}
+                // onContentSizeChange={() => {
+                //     this.scrollView.scrollToEnd({ animated: true, index: -1 }, 2000);
+                // }}
             />
         
             </KeyboardAwareScrollView>

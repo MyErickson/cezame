@@ -53,7 +53,7 @@ const Item = ({
 
                 <View style = {{ flexDirection:"row",justifyContent:"space-between"}}>
                     <Text style={{ marginTop: 5, fontSize: 12, color: "#A0A0A0" }}>
-                        {Moment(item.createdAt).format("DD/MM -  H[h]mm")}
+                        {Moment.utc(item.createdAt).format("DD/MM -  H[h]mm")}
                     </Text>
                     <Text style={{ marginTop: 5, fontSize: 12, color: "#A0A0A0",}}>
                         {`${user && user.firstName ?user.firstName:"Anonyme" }`}
