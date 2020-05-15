@@ -148,8 +148,8 @@ _createFolder = async () => {
                   
 
        <SafeAreaView style={[{backgroundColor:Colors.lightSecondary},Platform.OS === "android" && {height:20}]}>
-                <View style={{height:45}}>
-                    <View style={[{width: screen.width, height:0},Platform.OS==="android"? {bottom:26} : {bottom:28} ]}>
+                <View style={{height:45, }}>
+                    <View style={[{width: screen.width, height:0 },Platform.OS==="android"? {bottom:26} : {bottom:28} ]}>
                         <TouchableOpacity  
                         style={[Styles.footerIconDownload,]}
                         onPress={this._createFolder }
@@ -160,7 +160,7 @@ _createFolder = async () => {
                                 name="download"
                                 color="white"
                                 type="font-awesome"
-
+                                
                             />
                        
                         </TouchableOpacity >
