@@ -96,7 +96,7 @@ export default class News extends Component {
                                         <Image source={{uri:image ? image.contentUrl : `https://i.picsum.photos/id/${random1}/200/300.jpg`}} style={{ width: "100%", height: 150,borderRadius:8}} />
                                     </View>
                                     <Text style={{fontWeight: 'bold',fontSize:15,marginVertical:15,textAlign:"center"}}>{title}</Text>
-                                    <Text style={{marginBottom:10,}} >{content}</Text>
+                                    <Text style={{marginBottom:10,textAlign:"justify"}} >{content}</Text>
                                     <TouchableOpacity onPress={()=>Linking.openURL(link)} >
                                         <Text 
                                         style={{marginBottom:20,fontSize:13,textAlign:"center",textDecorationLine:"underline"}}

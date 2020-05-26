@@ -58,7 +58,7 @@ import {
                         <Text style={{fontSize:18, fontWeight:'bold', marginLeft:20 , marginBottom:20}} >
                         {trip_User && trip_User.hotel ? trip_User.hotel.title: 'Titre'}
                         </Text>
-                        <Text style={{marginHorizontal:20,fontSize:14}}>
+                        <Text style={{marginHorizontal:20,fontSize:14 , textAlign:'justify'}}>
                         {trip_User && trip_User.hotel ? trip_User.hotel.description : 'Bientôt...'}
                         </Text>
                 </View>

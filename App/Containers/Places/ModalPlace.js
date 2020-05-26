@@ -17,7 +17,7 @@ export default class ModalPlace extends Component {
     render() {
         return (
             <View style={{ backgroundColor: '#F6F6F6', borderRadius: 15, width: screen.width-85 }}>
-                <View style={[AppStyles.style.flex, { alignItems: "center", paddingLeft: 45, }]}>
+                <View style={[AppStyles.style.flex, { alignItems: "center", paddingLeft:35,width: screen.width-85 }]}>
                     <Icon name="arrow-left" type="simple-line-icon" hitSlop={{top: 10, bottom: 10, left: 0, right: 0}} size={16} onPress={this.props.onBack} />
                     <Text style={[Font.style.h3, { paddingLeft: 5, paddingVertical: 15 }]}>{this.props.title}</Text>
                 </View>

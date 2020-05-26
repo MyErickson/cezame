@@ -209,12 +209,17 @@ export default class Chat extends Component {
                     </View>
                 </View>
                 <View>
+                <TouchableOpacity 
+                    onPress={() => NavigationService.navigate("Contact")}
+                >
                     <Icon 
                         name="mail"
+                        underlayColor="none"
                         color={Colors.white}
                         size={25}
-                        onPress={() => NavigationService.navigate("Contact")}
+                        
                     />
+                    </TouchableOpacity>
                 </View>
             </View>
             <KeyboardAwareScrollView 
@@ -248,9 +253,7 @@ export default class Chat extends Component {
                 inverted
                 style={{ height: Platform.OS==="ios"?screen.height < 750 ? screen.height-200 : screen.height - 250 :screen.height-220,zIndex:-1}} 
                 showsVerticalScrollIndicator = {false}
-                // onContentSizeChange={() => {
-                //     this.scrollView.scrollToEnd({ animated: true, index: -1 }, 2000);
-                // }}
+      
             />
         
             </KeyboardAwareScrollView>

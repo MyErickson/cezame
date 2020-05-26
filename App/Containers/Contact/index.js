@@ -97,7 +97,7 @@ export default class Contact extends Component {
 
     requestForUser=()=>{
         const { name , email , tel ,comments,prenom } = this.state
-        if(name.trim() && email.trim() && tel.trim() && comments.trim() && prenom.trim()){
+        if(name.trim() && email.trim()  && comments.trim() && prenom.trim()){
             RNFetchBlob.fetch("post",`https://cezame-dev.digitalcube.fr/api/contact-mail`,{
           headers: JSON.stringify({ 'content-type': 'multipart/form-data' }),
           },[
@@ -139,7 +139,7 @@ export default class Contact extends Component {
         }else{
             this.setState({
                 visibleModal:true,
-                textModal:"Le message n'a pas etait envoyer. Les champs doivent être remplis."
+                textModal:"Le message n'a pas etait envoyé. Les champs obligatoires doivent être remplis."
             })
         
         }
@@ -223,7 +223,7 @@ export default class Contact extends Component {
                         { !tokenConnection && 
                         <>
                               <Input 
-                                placeholder="Nom"
+                                placeholder="Nom *"
                                 name='name'
                                 value={name}
                                 containerStyle={{ marginTop: 10 }}
@@ -237,7 +237,7 @@ export default class Contact extends Component {
                                 ref = { text=>this.input.prenom = text}
                                 name='prenom'
                                 value={prenom}
-                                placeholder="Prénom"
+                                placeholder="Prénom *"
                                 containerStyle={{ marginTop: 10 }}
                                 onChange={(e)=>this.UpdateInputToState(e) }
                                 placeholderTextColor="#CCCCCC"
@@ -249,7 +249,7 @@ export default class Contact extends Component {
                             <Input 
                                 ref = { text=>this.input.email = text}
                                 name='email'
-                                placeholder="Email"
+                                placeholder="Email *"
                                 value={email}
                                 labelStyle={Styles.labelStyle}
                                 placeholderTextColor="#CCCCCC"
@@ -280,7 +280,7 @@ export default class Contact extends Component {
                                 multiline
                                 value={comments}
                                 numberOfLines={6}
-                                label="Message"
+                                label="Message *"
                                 textAlignVertical="top"
                                 onChange={(e)=>this.UpdateInputToState(e) }
                                 labelStyle={Styles.labelStyle}

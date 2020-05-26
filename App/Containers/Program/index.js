@@ -20,6 +20,8 @@ import AlertImageRight from '../AlertDialog/AlertImageRight'
 var jwtDecode = require('jwt-decode');
 import axios from 'axios';
 import OneSignal from 'react-native-onesignal';
+import Communications from 'react-native-communications';
+
 
 export default class Program extends Component {
 
@@ -421,22 +423,34 @@ export default class Program extends Component {
                             </Marker>
                         </MapView>
                         <View style={{ width: (screen.width/2)+15 }}>
-                            <TouchableOpacity onPress={()=>{ NavigationService.navigate('Places', { coord: {latitude: 40.415584, longitude: -3.707412, latitudeDelta: 0.0052, longitudeDelta: 0.0121, } }) }}>
+                           
                         <Text style={[Font.style.h2, { flexShrink: 1,paddingLeft: 15}]}>
                             {trip_User && trip_User.hotel ? trip_User.hotel.title : 'Nom de l\'hôtel'}
                         </Text>
-                            </TouchableOpacity>
+                           
                             <View style={{ marginTop: 20, marginBottom: 5, flexDirection: "row" }}>
-                                <Icon
+                            <Icon
                                     name='map-marker'
                                     type='material-community'
                                     color={Colors.primary}
                                     size={14}
                                     containerStyle={{ marginRight: 5 }}
                                 />
-                                <Text style={[Font.style.normal, { flexShrink: 1, color: Colors.primary }]}>
+                                 <TouchableOpacity 
+                                 onPress={()=>{ NavigationService.navigate('Places',
+                                 trip_User && trip_User.hotel && { coord: {
+                                        latitude: trip_User.hotel.latitude && parseFloat(trip_User.hotel.latitude),
+                                        longitude: trip_User.hotel.longitude && parseFloat(trip_User.hotel.longitude),
+                                        latitudeDelta:0.00122, 
+                                        longitudeDelta:0.0001,
+                                        title: trip_User.hotel.title
+                                    } }) }}>
+           
+                                 <Text style={[Font.style.normal, { flexShrink: 1, color: Colors.primary }]}>
                                 {trip_User && trip_User.hotel ? trip_User.hotel.address : ''}
                                 </Text>
+                                 </TouchableOpacity>
+     
                             </View>
                             <View style={{ marginTop: 5, marginBottom: 15, flexDirection: "row" }}>
                                 <Icon
@@ -446,9 +460,18 @@ export default class Program extends Component {
                                     size={14}
                                     containerStyle={{ marginRight: 5 }}
                                 />
-                                <Text style={[Font.style.normal, { flexShrink: 1, color: Colors.primary }]}>
-                                    {trip_User && trip_User.hotel ? trip_User.hotel.phone : ''}
-                                </Text>
+                                {trip_User && trip_User.hotel ?
+                                   <TouchableOpacity 
+                                   onPress={()=> Communications.phonecall(trip_User.hotel.phone, true)} 
+                                    >
+                                        <Text style={[Font.style.normal, { flexShrink: 1, color: Colors.primary }]}>
+                                            { trip_User.hotel.phone }
+                                        </Text>
+                                    </TouchableOpacity>
+                                : ''
+                                }
+                             
+                            
                             </View>
                             <Button 
                                 buttonStyle={[{ backgroundColor: Colors.lightSecondary, borderRadius: 5 , },Platform.OS ==="ios" &&{marginTop:0}]} 

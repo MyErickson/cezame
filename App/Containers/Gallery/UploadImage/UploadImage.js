@@ -36,7 +36,7 @@ export default class UploadImage extends Component {
             mediaType:"photo",
             quality:0.4,
             takePhotoButtonTitle:null,
-            chooseFromLibraryButtonTitle:"Choisir une photo...",
+            chooseFromLibraryButtonTitle:"Choisir une photo",
             cancelButtonTitle:"Annuler",
             storageOptions: {
               skipBackup: true,

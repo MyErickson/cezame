@@ -65,11 +65,8 @@ import {Styles  } from "../styleGallery"
             
                          const { contentUrl } = value
                          if( isDivisibleBy(index.toString(),2)){
-     
-                             const randomHeight = Math.floor(Math.random() * (30 - 10 +1)) + 10
                            
-     
-     
+       
                              return <TouchableHighlight underlayColor="none" 
                              style={{borderRadius:10,backgroundColor:"#222222", margin:5,}}
                              key={value["@id"]}

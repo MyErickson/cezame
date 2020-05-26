@@ -44,6 +44,13 @@ export default class Places extends Component {
     // Lorsqu'un le bouton retour est sélectionné, on remet les valeurs initiales
     _return = () => {
         const { pointsOfInterest } = this.props.trip_User
+        const { trip_User ,navigation } = this.props
+        console.log("Places -> render -> navigation ", navigation )
+        let initLat , initLong;
+        if(navigation.state.params){
+            initLat = navigation.state.params.coord.latitude
+            initLong = navigation.state.params.coord.longitude
+        }
 
         Animated.timing(this.state.rightModal, {
             toValue: -screen.width, 
@@ -56,25 +63,40 @@ export default class Places extends Component {
             duration: 400
         }).start(() => this.setState({ index: -1 }));
         pointsOfInterest[0] && this.map.animateToRegion({
-            latitude: parseFloat(pointsOfInterest[0].latitude),
-            longitude:  parseFloat(pointsOfInterest[0].longitude),
+            latitude:initLat ? initLat:  parseFloat(pointsOfInterest[0].latitude),
+            longitude: initLong ? initLong : parseFloat(pointsOfInterest[0].longitude),
             latitudeDelta: 0.082,
             longitudeDelta: 0.0521,
         }, 1000)
 
 }
 
+componentWillUnmount(){
+    const { trip_User ,navigation } = this.props
+    if(navigation.state.params ){
+      
+            trip_User.pointsOfInterest.shift(navigation.state.params.coord)
+        
+       
+    }
+}
     render() {
         const { adress , initialRegion ,leftModal } = this.state
         const { trip_User ,navigation } = this.props
-      
+        console.log("Places -> render -> trip_User", trip_User)
+        if(navigation.state.params && !trip_User.pointsOfInterest.includes(navigation.state.params.coord) ){
+           
+                trip_User.pointsOfInterest.unshift(navigation.state.params.coord)
+            
+           
+        }
         return (
             <Layout noPaddingTop title="Points d'intérêts" navigation={navigation}>
                 <MapView
                     style={{ position: "absolute", top: 0, bottom: 0, left: 0, right: 0 }}
                     initialRegion={  trip_User.pointsOfInterest[0] &&{
-                        latitude:  parseFloat(trip_User.pointsOfInterest[0].latitude) ,
-                        longitude: parseFloat(trip_User.pointsOfInterest[0].longitude),
+                        latitude: parseFloat(trip_User.pointsOfInterest[0].latitude) ,
+                        longitude:  parseFloat(trip_User.pointsOfInterest[0].longitude),
                         latitudeDelta: 0.0052,
                         longitudeDelta: 0.0121,
                     }}
@@ -84,7 +106,7 @@ export default class Places extends Component {
 
                     {/* Boucle pour les marqueurs */}
                     {trip_User.pointsOfInterest[0] && trip_User.pointsOfInterest.map( (marker, index) => {
-                    console.log("Places -> render -> marker", marker)
+                  
                  
                         return(
                             <Marker
