@@ -182,6 +182,7 @@ export default class Login extends Component {
               this.ToogleLoader();
               this.setState({
                 alertVisible:true,
+                style:true,
                 messageAlert:"En tant que V.I.P, vous avez le privilège de vous connecter sur le Web",
               })
               return
@@ -196,6 +197,7 @@ export default class Login extends Component {
             this.ToogleLoader();
             this.setState({
               alertVisible:true,
+              style:false,
               messageAlert:"Le mot de passe ou l'identifiant est invalide.",
             })
           });
@@ -212,31 +214,44 @@ export default class Login extends Component {
     }
 
     ResetPassword = async () => {
-      const { login } = this.state
+      const { passwordForgotten } = this.state
+      console.log("Login -> ResetPassword -> login", passwordForgotten)
       try{
        
 
-        if(login.trim()){
+        if(passwordForgotten.trim()){
   
           axios.post( 'https://cezame-dev.digitalcube.fr/api/forgot-password',
           {
-            username:login
+            username:passwordForgotten
           })
           .then((res) => {
+          
+          this.setState({
+            alertVisible:true,
+            style:true,
+            passwordForgotten:"",
+            messageAlert:res.data.message,
+          })
 
-            this.ToogleModal();
+            this.ToogleModal();   
+        
           })
           .catch((err) => {
             this.setState({
               alertVisible:true,
-              messageAlert:"l'identifiant n'est pas dans notre base de données",
+              messageAlert:"L'identifiant n'est pas dans notre base de données",
             })
           });
           
         }
       }
       catch(error){
-        console.log(error);
+        this.setState({
+          alertVisible:true,
+          style:false,
+          messageAlert:"Le champ n'a pas été rempli",
+        })
       }
     }
   
