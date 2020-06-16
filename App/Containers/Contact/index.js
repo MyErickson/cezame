@@ -129,7 +129,7 @@ export default class Contact extends Component {
         
                 this.setState({
                     visibleModal:true,
-                    textModal:"Votre commentaire a bien été envoyé."
+                    textModal:"Votre message a bien été envoyé."
 
                 })
           })

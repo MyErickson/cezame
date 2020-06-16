@@ -240,6 +240,7 @@ export default class Login extends Component {
           .catch((err) => {
             this.setState({
               alertVisible:true,
+              style:false,
               messageAlert:"L'identifiant n'est pas dans notre base de données",
             })
           });
