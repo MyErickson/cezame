@@ -89,7 +89,7 @@ export default class Contact extends Component {
         }else{
             this.setState({
                 visibleModal:true,
-                textModal:"Le message n'a pas etait envoyer, un commentaire est requis."
+                textModal:"Le message n'a pas été envoyé, les champs obligatoire doivent être remplis."
             })
         }
        
@@ -139,7 +139,7 @@ export default class Contact extends Component {
         }else{
             this.setState({
                 visibleModal:true,
-                textModal:"Le message n'a pas etait envoyé. Les champs obligatoires doivent être remplis."
+                textModal:"Le message n'a pas été envoyé. Les champs obligatoires doivent être remplis."
             })
         
         }
