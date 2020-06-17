@@ -195,7 +195,7 @@ PODS:
     - React
   - react-native-image-picker (2.3.1):
     - React
-  - react-native-maps (0.25.0):
+  - react-native-maps (0.27.1):
     - React
   - react-native-netinfo (5.3.1):
     - React
@@ -417,7 +417,7 @@ SPEC CHECKSUMS:
   React-jsinspector: d15478d0a8ada19864aa4d1cc1c697b41b3fa92f
   react-native-cameraroll: 875e31fc43d4a5d8694c85a71c53dcf42f72f608
   react-native-image-picker: 6a850c41f57f0848d918c2a77aedd7aa272ffa30
-  react-native-maps: 190c02ca533fddac5bb49cf17bdece3644612107
+  react-native-maps: f4b89da81626ad7f151a8bfcb79733295d31ce5c
   react-native-netinfo: 54a7323159edfcd97e7be4141d8d1c232ddfbbef
   react-native-onesignal: f6e1f20292cba72076ddb97e52290b0d5cc0a51c
   react-native-webview: 53d0b4e398e8f59a1e9870685d079ace9228db70
