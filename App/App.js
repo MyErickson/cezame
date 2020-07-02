@@ -1,7 +1,6 @@
 import React from 'react';
 import { Provider } from "react-redux";
 import store from './store/';
-import {StatusBar} from 'react-native';
 import AppNavigator from './Navigators/AppNavigator';
 import NavigationService from './Services/NavigationService';
 
