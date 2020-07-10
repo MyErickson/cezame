@@ -12,7 +12,7 @@ export const requestNotif=(value)=>{
             'Authorization':"Bearer "+token
         } 
     }).then(res=>{
-    console.log("Notifications -> getNotif -> es", res)
+    // console.log("Notifications -> getNotif -> es", res)
   
         store.dispatch(all_Notif(res.data["hydra:member"]))
         if(res.data["hydra:member"]){

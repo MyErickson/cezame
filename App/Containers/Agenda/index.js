@@ -169,16 +169,20 @@ export default class Agenda extends Component {
      daySteps = ()=>{
         const { day_steps } = this.props
         console.log("TCL: Agenda -> daySteps -> trip_User", day_steps)
-
-        let data = day_steps && day_steps.map((value,key)=>{
-            return {
-                key:key,
-                date: Moment(value.fullDate).format("DD/MM/YYYY"),
-                hours:Moment(value.fullDate).format("H[h]mm"),
-                title:value.title,
-                description:value.description,
+        let data
+            if(day_steps !=="error" ){
+                
+                data =  day_steps.map((value,key)=>{
+                    return {
+                        key:key,
+                        date: Moment(value.fullDate).format("DD/MM/YYYY"),
+                        hours:Moment(value.fullDate).format("H[h]mm"),
+                        title:value.title,
+                        description:value.description,
+                    }
+                })
             }
-          })
+ 
           return data
 
      }
@@ -199,21 +203,23 @@ export default class Agenda extends Component {
     }
 
     getTrips=()=>{
-        const {tokenConnection ,callDaySteps } = this.props
+        const {tokenConnection ,callDaySteps , infoUser } = this.props
+       
 
         var decode = jwtDecode(tokenConnection)
             
         const data = new FormData
         data.token = tokenConnection
         data.id = decode.id
-        data.idTrip=decode.trip_id
+        data.idPlanning=infoUser?.planning?.id
 
         callDaySteps (data)
     }
 
     period =()=>{
  
-      
+
+        console.log("Agenda -> period -> this.props.trip_User", this.props.trip_User)
         if(this.props.trip_User){
             const { startAt , endAt} = this.props.trip_User
             console.log("Agenda -> period -> startAt ", startAt )
@@ -359,7 +365,7 @@ export default class Agenda extends Component {
                             }
                             >
                             <SafeAreaView>
-                                { data.length ? (<FlatList 
+                                { data?.length ? (<FlatList 
                                 
                                 data={data} 
                                 

@@ -168,10 +168,7 @@ export default class Login extends Component {
                 //request ask info Users
               getUsers(data)
               get_Notif(data)
-              // request call program
-
-              callTrips(data)
-
+              
               AsyncStorage.getItem("jwt_auth").then((value) => {
                 // remove loader
                 this.ToogleLoader();

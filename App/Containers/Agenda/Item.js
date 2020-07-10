@@ -25,7 +25,7 @@ LocaleConfig.locales['fr'] = {
             expanded: this.props.item.expanded, 
             arrow: "chevron-circle-down"
         };
-    };
+    
 
     toggle() {
         if( this.state.expanded == true) {

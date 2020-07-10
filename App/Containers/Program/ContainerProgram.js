@@ -12,7 +12,7 @@ import Program from './index'
 // Action Creators
 
 import { callTrips ,callDaySteps} from '../../store/actionCreator/Program';
-import { info_user} from '../../store/actionCreator/Parameters'
+import { info_user ,getUsers} from '../../store/actionCreator/Parameters'
 import { get_Notif } from "../../store/actionCreator/Notification"
 
 
@@ -37,7 +37,10 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   },
   get_Notif:(data) =>{
     dispatch(get_Notif(data))
-  }
+  },
+   getUsers:(data)=>{
+    dispatch(getUsers(data))
+  },
 
 });
 

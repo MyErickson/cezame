@@ -308,7 +308,8 @@ export default class Parameters extends PureComponent {
             avatarSource,
          
             }= this.state
-
+            
+            console.log("render ->  infoUser",  infoUser)
     
 
         let eyeIcon;

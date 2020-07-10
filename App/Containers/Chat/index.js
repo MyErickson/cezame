@@ -105,14 +105,16 @@ export default class Chat extends Component {
     }
 
     getMessage=(socket)=>{
+        console.log("Chat -> getMessage -> socket", socket)
         const { infoToken,tokenConnection} =this.props
    
 
         socket.on('auth', (status) => {
             if (!status.isAuth) {
-                console.log(status.error);
+                console.log('erroorroor chat ',status.error);
             } else {
-                
+    
+                console.log("Chat -> getMessage -> status", status)
                 this.setState({
                     messages:status.messages.reverse(),
                     idUser:infoToken.id

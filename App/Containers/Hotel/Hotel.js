@@ -19,18 +19,13 @@ import {
     render() {
 
         const { trip_User } = this.props
+   
 
         let image = undefined
-        const random1 = Math.floor(Math.random() * (100 - 1 +2)) + 1
-        const random2 = Math.floor(Math.random() * (100 - 1 +2)) + 1
-        const random3 = Math.floor(Math.random() * (100 - 1 +2)) + 1
-        const data = [
-            `https://i.picsum.photos/id/${random1}/500/800.jpg`,
-            `https://i.picsum.photos/id/${random2}/500/800.jpg`,
-            `https://i.picsum.photos/id/${random3}/500/800.jpg`,
-        ]
+  
+ 
         
-         if(trip_User && trip_User.hotel && trip_User.hotel.photos ){
+         if(trip_User?.hotel?.photos ){
              const photos = trip_User.hotel.photos 
              image =  photos.map(value =>{
                  return value.contentUrl
@@ -46,7 +41,7 @@ import {
                 >
                     <View style={{paddingBottom:40}}>
                         <Carousel layout={'stack'}
-                        data={image ? image : data}
+                        data={image}
                         // contentContainerCustomStyle={{backgroundColor:'black',,width:}}
                         renderItem={this._renderItem }
                         sliderWidth={380}

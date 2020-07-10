@@ -15,7 +15,7 @@ import {requestNotif} from './request/Notification'
     
     axios.defaults.baseURL = 'https://cezame-dev.digitalcube.fr/api/'
     next(action);
-    console.log("TCL: action", action)
+    // console.log("TCL: AjaxMiddleware action", action)
      
     switch(action.type){
       case  GET_USERS:

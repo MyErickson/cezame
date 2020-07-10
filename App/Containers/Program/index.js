@@ -52,14 +52,16 @@ export default class Program extends Component {
     }
 
     componentDidMount(){
+        this.getUsers()
         this.getNotif() 
-        this.getTrips()
+        // 
         setTimeout(()=>this.getImageright(),3000)
+        setTimeout(()=>this.getTrips(),100)
   
     }
 
     static getDerivedStateFromProps(props,state){
-
+        
         const { trip_User ,infoUser } = props
 
 
@@ -99,7 +101,7 @@ export default class Program extends Component {
         // console.log('Message: ', openResult.notification.payload.body);
         // console.log('Data: ', openResult.notification.payload.additionalData);
         // console.log('isActive: ', openResult.notification.isAppInFocus);
-        console.log('openResult: ', openResult);
+        // console.log('openResult: ', openResult);
 
         NavigationService.navigate(openResult.notification.payload.additionalData.redirect)
        
@@ -107,23 +109,23 @@ export default class Program extends Component {
     }
 
     onIds =(device)=> {
-        console.log('Device info: ', device);
+        
         if(device){
             const { userId } = device
       
             const { tokenConnection ,info_Token } = this.props
-            console.log("Program -> onIds -> info_Token", info_Token)
+       
             let exist;
             if(info_Token.onesignal_ids){
                 exist = info_Token.onesignal_ids.includes(userId)
            
                 if( !exist && tokenConnection  ){
-                    console.log("Program -> onIds -> exist ====", exist)
+             
                     axios.defaults.headers['Authorization']= "Bearer "+tokenConnection;
                     axios.post(`https://cezame-dev.digitalcube.fr/api/one_signals`,{
                         clientId:userId
                     }).then(res=>{
-                    console.log("Program -> onIds -> res", res)
+                    // console.log("Program -> onIds -> res", res)
         
                     }).catch(err=>{
                     console.log("Program -> onIds -> er", err.response)
@@ -136,7 +138,7 @@ export default class Program extends Component {
     }
     getNotif =()=>{
         const {  info_Token, tokenConnection , get_Notif } = this.props
-        console.log("Program -> getNotif -> infoUser,", info_Token)
+    
         if(info_Token && info_Token.id){
             let data = {}
             data.id = info_Token.id 
@@ -162,17 +164,29 @@ export default class Program extends Component {
         this.setState({[close]:false})
         
     }
-    
-    getTrips=()=>{
-        const {tokenConnection ,callTrips , callDaySteps} = this.props
-
+    getUsers=()=>{
+        const {tokenConnection ,getUsers  } = this.props
+      
         var decode = jwtDecode(tokenConnection)
             
         const data = new FormData
         data.token = tokenConnection
         data.id = decode.id
-        data.idTrip=decode.trip_id
+        getUsers(data)
+    }
 
+    getTrips=()=>{
+        const {tokenConnection ,callTrips , callDaySteps,infoUser } = this.props
+        console.log("erickson info ",infoUser?.planning?.id)
+        var decode = jwtDecode(tokenConnection)
+ 
+            
+        const data = new FormData
+        data.token = tokenConnection
+        data.id = decode.id
+        data.idPlanning=infoUser?.planning?.id
+        data.idTrip=decode.trip_id
+        
         callTrips(data)
         callDaySteps(data)
     }
@@ -286,7 +300,8 @@ export default class Program extends Component {
             styleImage} =this.state
 
             
-        
+         
+          
         
         let  startDate,endDate,endMonth,startMonth = undefined
 
@@ -355,7 +370,7 @@ export default class Program extends Component {
                             buttonStyle={[AppStyles.style.pH7, { backgroundColor: Colors.lightPrimary, borderRadius: 5, minWidth: '50%' }]} 
                             title="Votre convocation" 
                             onPress={()=>{
-                                infoUser  && infoUser.convocation
+                                infoUser?.convocation
                                 ? Linking.openURL(infoUser.convocation.contentUrl)
                                 : this.openAlert("Votre convocation sera bientôt disponible")
                             }}
@@ -374,8 +389,8 @@ export default class Program extends Component {
                             buttonStyle={[AppStyles.style.pH7, { backgroundColor: Colors.primary, borderRadius: 5, minWidth: '50%' }]} 
                             title="Carnet de voyage" 
                             onPress={()=>{
-                                trip_User && trip_User.tripGuide
-                                ? Linking.openURL(trip_User.tripGuide.contentUrl)
+                                infoUser?.planning?.tripGuide
+                                ? Linking.openURL(infoUser.planning.tripGuide.contentUrl)
                                 : this.openAlert("Le carnet de voyage sera bientôt disponible")
                             }}
                             icon={
@@ -475,7 +490,10 @@ export default class Program extends Component {
                             </View>
                             <Button 
                                 buttonStyle={[{ backgroundColor: Colors.lightSecondary, borderRadius: 5 , },Platform.OS ==="ios" &&{marginTop:0}]} 
-                                onPress={()=>{ NavigationService.navigate('Hotel') }}
+                                onPress={()=>{ trip_User?.hotel
+                                    ? NavigationService.navigate('Hotel') 
+                                    : this.openAlert("Le detail de l'hôtel sera bientôt disponible")}}
+  
                                 title="Voir plus de détail sur l'hôtel" 
                                 titleStyle={{ marginLeft: 5, fontSize: 13, fontWeight: "normal" }}
                             />

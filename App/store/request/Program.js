@@ -26,11 +26,11 @@ export const requestCallProgram=(value)=>{
 
 
 export const requestDaySteps = (value)=>{
-    const { idTrip , token } = value.action.data
+    const { idPlanning, token } = value.action.data
     const { store } = value
   
 
-    axios.get(`trips/${idTrip}/day_steps`,{
+    axios.get(`plannings/${idPlanning}/day_steps`,{
       headers:{
         'Authorization':"Bearer "+token
       } 
