@@ -124,11 +124,12 @@ export default class Agenda extends Component {
           this.setState({
               data
           })
+          this.getTrips()
      }
   
   static    getDerivedStateFromProps(props,state){
                 const { day_steps} = props
-                console.log("TCL: Agenda -> getDerivedStateFromProps -> day_steps", day_steps)
+          
                 let { dateDay } = state
              
                 let dataDaySteps =0
@@ -168,7 +169,7 @@ export default class Agenda extends Component {
 
      daySteps = ()=>{
         const { day_steps } = this.props
-        console.log("TCL: Agenda -> daySteps -> trip_User", day_steps)
+        
         let data
             if(day_steps !=="error" ){
                 
@@ -204,6 +205,7 @@ export default class Agenda extends Component {
 
     getTrips=()=>{
         const {tokenConnection ,callDaySteps , infoUser } = this.props
+
        
 
         var decode = jwtDecode(tokenConnection)
@@ -213,18 +215,19 @@ export default class Agenda extends Component {
         data.id = decode.id
         data.idPlanning=infoUser?.planning?.id
 
-        callDaySteps (data)
+        callDaySteps(data)
     }
 
     period =()=>{
  
 
-        console.log("Agenda -> period -> this.props.trip_User", this.props.trip_User)
+        
         if(this.props.trip_User){
             const { startAt , endAt} = this.props.trip_User
-            console.log("Agenda -> period -> startAt ", startAt )
+          
     
             let start = startAt && Moment(startAt).format("YYYY-MM-DD")
+            
             let end = endAt && Moment(endAt).format("YYYY-MM-DD") 
             let time =  new Date(start)
             let tab = {}
@@ -262,9 +265,10 @@ export default class Agenda extends Component {
 
 
         const { data ,refreshing} = this.state
-
-        
+        const { startAt } = this.props.trip_User
+        const current= startAt && Moment(startAt).format("YYYY-MM-DD")
         let period = this.period()
+        console.log("Agenda -> render -> period ", current)
          
         return (
             
@@ -340,6 +344,7 @@ export default class Agenda extends Component {
                             backgroundColor: "transparent",
                             height: 280,
                         }}
+                        current={current}
                         onDayPress={(day) => this.showPlaning(day)}
                         monthFormat={'MMMM yyyy'}
                         hideExtraDays={true}
@@ -350,7 +355,8 @@ export default class Agenda extends Component {
                         markedDates={period}
                         markingType={'multi-period'}
                         />
-                        <ScrollView
+                
+                           <ScrollView
                             style={{ flex:1, marginBottom:10,marginTop:10}} 
                             showsVerticalScrollIndicator = {false}
                        
@@ -384,7 +390,8 @@ export default class Agenda extends Component {
                                 
                             
                             </SafeAreaView>
-                        </ScrollView>
+                            </ScrollView>
+                        
                     </LinearGradient>
                 </View>
           
