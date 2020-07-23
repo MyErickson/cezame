@@ -176,17 +176,17 @@ export default class Program extends Component {
     }
 
     getTrips=()=>{
-        const {tokenConnection ,callTrips , callDaySteps,infoUser } = this.props
-        console.log("erickson info ",infoUser?.planning?.id)
+        const {tokenConnection ,callTrips , callDaySteps,getUsers} = this.props
+ 
         var decode = jwtDecode(tokenConnection)
+     
  
             
         const data = new FormData
         data.token = tokenConnection
         data.id = decode.id
-        data.idPlanning=infoUser?.planning?.id
         data.idTrip=decode.trip_id
-        
+        getUsers(data)
         callTrips(data)
         callDaySteps(data)
     }

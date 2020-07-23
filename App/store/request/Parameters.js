@@ -13,7 +13,7 @@ export const requestParam=(value)=>{
         } 
       })
        .then( res =>{
-         console.log("TCL: es planing ", res)
+         console.log("TCL: user requete planing ", res)
        store.dispatch(info_user(res.data))
 
        })

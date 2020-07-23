@@ -26,17 +26,18 @@ export const requestCallProgram=(value)=>{
 
 
 export const requestDaySteps = (value)=>{
-    const { idPlanning, token } = value.action.data
+    const { id, token } = value.action.data
+  
     const { store } = value
   
 
-    axios.get(`plannings/${idPlanning}/day_steps`,{
+    axios.get(`users/${id}/planning/day_steps`,{
       headers:{
         'Authorization':"Bearer "+token
       } 
     })
     .then( res =>{
-      // console.log("TCL: requestDaySteps -> store", res)
+      console.log("TCL: requestDaySteps -> store", res)
 
 
     store.dispatch(receivedaySteps(res.data["hydra:member"]))

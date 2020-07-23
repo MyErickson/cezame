@@ -204,18 +204,16 @@ export default class Agenda extends Component {
     }
 
     getTrips=()=>{
-        const {tokenConnection ,callDaySteps , infoUser } = this.props
-
-       
+        const {tokenConnection ,callDaySteps } = this.props
 
         var decode = jwtDecode(tokenConnection)
             
         const data = new FormData
         data.token = tokenConnection
         data.id = decode.id
-        data.idPlanning=infoUser?.planning?.id
-
         callDaySteps(data)
+        
+     
     }
 
     period =()=>{
@@ -264,11 +262,20 @@ export default class Agenda extends Component {
     render() {  
 
 
-        const { data ,refreshing} = this.state
+        const { data ,refreshing , dateDay} = this.state
+      
         const { startAt } = this.props.trip_User
-        const current= startAt && Moment(startAt).format("YYYY-MM-DD")
+        let current ; 
+        if (dateDay){
+            current = dateDay
+        }else{
+            current= startAt && Moment(startAt).format("YYYY-MM-DD")
+        
+        }
+       
+       
         let period = this.period()
-        console.log("Agenda -> render -> period ", current)
+       
          
         return (
             

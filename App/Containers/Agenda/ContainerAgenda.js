@@ -11,6 +11,7 @@ import Agenda from './index'
 
 // Action Creators
 import { callTrips ,callDaySteps} from '../../store/actionCreator/Program';
+import { getUsers} from '../../store/actionCreator/Parameters';
 
 const mapStateToProps = (state, ownProps) => ({
     tokenConnection:state.tokenConnection,
@@ -26,7 +27,9 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   },
   callDaySteps :(data)=>{
     dispatch(callDaySteps(data) )
-  }
+  },  getUsers:(data)=>{
+    dispatch(getUsers(data))
+    },
 
 });
 

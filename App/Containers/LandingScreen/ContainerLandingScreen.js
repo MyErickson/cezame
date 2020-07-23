@@ -16,7 +16,7 @@ import { callTrips } from '../../store/actionCreator/Program';
 import { getSocialNetwork } from '../../store/actionCreator/SocialNetwork'
 import { get_Notif } from "../../store/actionCreator/Notification"
 const mapStateToProps = (state, ownProps) => ({
-
+  infoUser:state.info_User,
     tokenConnection:state.tokenConnection,
     social_Network:state.social_Network
   

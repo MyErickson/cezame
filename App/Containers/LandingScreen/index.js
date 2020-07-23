@@ -40,7 +40,7 @@ export default class LandingScreen extends Component {
 
     goToScreen=async(value )=>{
         const { title , navigateName , dataNavigate } = value
-        const {navigation , decode_Token,initialize_State,getUsers,get_Notif,callTrips } = this.props;
+        const {navigation , decode_Token,initialize_State,getUsers,get_Notif,callTrips ,infoUser} = this.props;
         const token = await AsyncStorage.getItem("jwt_auth")
         console.log("LandingScreen -> goToScreen -> token ", token )
         const  decode = token && jwtDecode(token)
@@ -57,6 +57,7 @@ export default class LandingScreen extends Component {
               const data = {}
               data.token = token
               data.id = decode.id
+              data.idPlanning=infoUser?.planning?.id
               data.idTrip=decode.trip_id
                 getUsers(data)
                 get_Notif(data)
