@@ -103,12 +103,12 @@ export default class LandingScreen extends Component {
     onRefresh =async ()=>{ 
  
        const { callTrips, getSocialNetwork } =this.props
-       const token = await AsyncStorage.getItem("jwt_auth")
+      
         this.setState({
             refreshing:true
         });
         
-        token &&  getSocialNetwork()
+        getSocialNetwork()
 
         setTimeout(()=>{ this.setState({
             refreshing:false

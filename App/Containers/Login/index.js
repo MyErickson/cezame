@@ -18,7 +18,7 @@ import Images from '../../Themes/Images';
 import Colors from '../../Themes/Colors';
 import NavigationService from '../../Services/NavigationService';
 var jwtDecode = require('jwt-decode');
-
+import NetInfo from "@react-native-community/netinfo";
 import AlertDialog from '../AlertDialog/AlertDialog';
 
 import {
@@ -28,6 +28,12 @@ import {
 
 
 const screen = Dimensions.get("screen");
+let isConnected
+const unsubscribe = NetInfo.addEventListener(state => {
+  // console.log("Connection type", state.type);
+isConnected = state.isConnected
+  // console.log("Is connected?", state.isConnected);
+});
 
 
 export default class Login extends Component {
@@ -192,11 +198,20 @@ export default class Login extends Component {
             //handle error
             
             this.ToogleLoader();
-            this.setState({
-              alertVisible:true,
-              style:false,
-              messageAlert:"Le mot de passe ou l'identifiant est invalide.",
-            })
+            if(isConnected){
+              this.setState({
+                alertVisible:true,
+                style:false,
+                messageAlert:"Le mot de passe ou l'identifiant est invalide.",
+              })
+            }else{
+              this.setState({
+                alertVisible:true,
+                style:false,
+                messageAlert:"Impossible de se connecter, verifiez votre connexion Internet et réessayez.",
+              })
+            }
+       
           });
         }
         else{
