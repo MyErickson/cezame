@@ -203,7 +203,7 @@ dependencies {
     implementation project(':react-native-fs')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
-  
+    implementation project(':react-native-community-netinfo')
 
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";
@@ -230,3 +230,12 @@ task copyDownloadableDepsToLibs(type: Copy) {
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
 }
+
+// dependencies {
+//   compile 'com.android.support:multidex:1.0.1' //enter the latest version
+// }
+// android {
+//     defaultConfig {
+//         multiDexEnabled true
+//     }
+// }
