@@ -1,17 +1,39 @@
 import React, { Component } from 'react';
-import { Text, View, Modal, Alert, ActivityIndicator, ImageBackground, Dimensions, KeyboardAvoidingView, StatusBar, ScrollView } from 'react-native';
+import { Text,
+  View,
+  Modal, 
+  Alert, 
+  ActivityIndicator, 
+  ImageBackground, 
+  Dimensions, 
+  KeyboardAvoidingView, StatusBar, ScrollView, Platform,TouchableHighlight} from 'react-native';
 
 import axios from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
 import { Input, Button, Icon } from 'react-native-elements';
 
 import Styles from './style';
-import { config, patternEmail, errorsMsg } from '../../Configs/General'
+import { config,  errorsMsg } from '../../Configs/General'
 import Images from '../../Themes/Images';
 import Colors from '../../Themes/Colors';
 import NavigationService from '../../Services/NavigationService';
+var jwtDecode = require('jwt-decode');
+import NetInfo from "@react-native-community/netinfo";
+import AlertDialog from '../AlertDialog/AlertDialog';
+
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp
+} from "react-native-responsive-screen";
+
 
 const screen = Dimensions.get("screen");
+let isConnected
+const unsubscribe = NetInfo.addEventListener(state => {
+  // console.log("Connection type", state.type);
+isConnected = state.isConnected
+  // console.log("Is connected?", state.isConnected);
+});
 
 
 export default class Login extends Component {
@@ -19,8 +41,8 @@ export default class Login extends Component {
         super(props);
         this.state = {
           // inputs
-          email             : "",
           password          : "",
+          login             : "",
 
           emailErrorMsg     : "",
           passwordErrorMsg  : "",
@@ -32,9 +54,15 @@ export default class Login extends Component {
           // controls
           loaderConnexion   : false,
           isPasswordVisibility : false,
-          modalVisible      : false
-        }
+          modalVisible      : false,
+          trip_User :undefined,
 
+          alertVisible:false,
+          messageAlert:"",
+          style:false
+
+        };
+        this.input = { };
         // axios requests 
         this.Login = this.Login.bind(this);
         this.ResetPassword = this.ResetPassword.bind(this);
@@ -44,11 +72,15 @@ export default class Login extends Component {
         this.ToogleModal = this.ToogleModal.bind(this);
     }
 
+
+
+
     //-----------------------------------//
     //------- Input Listener -----------//
     //---------------------------------//
     UpdateInputToState = (event) => {
         const name = event._targetInst.pendingProps.name;
+       
         this.setState({ [name] :  event.nativeEvent.text})
     }
 
@@ -72,27 +104,6 @@ export default class Login extends Component {
     //------- INPUT VALIDATOR ----------//
     //---------------------------------//
 
-    EmailValidator = (emailToCheck, emailInputName) => {
-      let email;
-
-      // Email
-      if (emailToCheck){
-        if(patternEmail.test(emailToCheck.trim())){
-          email = emailToCheck.toLowerCase();
-          this.setState({[emailInputName] : ""});
-          
-        }
-        else{
-          this.setState({[emailInputName] : errorsMsg.emailInvalide});
-        }
-      }
-      else{
-        this.setState({[emailInputName] : errorsMsg.emptyFiled });
-      }
-
-      return (email);
-    }
-
     PasswordValidator = (passwordToCheck) => {
       let password;
 
@@ -108,12 +119,11 @@ export default class Login extends Component {
       return password;
     }
 
-    FormLoginValidator = async (emailToCheck, passwordToCheck) => {
-      let email;
+    FormLoginValidator = async ( passwordToCheck) => {
       let password;
 
       try{
-        email     = await this.EmailValidator(emailToCheck, "emailErrorMsg");
+
         password  = await this.PasswordValidator(passwordToCheck);
 
       }
@@ -121,48 +131,87 @@ export default class Login extends Component {
         console.log(error);
       }
 
-      return { email, password };
+      return {  password };
     }
 
     //--------------------------------//
     //------- MAIN ACTION -----------//
     //------------------------------//
     Login = async () => {
+      const { login, password} = this.state
       try{
         // activate loader
         this.ToogleLoader();
-        let validateInputs = await this.FormLoginValidator(this.state.email, this.state.password);
-        NavigationService.navigate('Program')
-        if(validateInputs.email && validateInputs.password){
-          let bodyFormData = new FormData();
-          bodyFormData.append("login", validateInputs.email);
-          bodyFormData.append("pass", validateInputs.password);
+        let validateInputs = await this.FormLoginValidator(password);
+        // NavigationService.navigate('Program')
+        if(login.trim() && validateInputs.password){
 
-          // a décommenter si on ne veux pas taper le login/password
-          // bodyFormData.append("login", "bruno.cox");
-          // bodyFormData.append("pass", 123456);
-  
-          axios({
-            url: "https://cezame-dev.digitalcube.fr/api/login",
-            method : 'POST',
-            data: bodyFormData,
-            headers: { "Content-Type": "multipart/form-data" }
-          })
-          .then((response) => {
-            //handle success
-            const token = response.data.token;
+          axios.post("https://cezame-dev.digitalcube.fr/api/login_check",
+              {    
+                  username: login,
+                  password: validateInputs.password
+              })
+            .then((response) => {
+
+   
+            // // handle success
+            const {token }= response.data;
+            const { responseConnection,getUsers ,callTrips,decode_Token ,get_Notif} = this.props
+      
+            responseConnection(token)
             this.StoreToken('jwt_auth', token);
-            AsyncStorage.getItem("jwt_auth").then((value) => {
-              // remove loader
+            var decode = jwtDecode(token)
+
+            console.log("TCL: Login -> Login -> decode", decode)
+            decode_Token(decode)
+
+            if(decode.trip_id){
+
+              const data = new FormData
+              data.token = token
+              data.id = decode.id
+              data.idTrip=decode.trip_id
+                //request ask info Users
+              getUsers(data)
+              get_Notif(data)
+              
+              AsyncStorage.getItem("jwt_auth").then((value) => {
+                // remove loader
+                this.ToogleLoader();
+                NavigationService.navigate('Program')
+              });
+            }else{
+
               this.ToogleLoader();
-            });
-            NavigationService.navigate('Program')
+              this.setState({
+                alertVisible:true,
+                style:true,
+                messageAlert:"En tant que V.I.P, vous avez le privilège de vous connecter sur le Web",
+              })
+              return
+
+            }  
+
           })
           .catch((error) => {
+          console.log("TCL: Login -> Login -> error-> error", error.response)
             //handle error
-            console.log(error);
-            this.setState({ emailErrorMsg : errorsMsg.invalidLogin, passwordErrorMsg : errorsMsg.invalidLogin });
+            
             this.ToogleLoader();
+            if(isConnected){
+              this.setState({
+                alertVisible:true,
+                style:false,
+                messageAlert:"Le mot de passe ou l'identifiant est invalide.",
+              })
+            }else{
+              this.setState({
+                alertVisible:true,
+                style:false,
+                messageAlert:"Impossible de se connecter, verifiez votre connexion Internet et réessayez.",
+              })
+            }
+       
           });
         }
         else{
@@ -171,33 +220,51 @@ export default class Login extends Component {
         }
       }
       catch(error){
-        console.log(error)
+        console.log("TCL: Login -> Login -> error", error)
+
       }
     }
 
     ResetPassword = async () => {
+      const { passwordForgotten } = this.state
+      console.log("Login -> ResetPassword -> login", passwordForgotten)
       try{
-        const email = await this.EmailValidator(this.state.passwordForgotten, "passwordForgottenErrorMsg");
+       
 
-        if(email){
-          let bodyFormData = new FormData();
-          bodyFormData.append("login", email);
+        if(passwordForgotten.trim()){
   
-          axios({
-            url : 'https://cezame-dev.digitalcube.fr/api/forgot-password',
-            method : 'POST',
-            data : bodyFormData,
-            headers : { "Content-Type" : "multipart/form-data"}
+          axios.post( 'https://cezame-dev.digitalcube.fr/api/forgot-password',
+          {
+            username:passwordForgotten
           })
           .then((res) => {
-            console.log(res);
-            this.ToogleModal();
+          
+          this.setState({
+            alertVisible:true,
+            style:true,
+            passwordForgotten:"",
+            messageAlert:res.data.message,
           })
-          .catch((err) => console.log(err));
+
+            this.ToogleModal();   
+        
+          })
+          .catch((err) => {
+            this.setState({
+              alertVisible:true,
+              style:false,
+              messageAlert:"L'identifiant n'est pas dans notre base de données",
+            })
+          });
+          
         }
       }
       catch(error){
-        console.log(error);
+        this.setState({
+          alertVisible:true,
+          style:false,
+          messageAlert:"Le champ n'a pas été rempli",
+        })
       }
     }
   
@@ -213,9 +280,25 @@ export default class Login extends Component {
       }
     }
 
+
+  inputFocus=(id)=>{  
+       this.input[id].focus()
+  }
+
+  closeAlert=()=>{
+      this.setState({alertVisible:!this.state.alertVisible})
+  }
+
+
+
+
     render(){
+
         // loader
+        const { messageAlert, style , alertVisible } = this.state
         let loaderConnexion;
+     
+    
         if (this.state.loaderConnexion){
           loaderConnexion =  <ActivityIndicator size="large" color="#0000ff" />;
         }
@@ -230,42 +313,64 @@ export default class Login extends Component {
           // Visibility = false
           eyeIcon = <Icon name='eye' type="font-awesome" size={18} color='#969696' onPress={this.TooglePasswordVisibility}/>;
         }
+        const keybord = Platform.OS === "ios" ? hp("-5%") : hp("-55%")
+
+     
 
         return(
-            <View>
-              <StatusBar translucent backgroundColor={'transparent'} />
-              <KeyboardAvoidingView  behavior="position" enabled>
+       
+            <View style={{flex:1}}>
+                 <KeyboardAvoidingView  behavior="position" enabled  keyboardVerticalOffset={keybord} style={{flex:1}} >  
+              <StatusBar translucent backgroundColor={Colors.rightColor} />
+                <ScrollView 
+                style={{ marginHorizontal: 0  }}
+          
+             
+                >
                 <ImageBackground 
                   source={Images.bgLogin}
-                  style={{width: screen.width, height: screen.height-231}}
+                 imageStyle={{ resizeMode: 'stretch'}}
+                 style={{width: screen.width, height: screen.height-281}}
                 >
+            
                   <Icon 
+                     underlayColor="none"
                     name="ios-arrow-round-back" 
                     type='ionicon' 
-                    onPress={ () => this.props.navigation.goBack() }
                     color={'white'}
-                    containerStyle={{ position: "absolute", left: 25, top: 25 }}
+                    onPress={ () => this.props.navigation.goBack()}
+                    containerStyle={{ position: "absolute", left: 30, top: 25 }}
                     size={55}
                   />
-                  <Text style={{color: "white", fontSize: 32, textTransform: "uppercase", position: "absolute", top: (screen.height/2)-50, left: 60 }}>Bienvenue</Text>
+             
+                  <Text style={{color: "white", fontSize: 32, textTransform: "uppercase", position: "absolute", top: (screen.height/2)-90, left: 60 }}>Bienvenue</Text>
                 </ImageBackground>
                 {loaderConnexion}
-              
-                <ScrollView style={{ marginHorizontal: 50, marginTop: -40, height: 300 }}>
+               
+                <ScrollView style={{ marginHorizontal: 50,marginTop:-20}}
+                  keyboardDismissMode='on-drag'
+                  keyboardShouldPersistTaps='handled'
+                  contentInsetAdjustmentBehavior="never"
+                >
                   <Input
-                    name='email' 
+                    name='login' 
                     label='Identifiant'
-                    placeholder='email@adress.com'
+                    placeholder='Identifiant'
                     errorStyle={{ color: 'red' }}
                     errorMessage={this.state.emailErrorMsg} 
                     value={this.state.email} 
                     onChange={this.UpdateInputToState}
+                    placeholderTextColor="#CCCCCC"
                     labelStyle={{ fontSize: 15, margin: 0, color: Colors.dark, fontWeight: "normal" }}
-                    inputStyle={{ padding: 0, marginTop: 15, fontSize: 15 }}
+                    inputStyle={{ padding: 0,marginTop: 10,  fontSize: 15 ,}}
                     containerStyle={{ borderBottomWidth: 1, borderBottomColor: "#C6C6C6" }}
                     inputContainerStyle={{ borderBottomWidth: 0,height: 25, marginBottom: 10 }}
+                    onSubmitEditing={() => { this.inputFocus("password") }}
+                    blurOnSubmit={false}
+                    returnKeyType="next"
                   />
                   <Input 
+                    ref={ text => this.input["password"] = text}
                     name="password"
                     secureTextEntry={!this.state.isPasswordVisibility}
                     label="Mot de passe"
@@ -275,10 +380,13 @@ export default class Login extends Component {
                     value={this.state.password} 
                     onChange={this.UpdateInputToState} 
                     rightIcon={eyeIcon}
-                    labelStyle={{ fontSize: 15, marginTop: 15, color: Colors.dark, fontWeight: "normal" }}
-                    inputStyle={{ padding: 0, marginTop: 15, fontSize: 15,  }}
+                    placeholderTextColor="#CCCCCC"
+                    labelStyle={{ fontSize: 15, marginTop: 5, color: Colors.dark, fontWeight: "normal" }}
+                    inputStyle={{ padding: 0, marginTop: 10, fontSize: 15,  }}
                     containerStyle={{ borderBottomWidth: 1, borderBottomColor: "#C6C6C6" }}
                     inputContainerStyle={{ borderBottomWidth: 0,height: 25, marginBottom: 10 }}
+                    onSubmitEditing={this.Login}
+                    returnKeyType="send"
                   />
                   <Button 
                     buttonStyle={{ borderRadius: 30, height: 50, backgroundColor: Colors.lightPrimary, }} 
@@ -287,31 +395,35 @@ export default class Login extends Component {
                     title="Connexion" 
                   />
                   <Button  
-                    title="Mot de passe oublié ?" 
+                    title="Mot de passe oublié ?"
                     onPress={this.ToogleModal} 
                     type="clear"
                   />
                 </ScrollView>
-              </KeyboardAvoidingView>
+               
+                </ScrollView>
+         
 
               {/* Modal */}
-              <View style={Styles.modalContainer}>
+        
                 <Modal
+                style={Styles.modalContainer}
                   animationType="slide"
                   transparent={false}
                   visible={this.state.modalVisible}
                   onRequestClose={() => {
-                    Alert.alert('Modal has been closed.');
+                    Alert.alert(`Touch sur "annuler" pour revenir à la page précèdente. `);
                   }}>
                   <View>
                     <View>
                       <Text style={Styles.modalTitle}>
-                        Saisissez votre adresse email, nous vous enverrons un email de récupération de mot de passe
+                        Saisissez votre Identifiant, nous vous enverrons un email de récupération de mot de passe
                       </Text>
                       <Input
+                       inputContainerStyle={{color:"black"}}
                         name='passwordForgotten' 
-                        label='Votre email'
-                        placeholder='email@my_email.com'
+                        label='Identifiant'
+                        
                         errorStyle={{ color: 'red' }}
                         errorMessage={ this.state.passwordForgottenErrorMsg } 
                         value={this.state.passwordForgotten} 
@@ -346,8 +458,17 @@ export default class Login extends Component {
                     </View>
                   </View>
                 </Modal>
-              </View>
+                </KeyboardAvoidingView>
+                        
+                <AlertDialog
+                alertVisible={alertVisible}
+                closeAlert={this.closeAlert}
+                messageAlert={messageAlert}
+                style={style}
+                />
+
             </View>
+       
         );
     }
 }

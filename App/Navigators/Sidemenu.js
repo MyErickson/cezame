@@ -1,13 +1,16 @@
 import React, {Component} from 'react';
-import {Text, View, Dimensions, Image, ImageBackground, Animated, BackHandler, FlatList, ScrollView, TouchableOpacity} from 'react-native';
+import {Text, View, Dimensions, Image, RefreshControl ,ImageBackground, Animated, BackHandler, FlatList, ScrollView, TouchableOpacity} from 'react-native';
 import { Icon, Button } from 'react-native-elements';
 import Images from '../Themes/Images';
 import LinearGradient from 'react-native-linear-gradient';
-import SocialNetwork from '../Components/SocialNetworkButtons';
+import ContainerSocialNetwork  from '../Components/SocialNetworkButtons/containerSocial';
 import Colors from '../Themes/Colors';
 import Font from '../Themes/Font';
 import NavigationService from '../Services/NavigationService';
 const screen = Dimensions.get('window');
+import { sideMenuApropos  } from "../Configs/General"
+
+
 
 class SideMenu extends Component {
     constructor(props){
@@ -15,20 +18,42 @@ class SideMenu extends Component {
         this.state = {
           menu: [
               ["Mon programme", "Program"], 
-              ["Points d'intérêts", 'Places'], 
-              ["Agenda", 'Agenda'], 
-              ["Galerie photos", 'Gallery'], 
-              ["Messagerie instantannée", 'Chat'], 
+              ["Points d'intérêts ", 'Places'], 
+              ["Agenda", 'Agenda'], //Agenda
+              ["Galerie photos", 'Gallery'], //Gallery
+              ["Messagerie", 'Chat'], //Chat
               ["Paramètres", 'Parameters'],
               ["Contact", 'Contact']
             ],
           left: new Animated.Value(0),
           iconBack: "clear",
           return: () => {  this.props.navigation.toggleDrawer() },
-          titleMenu: ""
+          titleMenu: "",
+          trip_User:undefined,
+          refreshing:false,
+          socialNetwork :undefined
         }
     }
 
+    componentDidMount(){
+        const { getSocialNetwork } =this.props
+        getSocialNetwork && getSocialNetwork()
+      
+    }
+
+    static  getDerivedStateFromProps(props,state){
+
+        const {social_Network } = props
+      
+
+        if(social_Network){
+            state.socialNetwork = social_Network
+        } else{
+            
+            return null
+        } 
+       
+     }
     changeMenu = () => {
         this.setState({ iconBack: "arrow-back", return: () => { this.goBack() }, titleMenu: "A propos de Cézame" })
         Animated.timing(this.state.left, {
@@ -51,13 +76,44 @@ class SideMenu extends Component {
           return true;
         });
     }
-
+    onRefresh =async ()=>{ 
+ 
+        const { getSocialNetwork } =this.props
+     
+         this.setState({
+             refreshing:true
+         });
+         
+         getSocialNetwork()
+ 
+         setTimeout(()=>{ this.setState({
+             refreshing:false
+         })},1000)
+ 
+       
+     }
   render () {
+
+    const { infoUser } = this.props
+    const { refreshing,socialNetwork  } = this.state
+  
+
     return (
-    <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 0}} colors={['#fff','#E9ECF5']}>
-        <ImageBackground source={Images.bgSidemenu} style={{width: '100%', height: '100%'}} resizeMode={"cover"}>
-            <ScrollView style={{width: screen.width, height: screen.height}}>
-                <View style={{ flexDirection: "row", justifyContent: "space-between", marginHorizontal: 25, marginBottom: 0, marginTop: 55 }}>
+    <LinearGradient  start={{x: 0, y: 0}} end={{x: 1, y: 0}} colors={['#fff','#E9ECF5']}>
+        <ImageBackground source={Images.bgSidemenu} style={{width: '100%', height: '100%',}} resizeMode={"cover"}>
+            <ScrollView style={{ flex:1}}
+             refreshControl={
+                <RefreshControl 
+                refreshing={refreshing} 
+                progressViewOffset={20}
+                onRefresh={()=>this.onRefresh()} 
+                colors={["#0000ff"]}
+                tintColor="#0000ff"
+                titleColor="#0000ff"
+                title="actualise"/>
+              }
+            >
+                <View style={{ flexDirection: "row", justifyContent: "space-between", marginHorizontal: 25, marginBottom: 0, marginTop: Platform.OS==='ios'?55:30 }}>
                     <Icon 
                         name={this.state.iconBack} 
                         color="#000" 
@@ -70,7 +126,7 @@ class SideMenu extends Component {
                         style={{ width: 35, height: 35, borderRadius: 35, backgroundColor: Colors.dark}} 
                         onPress={() => { NavigationService.navigate("Parameters"),this.props.navigation.closeDrawer()} } 
                     >
-                        <Image source={Images.devProfil} style={{ width: 35, height: 35, borderRadius: 35, }} />
+                        <Image source={ infoUser && infoUser.avatar? {uri : infoUser.avatar.contentUrl}:Images.devProfil} style={{ width: 35, height: 35, borderRadius: 35, }} />
                     </TouchableOpacity>
                 </View>
                 
@@ -101,7 +157,7 @@ class SideMenu extends Component {
                                 keyExtractor={item => item.id}
                             />
 
-                            <View style={{ position: "relative" }}>
+                            <View style={{  }}>
                                 <Button 
                                     title={"A propos de Cézame"} 
                                     buttonStyle={{ justifyContent: "flex-start", paddingHorizontal: 15, paddingVertical: 12, marginHorizontal: 25, marginVertical: 5, backgroundColor: Colors.white }}
@@ -119,61 +175,37 @@ class SideMenu extends Component {
 
 
 
-                        <View style={{ width: screen.width }}>
-                            <Button 
-                                title={"Actualités"} 
-                                buttonStyle={{ justifyContent: "flex-start", paddingHorizontal: 15, paddingVertical: 12, marginHorizontal: 25, marginVertical: 5, backgroundColor: Colors.primary }}
-                                titleStyle={{ marginLeft: 15, color: Colors.white }}
-                                icon={
-                                    <Icon 
-                                        name="newspaper-o" 
-                                        type="font-awesome" 
-                                        color="white"
-                                    />
-                                }
-                                onPress={() => {  this.goBack(), this.props.navigation.toggleDrawer(), NavigationService.navigate("News") } }
-                            />
-                            <Button 
-                                title={"Qui sommes-nous ?"} 
-                                buttonStyle={{ justifyContent: "flex-start", paddingHorizontal: 15, paddingVertical: 12, marginHorizontal: 25, marginVertical: 5, backgroundColor: Colors.primary }}
-                                titleStyle={{ marginLeft: 15, color: Colors.white }}
-                                icon={
-                                    <Icon 
-                                        name="globe" 
-                                        type="font-awesome" 
-                                        color="white"
-                                    />
-                                }
-                            />
-                            <Button 
-                                title={"Mentions légales"} 
-                                buttonStyle={{ justifyContent: "flex-start", paddingHorizontal: 15, paddingVertical: 12, marginHorizontal: 25, marginVertical: 5, backgroundColor: Colors.primary }}
-                                titleStyle={{ marginLeft: 15, color: Colors.white }}
-                                icon={
-                                    <Icon 
-                                        name="file-text" 
-                                        type="font-awesome" 
-                                        color="white"
-                                    />
-                                }
-                            />
-                            <Button 
-                                title={"Confidentialité"} 
-                                buttonStyle={{ justifyContent: "flex-start", paddingHorizontal: 15, paddingVertical: 12, marginHorizontal: 25, marginVertical: 5, backgroundColor: Colors.primary }}
-                                titleStyle={{ marginLeft: 15, color: Colors.white }}
-                                icon={
-                                    <Icon 
-                                        name="lock" 
-                                        type="font-awesome" 
-                                        color="white"
-                                    />
-                                }
-                            />
+                        <View style={{ width: screen.width ,}}>
+                            { sideMenuApropos.map((value,key)=>{
+
+                                return (
+                                    <Button 
+                                    key={key}
+                                    title={value.title} 
+                                    buttonStyle={{ justifyContent: "flex-start", paddingHorizontal: 15, paddingVertical: 12, marginHorizontal: 25, marginVertical: 5, backgroundColor: Colors.primary }}
+                                    titleStyle={{ marginLeft: 15, color: Colors.white }}
+                                    icon={
+                                        <Icon 
+                                            name={value.iconName} 
+                                            type="font-awesome" 
+                                            color="white"
+                                        />
+                                    }
+                                    onPress={() => {    NavigationService.navigate(value.navigate) } }
+                                />
+                                )
+                            })}
+                                      
+           
                         </View>
                     </Animated.View>
-                    <SocialNetwork />
+                  
                 </View>
+             
             </ScrollView>
+            <View style={{  bottom: 15}}>
+                    <ContainerSocialNetwork  socialNetwork={socialNetwork } />
+            </View>
         </ImageBackground>
       </LinearGradient>
     );

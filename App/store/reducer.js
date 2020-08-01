@@ -1,0 +1,145 @@
+
+/**
+ * Initial State
+ */
+const initialState = {
+  tokenConnection: undefined,
+  info_User:undefined,
+  trip_User:undefined,
+  info_Token:undefined,
+  info_hotel:undefined,
+  day_steps:undefined,
+  social_Network:undefined,
+  all_Notif:undefined,
+  count_Notif:undefined
+};
+
+/**
+ * Types
+ */
+export const RESPONSE_CONNECTION = 'REPONSE_CONNECTION';
+export const INITITALIZE_STATE = 'INITITALIZE_STATE';
+export const RECEIVE_TRIPS = "RECEIVE_TRIPS";
+export const  CALL_TRIPS = " CALL_TRIPS";
+export const GET_USERS = 'GET_USERS';
+export const INFO_USER ='INFO_USER';
+export const DECODE_TOKEN = 'DECODE_TOKEN';
+export const GET_INFO_HOTEL = 'GET_INFO_HOTEL';
+export const INFO_HOTEL = 'INFO_HOTEL ';
+export const CALL_DAY_STEPS = 'CALL_DAY_STEPS';
+export const DAY_STEPS ='DAY_STEPS';
+export const GET_SOCIAL_NETWORK = 'GET_SOCIAL_NETWORK';
+export const SOCIAL_NETWORK ='SOCIAL_NETWORK'
+export const GET_NOTIF = "GET_NOTIF";
+export const ALL_NOTIF = "ALL_NOTIF";
+export const COUNT_NOTIF ="COUNT_NOTIF"
+/**
+ * Traitements
+ */
+
+/**
+ * Reducer
+ */
+const reducer = (state = initialState, action = {}) => {
+  switch (action.type) {
+    case RESPONSE_CONNECTION:
+
+      return {
+        ...state,
+        tokenConnection:action.responseConnection,
+
+      };
+
+    case INFO_USER :
+      
+        return {
+          ...state,
+          info_User:action.data,
+  
+        
+        };
+    
+    case RECEIVE_TRIPS :
+
+     return {
+       ...state,
+       trip_User:action.data,
+
+     
+     };
+
+    case  DECODE_TOKEN:
+
+      return {
+        ...state,
+        info_Token:action.data,
+ 
+      
+      };
+ 
+    case INFO_HOTEL:
+        return { 
+          ...state,
+          info_hotel:action.data
+        }
+
+    case DAY_STEPS:
+
+      return {
+        ...state,
+        day_steps:action.data
+      }
+    
+    case SOCIAL_NETWORK:
+
+    return {
+      ...state,
+      social_Network:action.data
+    }
+
+    case ALL_NOTIF:
+      return{
+        ...state,
+        all_Notif:action.data
+      }
+    
+      case COUNT_NOTIF:
+        return{
+          ...state,
+          count_Notif:action.data
+        }
+
+    case INITITALIZE_STATE:
+    
+      return {
+        tokenConnection: undefined,
+        info_User:undefined,
+        trip_User:undefined,
+        info_Token:undefined,
+        info_hotel:undefined,
+        all_Notif:undefined
+      };
+
+
+
+
+    default:
+      return state;
+  }
+};
+
+
+
+/**
+ * Action Creators
+ */
+
+/**
+ * Selectors
+ */
+
+/*
+ * Export
+ */
+export default reducer;
+

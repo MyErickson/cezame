@@ -1,12 +1,15 @@
 import React from 'react';
-import {StatusBar} from 'react-native';
+import { Provider } from "react-redux";
+import store from './store/';
 import AppNavigator from './Navigators/AppNavigator';
 import NavigationService from './Services/NavigationService';
 
 export default function App() {
   return (
+    <Provider store={store}>
     <AppNavigator ref={(navigatorRef) => {
       NavigationService.setTopLevelNavigator(navigatorRef)
     }}/>
+     </Provider>
   );
 };

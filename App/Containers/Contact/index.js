@@ -1,134 +1,317 @@
-import React, { Component, useRef } from 'react';
-import { Text, View, Dimensions, KeyboardAvoidingView } from 'react-native';
-import Layout from '../../Components/Layout';
+import React, { Component, useRef, Fragment } from 'react';
+import { Text,
+    View, 
+    Dimensions, 
+    FlatList, 
+    KeyboardAvoidingView,
+    ScrollView,
+    StatusBar,
+    SafeAreaView  ,
+    TouchableOpacity, 
+    Linking  } from 'react-native';
+import ContainerLayoutContent from '../../Components/Layout/ContainerLayout';
 import Colors from '../../Themes/Colors';
 import { Icon, Input, Button, CheckBox } from 'react-native-elements';
-import AppStyles from '../../Themes/AppStyles';
-import { FlatList } from 'react-native-gesture-handler';
 import Modal from "react-native-modal";
 const screen = Dimensions.get("window");
+import { Styles } from './styleContact'
+import RNFetchBlob from 'rn-fetch-blob';
+import Item from "./Item/Item"
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 
-const data = [
-    {
-        id: 0,
-        name: "Sandrice LOUYER (BPCE)",
-        tel: "00 33 6 20 93 81 95"
-    },
-    {
-        id: 1,
-        name: "Sandrice LOUYER (BPCE)",
-        tel: "00 33 6 20 93 81 95"
-    },
-    {
-        id: 3,
-        name: "Sandrice LOUYER (BPCE)",
-        tel: "00 33 6 20 93 81 95"
-    },
-]
 
-function Item({item}) {
-    return(
-        <View style={{ 
-            backgroundColor: "white",
-            width: screen.width-50,
-            borderRadius: 15,
-            shadowColor: "#000",
-            alignSelf: "center",
-            paddingVertical: 13,
-            paddingHorizontal: 15,
-            marginVertical: 5,
-            shadowColor: "#000",
-            shadowOffset: {
-                width: 0,
-                height: 2,
-            },
-            shadowOpacity: 0.25,
-            shadowRadius: 3.84,
-            elevation: 5,
-            flexDirection: "row", justifyContent: "space-between", alignItems: "center"
-         }}>
-            <View>
-                <Text style={{ fontSize: 15, fontWeight: "bold" }}>{item.name}</Text>
-                <View style={[AppStyles.style.flex, {alignItems: "center", marginTop: 2}]}>
-                    <Icon name="phone-square" type="font-awesome" color={Colors.primary} size={14} containerStyle={{ marginRight: 5 }} />
-                    <Text style={{ color: "#A0A0A0" }}>{item.tel}</Text>
-                </View>
-            </View>
-            <Icon name="phone-square" type="font-awesome" color={Colors.secondary} size={28} />
-        </View>
-    )
-}
+import {
+    widthPercentageToDP as wp,
+    heightPercentageToDP as hp
+  } from "react-native-responsive-screen";
+
+
 
 export default class Contact extends Component {
 
     constructor(props){
         super(props);
         this.state = {
-            name: "John Doe", 
-            email: "email@address.com", 
-            tel: "06478754852", 
-            password: "mot de passe",
-            checked: false,
+            name: "",
+            prenom:"", 
+            email: "", 
+            tel: "", 
+            comments:"",
+            password: "",
+            trip_User:[],
+            textModal:"",
             visibleModal: false
-        }
+        };
+        this.input ={};
     }
 
+    componentDidMount(){
+        const { trip_User } =this.props
+
+        this.setState({
+            trip_User:trip_User && trip_User.users
+        })
+    }
     
     UpdateInputToState = (event) => {
         const name = event._targetInst.pendingProps.name;
         this.setState({ [name] :  event.nativeEvent.text})
     }
 
-    sendMessage = () => {
-        this.setState({ visibleModal: true })
+
+    requestUserLogin = ()=>{
+        const { tokenConnection } = this.props
+        const { comments } =this.state
+        console.log("Contact -> requestUserLogin -> comments", comments.trim())
+        if(comments.trim()){
+            RNFetchBlob.fetch("post",`https://cezame-dev.digitalcube.fr/api/send-comment`,{
+                Authorization : "Bearer "+tokenConnection,
+                headers: JSON.stringify({ 'content-type': 'multipart/form-data' }),
+                },[
+                  {
+                  name:'comment',
+                  data: comments
+                  },
+           
+                ]).then((res) => {
+                console.log("Contact -> sendMessage -> res", res)
+              
+                      this.setState({
+                          visibleModal:true,
+                          textModal:"Votre message a bien été envoyé."
+                      })
+                })
+                .catch((err) => {
+                console.log("TCL: MyQuestions -> onStopRecord -> err", err)
+                })
+              
+        }else{
+            this.setState({
+                visibleModal:true,
+                textModal:"Le message n'a pas été envoyé, les champs obligatoire doivent être remplis."
+            })
+        }
+       
     }
 
+    requestForUser=()=>{
+        const { name , email , tel ,comments,prenom } = this.state
+        if(name.trim() && email.trim()  && comments.trim() && prenom.trim()){
+            RNFetchBlob.fetch("post",`https://cezame-dev.digitalcube.fr/api/contact-mail`,{
+          headers: JSON.stringify({ 'content-type': 'multipart/form-data' }),
+          },[
+            {
+            name:'lastname',
+            data: name
+            },
+            {
+            name:'firstname',
+            data:prenom
+            },
+            {
+            name:'email',
+            data:email
+            }
+            ,
+            {
+            name:'content',
+            data:comments
+            }
+            ,
+            {
+            name:'phone',
+            data:tel
+            }
+         
+          ]).then((res) => {
+          console.log("Contact -> sendMessage -> res", res)
+        
+                this.setState({
+                    visibleModal:true,
+                    textModal:"Votre message a bien été envoyé."
+
+                })
+          })
+          .catch((err) => {
+          console.log("TCL: MyQuestions -> onStopRecord -> err", err)
+          })
+        }else{
+            this.setState({
+                visibleModal:true,
+                textModal:"Le message n'a pas été envoyé. Les champs obligatoires doivent être remplis."
+            })
+        
+        }
+        
+        
+    }
+    
+    closeModal=()=>{
+        this.setState({ 
+            visibleModal: false ,
+            name: "",
+            prenom:"", 
+            email: "", 
+            tel: "", 
+            comments:"",
+        }) 
+    }
+
+
+    inputFocus=(id)=>{  
+        this.input[id].focus()
+   }
     render() {
+        const { trip_User , user,name , prenom , email , tel , comments ,textModal} =this.state
+        const { tokenConnection } =this.props
+        const keybord = Platform.OS === "ios" ? hp("5%") : hp("-65%")
+        const behavior = Platform.OS === "ios" ? "padding":""
+
         return (
-            <Layout return title="Contact" navigation={this.props.navigation}>
-                <KeyboardAvoidingView  behavior={'position'} keyboardVerticalOffset={70} style={{flex: 1}}>  
-                    <View>
-                        <View style={{ width: screen.width-50, alignSelf: "center" }}>
-                            <Text style={{ fontSize: 22, textAlign: "center" }}>Une question ? Besoin d'information ?</Text>
-                            <Text style={{ fontSize: 18, textAlign: "center" }}>Nous vous accompagnons durant votre seminaire</Text>
-                            <Text style={{ fontSize: 15, textAlign: "center" }}>Contacts utiles</Text>
-                        </View>
-                        <FlatList data={data} renderItem={({ item }) => 
-                            <Item item={item} />
-                        } />
-                    
-                        <View style={{ width: screen.width-75, alignSelf: "center" }}>
+            <ContainerLayoutContent return title="Contact" style={{flex:1, }} navigation={this.props.navigation}>
+          
+                 <StatusBar translucent backgroundColor={Colors.rightColor} />
+
+                 {/* <KeyboardAvoidingView  behavior="height" enabled  keyboardVerticalOffset={keybord} style={{flex:1}} >   */}
+                <ScrollView    
+                    style={{ marginHorizontal: 0 ,marginBottom:0,}}
+                    containerStyle={{justifyContent:"space-between",}}
+                    showsVerticalScrollIndicator = {false}
+                    keyboardDismissMode='on-drag'
+                    keyboardShouldPersistTaps='handled'
+                    contentInsetAdjustmentBehavior="always"
+                >
+                <KeyboardAwareScrollView
+                extraScrollHeight={30}
+                >
+                    <View >
+                    <View style={{ width: screen.width-50, alignSelf: "center" ,marginTop:15,marginBottom:10}}>
+                            <Text style={Styles.textTitle}>Une question ? Besoin d'information ?</Text>
+                    { tokenConnection ?
+
+                     
+                     <Text style={Styles.text}> 
+                        Nous vous accompagnons pendant votre séminaire
+                     </Text>
+                
+
+                 :
+
+                    <Fragment>
+                        <Text style={{fontSize:22,textAlign: "center" , fontWeight:'bold',marginBottom:10}}>CEZAME</Text>
+                        <Text style={Styles.text}> 
+                            5 rue Gallieni {"\n"} 92100 Boulogne {"\n"}Téléphone : 01.58.17.01.01 {"\n"}Email: contact@cezame.fr
+                        </Text>
+                    </Fragment>   
+                    }  
+
+                    </View>
+                    { tokenConnection && 
+                
+                     
+                        <SafeAreaView style={{flex: 1}}>
+                            <Text style={Styles.textContact}>Contacts utiles</Text>
+                            <FlatList data={trip_User} keyExtractor={item => item.id} renderItem={({ item }) => 
+                          
+                                 <Item  item={item} />
+                            } />
+                 
+                        </SafeAreaView>
+                        }
+                        <View style={{ width: screen.width-75, alignSelf: "center" ,marginVertical:20}}>
+                        { !tokenConnection && 
+                        <>
+                              <Input 
+                                placeholder="Nom *"
+                                name='name'
+                                value={name}
+                                containerStyle={{ marginTop: 10 }}
+                                onChange={(e)=>this.UpdateInputToState(e) }
+                                placeholderTextColor="#CCCCCC"
+                                onSubmitEditing={() => { this.inputFocus("prenom") }}
+                                blurOnSubmit={false}
+                                returnKeyType="next"
+                                />
                             <Input 
-                                label="Commentaire" 
+                                ref = { text=>this.input.prenom = text}
+                                name='prenom'
+                                value={prenom}
+                                placeholder="Prénom *"
+                                containerStyle={{ marginTop: 10 }}
+                                onChange={(e)=>this.UpdateInputToState(e) }
+                                placeholderTextColor="#CCCCCC"
+                                onSubmitEditing={() => { this.inputFocus("email") }}
+                                blurOnSubmit={false}
+                                returnKeyType="next"
+                            />
+
+                            <Input 
+                                ref = { text=>this.input.email = text}
+                                name='email'
+                                placeholder="Email *"
+                                value={email}
+                                labelStyle={Styles.labelStyle}
+                                placeholderTextColor="#CCCCCC"
+                                containerStyle={{ marginTop: 10 }}
+                                onChange={(e)=>this.UpdateInputToState(e) }
+                                onSubmitEditing={() => { this.inputFocus("tel") }}
+                                blurOnSubmit={false}
+                                returnKeyType="next"
+                            />
+
+                            <Input 
+                                ref = { text=>this.input.tel = text}
+                                name='tel'
+                                value={tel}
+                                placeholder="Portable"
+                                placeholderTextColor="#CCCCCC"
+                                containerStyle={{ marginTop: 10 }}
+                                onChange={(e)=>this.UpdateInputToState(e) }
+                                onSubmitEditing={() => { this.inputFocus("comments") }}
+                                blurOnSubmit={false}
+                                returnKeyType="next"
+                            />
+                            </>
+                        }
+                            <Input 
+                                ref = { text=>this.input.comments = text}
+                                name='comments'
                                 multiline
+                                value={comments}
                                 numberOfLines={6}
-                                label="Commentaire"
+                                label="Message *"
                                 textAlignVertical="top"
-                                labelStyle={{ fontWeight: "normal", color: Colors.text, fontSize: 18, marginBottom: 8  }}
-                                inputStyle={{ backgroundColor: "#F1F1F1", borderWidth: 1, borderRadius: 5, borderColor: "#DCDCDC" }}
+                                onChange={(e)=>this.UpdateInputToState(e) }
+                                labelStyle={Styles.labelStyle}
+                                inputStyle={Styles.inputStyle}
                                 inputContainerStyle={{ borderBottomWidth: 0 }}
                                 containerStyle={{ marginTop: 15 }}
-                            />
+                                />
                             <Button 
                                 title="Envoyer" 
-                                onPress={() => { this.sendMessage() }}
-                                buttonStyle={{ backgroundColor: Colors.lightPrimary, borderRadius: 35, paddingVertical: 10, marginTop: 25, width: screen.width-125, alignSelf: "center" }} 
+                                
+                                onPress={() => {!tokenConnection ?  this.requestForUser() :  this.requestUserLogin()}}
+                                buttonStyle={Styles.buttonStyle} 
                             />
                         </View>
                     </View>
-                </KeyboardAvoidingView>
+            
+                    </KeyboardAwareScrollView>
+                </ScrollView>
+                {/* </KeyboardAvoidingView> */}
                 <Modal isVisible={this.state.visibleModal}>
-                    <View style={{ backgroundColor: "white", width: screen.width-50, paddingVertical: 50, borderRadius: 15 }}>
-                        <Text style={{ textAlign: "center", fontSize: 18 }}>Votre message a bien été transmis.</Text>
+                    <View style={Styles.viewModal}>
+                    <Text style={{ textAlign: "center", fontSize: 18 }}>{textModal}</Text>
                         <Button 
-                            title="OK"
-                            buttonStyle={{ backgroundColor: Colors.lightPrimary, borderRadius: 35, paddingVertical: 10, marginTop: 25, width: screen.width-125, alignSelf: "center" }} 
-                            onPress={() => { this.setState({ visibleModal: false }) }}
+                            title="Ok, merci "
+                            buttonStyle={Styles.buttonStyle}
+                            onPress={() => { this.closeModal()}}
                         />
                     </View>
                 </Modal>
-            </Layout>
+          
+            </ContainerLayoutContent>
         )
     }
 }

@@ -1,144 +1,288 @@
 import React, { Component } from 'react';
-import { Text, View, KeyboardAvoidingView , Dimensions, FlatList } from 'react-native';
+import { Text, View, 
+    KeyboardAvoidingView , 
+    Dimensions, 
+    FlatList, 
+    Platform ,
+    Animated,
+    TouchableOpacity,
+    SafeAreaView} from 'react-native';
 import Layout from '../../Components/Layout';
 import Colors from '../../Themes/Colors';
-import { Icon, Input } from 'react-native-elements';
+import { Icon, Input ,Avatar } from 'react-native-elements';
 import AppStyles from '../../Themes/AppStyles';
 import Font from '../../Themes/Font';
+import ImagePicker from 'react-native-image-picker';
 import Moment from 'moment';
+import NavigationService from '../../Services/NavigationService';
+import { Styles } from '../../Components/Layout/styleLayout';
+import { StylesChat } from './styleChat'
+import axios from "axios"
+import Item from "./Item"
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import {
+    widthPercentageToDP as wp,
+    heightPercentageToDP as hp
+  } from "react-native-responsive-screen";
+
 const screen = Dimensions.get("window");
+import io from "socket.io-client"
 
 
-const data = [
-    {
-        id: 1, 
-        message: 'Lorem ipsum dolor sit amet conse ctetur adipiscing elit sed do eiusmod tempor incididunt',
-        date: new Date(),
-        author: {
-            id: 1, 
-            lastName: "Nom 1",
-            name: "Prénom 1",
-            avatar: ""
-        }
-    },
-    {
-        id: 2, 
-        message: 'Lorem ipsum dolor sit amet conse ctetur adipiscing elit sed do eiusmod tempor incididunt',
-        date: new Date(),
-        author: {
-            id: 2, 
-            lastName: "Nom 2",
-            name: "Prénom 2",
-            avatar: ""
-        }
-    },
-    {
-        id: 3, 
-        message: 'Lorem ipsum dolor sit amet conse ctetur adipiscing elit sed do eiusmod tempor incididunt',
-        date: new Date(),
-        author: {
-            id: 1, 
-            lastName: "Nom 1",
-            name: "Prénom 1",
-            avatar: ""
-        }
-    },
-    {
-        id: 4, 
-        message: 'Lorem ipsum dolor sit amet conse ctetur adipiscing elit sed do eiusmod tempor incididunt',
-        date: new Date(),
-        author: {
-            id: 2, 
-            lastName: "Nom 2",
-            name: "Prénom 2",
-            avatar: ""
-        }
-    },
-    {
-        id: 5, 
-        message: 'Lorem ipsum dolor sit amet conse ctetur adipiscing elit sed do eiusmod tempor incididunt',
-        date: new Date(),
-        author: {
-            id: 1, 
-            lastName: "Nom 1",
-            name: "Prénom 1",
-            avatar: ""
-        }
-    },
-]
 
-function Item({item}) {
-    return(
-        <View style={[AppStyles.style.flex, { marginHorizontal: 0, alignItems: "flex-end", marginVertical: 15 }]}>
-            <View style={{ 
-                backgroundColor: "#DCEDD6", 
-                borderRadius: 15,
-                borderBottomRightRadius: 0, 
-                paddingVertical: 10, paddingHorizontal: 25,
-                marginLeft: 25, width: '80%'
-            }}>
-                <Text style={[Font.style.normal, {flexShrink: 1}]}>{item.message}</Text>
-                <Text style={{ marginTop: 5, fontSize: 12, color: "#A0A0A0" }}>{Moment(item.date).format("DD/MM -  H[h]mm")}</Text>
-            </View>
-            <View style={{ backgroundColor: Colors.primary, width: 35, height: 35, borderRadius: 35, marginLeft: 10 }}></View>
-        </View>
-    )
-}
+const optionsImagePicker = {
+    title: 'Select Avatar',
+    customButtons: [{ name: 'fb', title: 'Choose Photo from Facebook' }],
+    storageOptions: {
+      skipBackup: true,
+      path: 'images',
+    },
+  };
+
+
+var chat
+const socketAddress = "https://live.cezame-dev.digitalcube.fr";
+const socketPort = "5005";
+
+
 
 export default class Chat extends Component {
+  constructor(props){
+    super(props);
+      this.state={
+        avatarSource: undefined,
+        messages:[],
+        idUser:undefined, 
+        message:null,
+        socket:undefined,
+        modo:undefined
+      }
+      this.viewAnimated = new Animated.Value(0);
+      this.startAnimated=false
+  }
 
-    constructor(props){
-        super(props);
-        this.state = {
+
+    componentDidMount(){
+        const { tokenConnection ,trip_User} =this.props
+        console.log("Chat -> componentDidMount -> trip_User",  trip_User.users[0])
+       
+        console.log("Chat -> componentDidMount -> screen ", screen )
+        
+       let  socket = io(socketAddress + ':' + socketPort, {
+            query: {
+                token: tokenConnection,
+            }
+        });
+
+
+        
+        socket.on('new_posted_message', (message) => {
+            const { messages } =this.state
+            this.setState({
+                messages:[...messages,message],
+            })
+            
+        });
+          
+            
+        this.getMessage(socket)
+
+        this.getNewMessage(socket)
+
+
+        this.setState({
+           modo:trip_User.users[0],
+           socket
+       })
+        
+
+    } 
+  
+    componentWillUnmount(){
+      
+        const { socket } =  this.state
+        socket.disconnect(true);
+    }
+
+    getMessage=(socket)=>{
+        console.log("Chat -> getMessage -> socket", socket)
+        const { infoToken,tokenConnection} =this.props
+   
+
+        socket.on('auth', (status) => {
+            if (!status.isAuth) {
+                console.log('erroorroor chat ',status.error);
+            } else {
+    
+                console.log("Chat -> getMessage -> status", status)
+                this.setState({
+                    messages:status.messages.reverse(),
+                    idUser:infoToken.id
+                })
+               
+            }
+        });
+      
+    }
+
+    getNewMessage =(socket)=>{
+        
+        socket.on('post_message_status', (status) => {
+    
+            let isPosted = status.isPosted;
+            
+            if (!isPosted) {
+                console.log(status.error);
+            } else {
+               const { messages } = this.state 
+               this.setState({
+                   messages:[...messages,status.message],
+                   message:undefined,
+                 
+               })
+               
+            }
+        }); 
+
+    }
+
+    _uploadImage = () => {
+        ImagePicker.launchImageLibrary(optionsImagePicker, (response) => {
+         
+
+            if (response.didCancel) {
+                console.log('User cancelled image picker');
+            } else if (response.error) {
+                console.log('ImagePicker Error: ', response.error);
+            } else if (response.customButton) {
+                console.log('User tapped custom button: ', response.customButton);
+            } else {
+                const source = { uri: response.uri };
+            
+                // You can also display the image using data:
+                // const source = { uri: 'data:image/jpeg;base64,' + response.data };
+            
+                this.setState({
+                avatarSource: source,
+                });
+            }
+        });
+    }
+    
+
+
+    inputMesssage=(msg)=>{
+
+        if( msg.trim()){
+            this.setState({
+                message:msg
+            })
+        }else{
+            this.setState({
+                message:null
+            })
         }
     }
 
+    sendMessage = ()=>{
+        const { message ,socket } =this.state
+        const { tokenConnection } = this.props
+
+    
+        socket.emit('post_message', {content: message });
+
+   
+    }
+
     render() {
+
+        const { messages ,idUser,message ,modo} = this.state
+       
         return (
             
         <Layout noPaddingTop chat return title="Messagerie instantanée" navigation={this.props.navigation}>
-
+            
+ 
             <View style={[AppStyles.style.flex, { alignItems: "center", backgroundColor: Colors.lightPrimary, paddingVertical: 15, paddingHorizontal: 25, justifyContent: "space-between", zIndex: 3, }]}>
                 <View style={[AppStyles.style.flex, { alignItems: "center" }]}>
-                    <View style={{ width: 35, height: 35, backgroundColor: Colors.primary, borderRadius: 35, marginRight: 15 }}></View>
+                
                     <View>
-                        <Text style={Font.style.h2}>Nom Modérateur</Text>
-                        <Text style={{ color: Colors.white }}>Modérateur</Text>
+                        <Text style={{ color: Colors.white,fontWeight:"bold" }}>Modérateur</Text>
                     </View>
                 </View>
                 <View>
+                <TouchableOpacity 
+                    onPress={() => NavigationService.navigate("Contact")}
+                >
                     <Icon 
                         name="mail"
+                        underlayColor="none"
                         color={Colors.white}
                         size={25}
+                        
                     />
+                    </TouchableOpacity>
                 </View>
             </View>
+            <KeyboardAwareScrollView 
+                keyboardOpeningTime={50}
+                extraScrollHeight={screen.height <750 ? 70 :100}
+                keyboardDismissMode='on-drag'
+                scrollEnabled={false}
+                enableAutomaticScroll={true}
+                keyboardShouldPersistTaps="always"
+                showsVerticalScrollIndicator = {false}
+                style={{marginBottom:10}}
+         
+             >
+
+             <KeyboardAwareScrollView 
+             scrollEnabled={false}
+             enableAutomaticScroll={true}
+             showsVerticalScrollIndicator = {false}
+             
+
+             >
+
             <FlatList 
                 ref={ref => (this.scrollView = ref)}
-                data={data}  
-                renderItem={({ item }) => <Item item={item} />}
-                keyboardShouldPersistTaps="always" style={{ height: screen.height-360 }} 
-                onContentSizeChange={() => {
-                    this.scrollView.scrollToEnd({ animated: true, index: -1 }, 200);
-                }}
+                data={ messages}  
+                keyExtractor={item => item && item["@id"]}
+                renderItem={({ item }) => <Item item={item} idUser={idUser} />}
+                // contentInsetAdjustmentBehavior="never"
+                // keyboardShouldPersistTaps={Platform.OS==="android"?"handled":"always" }
+                keyboardDismissMode='on-drag'
+                inverted
+                style={{ height: Platform.OS==="ios"?screen.height < 750 ? screen.height-200 : screen.height - 250 :screen.height-220,zIndex:-1}} 
+                showsVerticalScrollIndicator = {false}
+      
             />
-            <KeyboardAvoidingView  behavior={'position'} keyboardVerticalOffset={70} style={{flex: 1}}>  
-                <View style={[AppStyles.style.flex, {backgroundColor: Colors.white, paddingTop: 30,  alignItems: "center"}]}>
-                    <Input 
-                        containerStyle={{ width: "80%" }}
-                        inputContainerStyle={{ backgroundColor: Colors.inputBg, borderRadius: 35, paddingVertical: 10, paddingHorizontal: 18, borderBottomWidth: 0, height: 50 }}
-                        inputStyle={{ padding: 0 }}
-                        placeholder='Tapez votre message'
-                        rightIcon={{ type: 'font-awesome', name: 'send', size: 18, color: "#4C4C4C" }}
-                    />
-                    <View style={AppStyles.style.flex}>
-                        <Icon name="smile-o"  type='font-awesome' color="#B6B6B6" size={34} containerStyle={{ marginRight: 8 }} />
-                        <Icon name="file-picture-o" type='font-awesome' color="#B6B6B6" size={30} />
-                    </View>
-                </View>
-                    
-            </KeyboardAvoidingView>
+        
+            </KeyboardAwareScrollView>
+            
+            <View style={[ {flexDirection:"column",paddingTop:Platform.OS==="android"? 20:10,  alignItems: "center",backgroundColor:"white"}]}>
+                   
+                   <Input 
+                       containerStyle={{ width: "100%"}}
+                       rightIconContainerStyle={Platform.OS ==="android" && {marginBottom:20}}
+                       value={message}
+                       inputContainerStyle={Platform.OS === "ios" ? StylesChat.input : StylesChat.inputAndroid}
+                       inputStyle={[{ padding: 0  },Platform.OS === "android" && StylesChat.styleAndroid]}
+                       multiline={true}
+                       placeholderTextColor="#9E9E9E"
+                       placeholder='Tapez votre message'
+                       onChangeText={(e)=> this.inputMesssage(e)}
+                       rightIcon={message&&{ 
+                           type: 'font-awesome',
+                           name: 'send',
+                           size: 18, 
+                           onPress:()=> this.sendMessage() ,
+                            }}
+                   />
+              
+               </View>
+               
+               </KeyboardAwareScrollView>
         </Layout>
         )
     }
